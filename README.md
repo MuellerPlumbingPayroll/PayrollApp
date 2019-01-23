@@ -1,2 +1,2 @@
 # PayrollApp
-Application for phones for Mueller payroll app.
+Application for phones for Muller timecard app.
