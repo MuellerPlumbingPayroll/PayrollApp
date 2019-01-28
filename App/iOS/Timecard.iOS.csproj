@@ -116,14 +116,6 @@
     <ImageAsset Include="Assets.xcassets\Contents.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewControllers\DetailViewControllers\BrowseItemDetailViewController.cs" />
-    <Compile Include="ViewControllers\DetailViewControllers\BrowseItemDetailViewController.designer.cs">
-      <DependentUpon>BrowseItemDetailViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\AboutViewController.cs" />
-    <Compile Include="ViewControllers\AboutViewController.designer.cs">
-      <DependentUpon>AboutViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\BrowseViewController.cs" />
     <Compile Include="ViewControllers\BrowseViewController.designer.cs">
       <DependentUpon>BrowseViewController.cs</DependentUpon>
@@ -137,6 +129,18 @@
     <Compile Include="ViewControllers\TimeNewViewController.cs" />
     <Compile Include="ViewControllers\TimeNewViewController.designer.cs">
       <DependentUpon>TimeNewViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\HomeViewController.cs" />
+    <Compile Include="ViewControllers\HomeViewController.designer.cs">
+      <DependentUpon>HomeViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\TimeDetailViewController.cs" />
+    <Compile Include="ViewControllers\TimeDetailViewController.designer.cs">
+      <DependentUpon>TimeDetailViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HistoryTableViewCell.cs" />
+    <Compile Include="HistoryTableViewCell.designer.cs">
+      <DependentUpon>HistoryTableViewCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

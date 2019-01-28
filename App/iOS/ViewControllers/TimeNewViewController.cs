@@ -9,8 +9,12 @@ namespace Timecard.iOS
     public partial class TimeNewViewController : UIViewController
     {
         public ItemsViewModel ViewModel { get; set; }
+        public Item EditingItem { get; internal set; } = null;
+
         private UIDatePicker datePicker;
+        private UIPickerView costCodePicker;
         private UIPickerView jobDescriptionPicker;
+        private JobDescriptionModel jobDescriptionModel;
 
         public TimeNewViewController(IntPtr handle) : base(handle)
         {
@@ -19,61 +23,86 @@ namespace Timecard.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            Title = EditingItem == null ? "New Entry" : "Editing Entry";
 
-            this.ConfigureDatePicker();
-            this.ConfigureJobDescriptionPicker();
+            ConfigureDatePicker();
+            ConfigureJobDescriptionPicker();
+            ConfigureCostCodePicker();
+            ConfigureSaveButton();
 
-            jobTypeSegControl.SetTitle(JobTypes.Construction, 0);
-            jobTypeSegControl.SetTitle(JobTypes.Service, 1);
-            jobTypeSegControl.SetTitle(JobTypes.Other, 2);
-
+            jobTypeSegControl.SetTitle(JobType.Construction, 0);
+            jobTypeSegControl.SetTitle(JobType.Service, 1);
+            jobTypeSegControl.SetTitle(JobType.Other, 2);
  
-            this.AddDoneButtonToTextField(txtHoursWorked);
+            AddDoneButtonToTextField(txtHoursWorked);
 
+            // When user taps outside of a picker or keyboard, it disappears
+            var gestureRecognizer = new UITapGestureRecognizer(() => View.EndEditing(true));
+            View.AddGestureRecognizer(gestureRecognizer);
+
+            ConfigureEditing();
+        }
+
+        private void ConfigureEditing()
+        {
+            if (EditingItem != null)
+            {
+                // Prevent user from being able to change the job type
+                jobTypeSegControl.Hidden = true;
+                txtCostCode.Hidden = EditingItem.JobType == JobType.Other;
+                txtHoursWorked.Text = EditingItem.HoursWorked;
+            }
+        }
+
+        private void ConfigureSaveButton()
+        {
+            // Round the button's corners
             btnSaveTime.Layer.CornerRadius = 10;
             btnSaveTime.ClipsToBounds = true;
 
             btnSaveTime.TouchUpInside += (sender, e) =>
             {
-                var item = new Item
+                if (EditingItem == null) // Creating a new item
                 {
-                    Text = "Testing",
-                    JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment),
-                    JobDescription = txtJobDescription.Text,
-                    HoursWorked = txtHoursWorked.Text
-                };
+                    var item = new Item
+                    {
+                        JobDate = txtDateField.Text,
+                        JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment),
+                        JobDescription = txtJobDescription.Text,
+                        HoursWorked = txtHoursWorked.Text,
+                        CostCode = txtCostCode.Text
+                    };
 
-                var errorMessage = item.CleanAndValidate();
-                if (string.IsNullOrWhiteSpace(errorMessage)) // Nothing wrong with item
+                    var errorMessage = item.CleanAndValidate();
+                    if (string.IsNullOrWhiteSpace(errorMessage)) // Nothing wrong with item
+                    {
+                        ViewModel.AddItemCommand.Execute(item);
+                        NavigationController.PopToRootViewController(true);
+                    }
+                    else
+                    {
+                        var alert = UIAlertController.Create("Error", errorMessage, UIAlertControllerStyle.Alert);
+                        alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
+
+                        PresentViewController(alert, animated: true, completionHandler: null);
+                    }
+                }
+                else // Editing an existing item
                 {
-                    ViewModel.AddItemCommand.Execute(item);
+                    var item = new Item
+                    {
+                        Id = EditingItem.Id,
+                        JobDate = txtDateField.Text,
+                        JobType = EditingItem.JobType,
+                        JobDescription = txtJobDescription.Text,
+                        HoursWorked = txtHoursWorked.Text,
+                        CostCode = txtCostCode.Text
+                    };
+
+                    ViewModel.UpdateItemCommand.Execute(item);
                     NavigationController.PopToRootViewController(true);
                 }
-                else
-                {
-                    var alert = UIAlertController.Create("Error", errorMessage, UIAlertControllerStyle.Alert);
-                    alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
-
-                    PresentViewController(alert, animated: true, completionHandler: null);
-                }
             };
-        }
-
-
-        private void AddDoneButtonToTextField(UITextField textField)
-         { 
-            var toolbar = new UIToolbar(new RectangleF(0.0f, 0.0f, 50.0f, 44.0f));
-            var doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, delegate
-            {
-                textField.ResignFirstResponder();
-            });
-
-            toolbar.Items = new UIBarButtonItem[] {
-                new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
-                doneButton
-            };
-
-            textField.InputAccessoryView = toolbar;
         }
 
         private void ConfigureDatePicker()
@@ -94,63 +123,115 @@ namespace Timecard.iOS
             AddDoneButtonToTextField(txtDateField);
             txtDateField.Text = DateTime.Now.ToString(ProjectSettings.DateFormat);
             txtDateField.InputView = datePicker;
+
+            if (EditingItem != null)
+            {
+                txtDateField.Text = EditingItem.JobDate;
+            }
         }
 
         private void ConfigureJobDescriptionPicker()
         {
+            var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
+
+            jobDescriptionModel = new JobDescriptionModel(ViewModel, txtJobDescription, selectedJobType);
             jobDescriptionPicker = new UIPickerView
             {
-                Model = new JobDescriptionModel(this.ViewModel, txtJobDescription),
-                ShowSelectionIndicator = true
+                Model = jobDescriptionModel
             };
 
             AddDoneButtonToTextField(txtJobDescription);
             txtJobDescription.InputView = jobDescriptionPicker;
+
+            if (EditingItem != null)
+            {
+                if (EditingItem.JobType == JobType.Service)
+                {
+                    txtJobDescription.InputView = null;
+                }
+
+                txtJobDescription.Text = EditingItem.JobDescription;
+            }
         }
+
+        private void ConfigureCostCodePicker()
+        {
+            costCodePicker = new UIPickerView
+            {
+
+            };
+
+            AddDoneButtonToTextField(txtCostCode);
+            txtCostCode.InputView = costCodePicker;
+
+            if (EditingItem != null)
+            {
+                txtCostCode.Text = EditingItem.CostCode;
+            }
+        }
+
+        private void AddDoneButtonToTextField(UITextField textField)
+        {
+            var toolbar = new UIToolbar(new RectangleF(0.0f, 0.0f, 50.0f, 44.0f));
+            var doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, delegate
+            {
+                textField.ResignFirstResponder();
+            });
+
+            toolbar.Items = new UIBarButtonItem[] {
+                new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
+                doneButton
+            };
+
+            textField.InputAccessoryView = toolbar;
+        }
+
+        /* Event Handlers */
 
         partial void JobTypeSegControl_ValueChanged(UISegmentedControl sender)
         {
+            // Hide the picker or keyboard that's currently on the screen
+            View.EndEditing(true);
+
             var segmentTitle = sender.TitleAt(sender.SelectedSegment);
 
-            switch (segmentTitle)
-            {
-                case (JobTypes.Construction):
-                    Console.Write("construction");
-                    break;
-                case (JobTypes.Service):
-                    Console.Write("service");
-                    break;
-                case (JobTypes.Other):
-                    Console.Write("other");
-                    break;
-            }
+            txtJobDescription.InputView = segmentTitle == JobType.Service ? null : jobDescriptionPicker;
+            txtJobDescription.Text = string.Empty;
+
+            txtCostCode.Hidden = segmentTitle == JobType.Other;
+
+            jobDescriptionModel.SelectedJobType = segmentTitle;
+            jobDescriptionPicker.ReloadAllComponents();
         }
     }
 
+
     class JobDescriptionModel : UIPickerViewModel
     {
-        ItemsViewModel viewModel;
-        UITextField textField;
+        public string SelectedJobType { get; set; }
+        private ItemsViewModel viewModel;
+        private UITextField textField;
 
-        public JobDescriptionModel(ItemsViewModel viewModel, UITextField textField)
+        public JobDescriptionModel(ItemsViewModel viewModel, UITextField textField, string selectedJobType)
         {
             this.viewModel = viewModel;
             this.textField = textField;
+            this.SelectedJobType = selectedJobType;
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            textField.Text = ProjectSettings.OtherTimeOptions[row];
+            textField.Text = viewModel.JobDescriptions[SelectedJobType][(int) row];
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return ProjectSettings.OtherTimeOptions[row];
+            return viewModel.JobDescriptions[SelectedJobType][(int) row];
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return ProjectSettings.OtherTimeOptions.Length;
+            return viewModel.JobDescriptions[SelectedJobType].Count;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)

@@ -19,7 +19,7 @@ namespace Timecard.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
+            
             ViewModel = new ItemsViewModel();
 
             // Setup UITableView.
@@ -44,13 +44,14 @@ namespace Timecard.iOS
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if (segue.Identifier == "NavigateToItemDetailSegue")
+            if (segue.Identifier == "NavigateToTimeDetailSegue")
             {
-                var controller = segue.DestinationViewController as BrowseItemDetailViewController;
+                var controller = segue.DestinationViewController as TimeDetailViewController;
                 var indexPath = TableView.IndexPathForCell(sender as UITableViewCell);
                 var item = ViewModel.Items[indexPath.Row];
 
                 controller.ViewModel = new ItemDetailViewModel(item);
+                controller.AllItemsViewModel = ViewModel;
             }
             else
             {
@@ -86,13 +87,15 @@ namespace Timecard.iOS
 
         void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("the items changed");
             InvokeOnMainThread(() => TableView.ReloadData());
         }
     }
 
     class ItemsDataSource : UITableViewSource
     {
-        static readonly NSString CELL_IDENTIFIER = new NSString("ITEM_CELL");
+        static readonly NSString CELL_IDENTIFIER = new NSString("HISTORY_CELL");
+        static readonly int CELL_HEIGHT = 100;
 
         ItemsViewModel viewModel;
 
@@ -106,12 +109,11 @@ namespace Timecard.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(CELL_IDENTIFIER, indexPath);
+            tableView.RowHeight = CELL_HEIGHT;
 
+            var cell = tableView.DequeueReusableCell(CELL_IDENTIFIER, indexPath) as HistoryTableViewCell;
             var item = viewModel.Items[indexPath.Row];
-            cell.TextLabel.Text = item.Text;
-            cell.DetailTextLabel.Text = item.JobDescription;
-            cell.LayoutMargins = UIEdgeInsets.Zero;
+            cell.UpdateCell(item);
 
             return cell;
         }

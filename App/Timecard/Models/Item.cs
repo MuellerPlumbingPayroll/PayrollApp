@@ -6,18 +6,22 @@ namespace Timecard
 {
     public class Item
     {
-        private readonly static float MAX_NUM_HOURS_WORKED = 12;
+        private readonly static float MAX_NUM_HOURS_WORKED = 18;
 
         public string Id { get; set; }
-        public string Text { get; set; }
+        public string JobDate { get; set; }
         public string JobType { get; set; }
         public string JobDescription { get; set; }
+        public string CostCode { get; set; }
         public string HoursWorked { get; set; }
+
+        public Item()
+        {
+            this.Id = Guid.NewGuid().ToString("N");
+        }
 
         public string CleanAndValidate()
         {
-            this.Id = this.Id?.Trim();
-            this.Text = this.Text?.Trim();
             this.JobDescription = this.JobDescription?.Trim();
             this.HoursWorked = this.HoursWorked?.Trim();
             return this.Validate();
@@ -25,11 +29,7 @@ namespace Timecard
 
         private string Validate()
         {
-            if (string.IsNullOrEmpty(this.Text))
-            {
-                return "Text must have a value";
-            }
-            else if (!Array.Exists(JobTypes.Types, element => element == JobType))
+            if (!Array.Exists(Models.JobType.Types, element => element == JobType))
             {
                 return "Invalid Job Type.";
             }

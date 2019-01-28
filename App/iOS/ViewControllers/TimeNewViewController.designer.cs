@@ -24,6 +24,10 @@ namespace Timecard.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField txtCostCode { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField txtDateField { get; set; }
 
         [Outlet]
@@ -48,6 +52,11 @@ namespace Timecard.iOS
             if (jobTypeSegControl != null) {
                 jobTypeSegControl.Dispose ();
                 jobTypeSegControl = null;
+            }
+
+            if (txtCostCode != null) {
+                txtCostCode.Dispose ();
+                txtCostCode = null;
             }
 
             if (txtDateField != null) {

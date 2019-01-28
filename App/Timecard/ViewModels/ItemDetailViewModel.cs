@@ -9,7 +9,7 @@ namespace Timecard
         {
             if (item != null)
             {
-                Title = item.Text;
+                Title = string.Empty;
                 Item = item;
             }
         }
