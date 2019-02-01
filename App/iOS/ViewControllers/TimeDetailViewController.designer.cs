@@ -34,6 +34,10 @@ namespace Timecard.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel jobTypeLabel { get; set; }
 
+        [Action ("DeleteButton_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void DeleteButton_TouchUpInside (UIKit.UIButton sender);
+
         void ReleaseDesignerOutlets ()
         {
             if (btnEditTime != null) {

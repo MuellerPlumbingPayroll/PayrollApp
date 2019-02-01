@@ -37,5 +37,21 @@ namespace Timecard.iOS
                 controller.EditingItem = ViewModel.Item;
             }
         }
+
+        partial void DeleteButton_TouchUpInside(UIButton sender)
+        {
+            var alert = UIAlertController.Create(
+            "Are you sure you want to delete this entry?",
+            "This action cannot be undone" ,
+             UIAlertControllerStyle.ActionSheet);
+
+            alert.AddAction(UIAlertAction.Create("Delete", UIAlertActionStyle.Destructive, (UIAlertAction) => {
+                AllItemsViewModel.DeleteItemCommand.Execute(ViewModel.Item);
+                NavigationController.PopToRootViewController(true);
+            }));
+            alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+
+            PresentViewController(alert, animated: true, completionHandler: null);
+        }
     }
 }

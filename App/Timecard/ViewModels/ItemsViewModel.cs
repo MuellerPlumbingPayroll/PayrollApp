@@ -14,6 +14,7 @@ namespace Timecard
         public Command LoadItemsCommand { get; set; }
         public Command AddItemCommand { get; set; }
         public Command UpdateItemCommand { get; set; }
+        public Command DeleteItemCommand { get; set; }
         public Dictionary<string, List<string>> JobDescriptions { get; set; }
 
         public ItemsViewModel()
@@ -23,6 +24,7 @@ namespace Timecard
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AddItemCommand = new Command<Item>(async (Item item) => await AddItem(item));
             UpdateItemCommand = new Command<Item>(async (Item item) => await UpdateItem(item));
+            DeleteItemCommand = new Command<Item>(async (Item item) => await DeleteItem(item));
 
             JobDescriptions = new Dictionary<string, List<string>>
             {
@@ -100,9 +102,15 @@ namespace Timecard
             if (elementToRemove >= 0)
             {
                 Items.RemoveAt(elementToRemove);
-                Items.Add(item);
+                Items.Insert(elementToRemove, item);
                 await DataStore.UpdateItemAsync(item);
             }
+        }
+
+        async Task DeleteItem(Item item)
+        {
+            Items.Remove(item);
+            await DataStore.DeleteItemAsync(item.Id);
         }
     }
 }

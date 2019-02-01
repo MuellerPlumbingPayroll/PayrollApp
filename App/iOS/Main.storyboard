@@ -239,7 +239,19 @@
                             <constraint id="39293" firstItem="39282" firstAttribute="leading" secondItem="119" secondAttribute="leadingMargin" constant="20"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="200"/>
+                    <navigationItem key="navigationItem" title="Title" id="200">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="40318">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="40317" translatesAutoresizingMaskIntoConstraints="NO" key="customView" buttonType="roundedRect">
+                                <rect key="frame" x="0.0" y="0.0" width="57" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Delete"/>
+                                <connections>
+                                    <action selector="DeleteButton_TouchUpInside:" destination="118" id="40321" eventType="touchUpInside"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="dateLabel" destination="1702" id="name-outlet-1702"/>
                         <outlet property="hoursWorkedLabel" destination="23592" id="name-outlet-23592"/>
