@@ -14,10 +14,9 @@ namespace Timecard
             items = new List<Item>();
             var _items = new List<Item>
             {
-                new Item { Id = Guid.NewGuid().ToString(), JobDescription="This is a nice description", HoursWorked = "1"},
-                new Item { Id = Guid.NewGuid().ToString(), JobDescription="This is a nice description", HoursWorked = "3"},
-                new Item { Id = Guid.NewGuid().ToString(), JobDescription="This is a nice description", HoursWorked = "3"},
-                new Item { Id = Guid.NewGuid().ToString(), JobDescription="This is a nice description", HoursWorked = "5.25"}
+                new Item { Id = Guid.NewGuid().ToString(), JobType="Other", JobDescription="description", HoursWorked = "1.5"},
+                new Item { Id = Guid.NewGuid().ToString(), JobType="Other", JobDescription="description", HoursWorked = "8"},
+                new Item { Id = Guid.NewGuid().ToString(), JobType="Other", JobDescription="description", HoursWorked = "3"},
             };
 
             foreach (Item item in _items)

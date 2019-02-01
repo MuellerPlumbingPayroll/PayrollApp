@@ -87,7 +87,6 @@ namespace Timecard.iOS
 
         void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("the items changed");
             InvokeOnMainThread(() => TableView.ReloadData());
         }
     }

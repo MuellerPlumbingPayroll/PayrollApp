@@ -62,9 +62,11 @@ namespace Timecard.iOS
 
             btnSaveTime.TouchUpInside += (sender, e) =>
             {
+                Item item;
+
                 if (EditingItem == null) // Creating a new item
                 {
-                    var item = new Item
+                    item = new Item
                     {
                         JobDate = txtDateField.Text,
                         JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment),
@@ -72,24 +74,10 @@ namespace Timecard.iOS
                         HoursWorked = txtHoursWorked.Text,
                         CostCode = txtCostCode.Text
                     };
-
-                    var errorMessage = item.CleanAndValidate();
-                    if (string.IsNullOrWhiteSpace(errorMessage)) // Nothing wrong with item
-                    {
-                        ViewModel.AddItemCommand.Execute(item);
-                        NavigationController.PopToRootViewController(true);
-                    }
-                    else
-                    {
-                        var alert = UIAlertController.Create("Error", errorMessage, UIAlertControllerStyle.Alert);
-                        alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
-
-                        PresentViewController(alert, animated: true, completionHandler: null);
-                    }
                 }
                 else // Editing an existing item
                 {
-                    var item = new Item
+                    item = new Item
                     {
                         Id = EditingItem.Id,
                         JobDate = txtDateField.Text,
@@ -98,9 +86,28 @@ namespace Timecard.iOS
                         HoursWorked = txtHoursWorked.Text,
                         CostCode = txtCostCode.Text
                     };
+                }
 
-                    ViewModel.UpdateItemCommand.Execute(item);
+                var errorMessage = item.CleanAndValidate();
+                if (string.IsNullOrWhiteSpace(errorMessage)) // Nothing wrong with the item
+                {
+                    if (EditingItem == null)
+                    {
+                        ViewModel.AddItemCommand.Execute(item);
+                    }
+                    else
+                    {
+                        ViewModel.UpdateItemCommand.Execute(item);
+                    }
+
                     NavigationController.PopToRootViewController(true);
+                }
+                else
+                {
+                    var alert = UIAlertController.Create("Error", errorMessage, UIAlertControllerStyle.Alert);
+                    alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
+
+                    PresentViewController(alert, animated: true, completionHandler: null);
                 }
             };
         }
