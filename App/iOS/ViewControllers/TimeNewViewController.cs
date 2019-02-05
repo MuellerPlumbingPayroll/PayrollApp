@@ -36,11 +36,45 @@ namespace Timecard.iOS
  
             AddDoneButtonToTextField(txtHoursWorked);
 
-            // When user taps outside of a picker or keyboard, it disappears
-            var gestureRecognizer = new UITapGestureRecognizer(() => View.EndEditing(true));
-            View.AddGestureRecognizer(gestureRecognizer);
-
+            ConfigureGestures();
             ConfigureEditing();
+        }
+
+        private void ConfigureGestures()
+        {
+            // When user taps outside of a picker or keyboard, it disappears
+            var tapGesture = new UITapGestureRecognizer(() => View.EndEditing(true));
+            View.AddGestureRecognizer(tapGesture);
+
+            // When the user swipes left or right, change the value of the selected job type
+            var swipeLeft = new UISwipeGestureRecognizer((s) =>
+            {
+                if (jobTypeSegControl.SelectedSegment == 0)
+                    jobTypeSegControl.SelectedSegment = jobTypeSegControl.NumberOfSegments - 1;
+                else
+                    jobTypeSegControl.SelectedSegment -= 1;
+
+                JobTypeSegControl_ValueChanged(jobTypeSegControl);
+            })
+            {
+                Direction = UISwipeGestureRecognizerDirection.Left
+            };
+
+            var swipeRight = new UISwipeGestureRecognizer((s) =>
+            {
+                if (jobTypeSegControl.SelectedSegment == jobTypeSegControl.NumberOfSegments - 1)
+                    jobTypeSegControl.SelectedSegment = 0;
+                else
+                    jobTypeSegControl.SelectedSegment += 1;
+
+                JobTypeSegControl_ValueChanged(jobTypeSegControl);
+            })
+            {
+                Direction = UISwipeGestureRecognizerDirection.Right
+            };
+
+            View.AddGestureRecognizer(swipeLeft);
+            View.AddGestureRecognizer(swipeRight);
         }
 
         private void ConfigureEditing()

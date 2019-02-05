@@ -30,6 +30,8 @@ namespace Timecard
         public string CleanAndValidate()
         {
             this.JobDescription = this.JobDescription?.Trim();
+            if (this.JobType == Models.JobType.Other)
+                this.CostCode = string.Empty;
             return this.Validate();
         }
 
