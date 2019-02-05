@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Specialized;
-
+using CoreGraphics;
 using Foundation;
+using Timecard.Models;
 using UIKit;
 
 namespace Timecard.iOS
@@ -19,15 +20,15 @@ namespace Timecard.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            
-            ViewModel = new ItemsViewModel();
+
+            ViewModel = (this.TabBarController as TabBarController).AllItemsViewModel;
 
             // Setup UITableView.
             refreshControl = new UIRefreshControl();
             refreshControl.ValueChanged += RefreshControl_ValueChanged;
             TableView.Add(refreshControl);
             TableView.Source = new ItemsDataSource(ViewModel);
-
+            
             Title = ViewModel.Title;
 
             ViewModel.PropertyChanged += IsBusy_PropertyChanged;
@@ -48,7 +49,7 @@ namespace Timecard.iOS
             {
                 var controller = segue.DestinationViewController as TimeDetailViewController;
                 var indexPath = TableView.IndexPathForCell(sender as UITableViewCell);
-                var item = ViewModel.Items[indexPath.Row];
+                var item = ViewModel.GetItemSections()[indexPath.Section][indexPath.Row];
 
                 controller.ViewModel = new ItemDetailViewModel(item);
                 controller.AllItemsViewModel = ViewModel;
@@ -93,8 +94,11 @@ namespace Timecard.iOS
 
     class ItemsDataSource : UITableViewSource
     {
-        static readonly NSString CELL_IDENTIFIER = new NSString("HISTORY_CELL");
-        static readonly int CELL_HEIGHT = 100;
+        private static readonly NSString CELL_IDENTIFIER = new NSString("HISTORY_CELL");
+        private static readonly NSString SECTION_IDENTIFIER = new NSString("SECTION_CELL");
+        private readonly int CELL_HEIGHT = 100;
+        private static readonly int SECTION_HEADER_HEIGHT = 50;
+        private static readonly int SECTION_FOOTER_HEIGHT = 2;
 
         ItemsViewModel viewModel;
 
@@ -103,15 +107,63 @@ namespace Timecard.iOS
             this.viewModel = viewModel;
         }
 
-        public override nint RowsInSection(UITableView tableview, nint section) => viewModel.Items.Count;
-        public override nint NumberOfSections(UITableView tableView) => 1;
+        public override nint RowsInSection(UITableView tableview, nint section)
+        {
+            return viewModel.GetItemSections()[section].Count;
+        }
+
+        public override nint NumberOfSections(UITableView tableView)
+        {
+            return viewModel.GetItemSections().Length;
+        }
+
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
+        {
+            return CELL_HEIGHT;
+        }
+
+        public override nfloat GetHeightForHeader(UITableView tableView, nint section)
+        {
+            return SECTION_HEADER_HEIGHT;
+        }
+
+        public override UIView GetViewForHeader(UITableView tableView, nint section)
+        {
+            var header = tableView.DequeueReusableCell(SECTION_IDENTIFIER) as HistoryTableViewSectionHeader;
+
+            var date = ProjectSettings.GetStartOfCurrentPayPeriod().AddDays(section);
+            var numberHoursWorked = viewModel.NumberHoursWorkedOnDay(date.DayOfWeek);
+
+            header.UpdateHeader(date, numberHoursWorked);
+
+            return header;
+        }
+
+        public override nfloat GetHeightForFooter(UITableView tableView, nint section)
+        {
+            return SECTION_FOOTER_HEIGHT;
+        }
+
+        public override UIView GetViewForFooter(UITableView tableView, nint section)
+        {
+            // If this is an empty section, then add a small footer to
+            // differentiate the two section headers
+            if (tableView.NumberOfRowsInSection(section) == 0)
+            {
+                UIView separator = new UIView
+                {
+                    Frame = new CGRect(0, 0, tableView.Bounds.Size.Width, SECTION_FOOTER_HEIGHT),
+                    BackgroundColor = tableView.SeparatorColor
+                };
+                return separator;
+            }
+            return null;
+        }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            tableView.RowHeight = CELL_HEIGHT;
-
             var cell = tableView.DequeueReusableCell(CELL_IDENTIFIER, indexPath) as HistoryTableViewCell;
-            var item = viewModel.Items[indexPath.Row];
+            var item = viewModel.GetItemSections()[indexPath.Section][indexPath.Row];
             cell.UpdateCell(item);
 
             return cell;

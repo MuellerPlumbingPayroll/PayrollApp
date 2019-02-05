@@ -1,6 +1,7 @@
 using Foundation;
 using System;
 using UIKit;
+using Timecard.Models;
 
 namespace Timecard.iOS
 {
@@ -19,7 +20,7 @@ namespace Timecard.iOS
 
             Title = ViewModel.Title;
 
-            dateLabel.Text = ViewModel.Item.JobDate;
+            dateLabel.Text = ViewModel.Item.JobDate.ToString(ProjectSettings.DateFormat);
             hoursWorkedLabel.Text = "Hours Worked:   " + ViewModel.Item.HoursWorked;
             jobTypeLabel.Text = "Type:   " + ViewModel.Item.JobType;
             jobDescriptionLabel.Text = "Job:   " + ViewModel.Item.JobDescription;

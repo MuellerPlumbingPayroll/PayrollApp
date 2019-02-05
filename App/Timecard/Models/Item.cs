@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Timecard.Models;
 
 namespace Timecard
 {
@@ -9,7 +7,7 @@ namespace Timecard
         private readonly static float MAX_NUM_HOURS_WORKED = 18;
 
         public string Id { get; set; }
-        public string JobDate { get; set; }
+        public DateTime JobDate { get; set; }
         public string ConstructionJobId { get; set; }
         public string JobDescription { get; set; }
         public string JobType { get; set; }
@@ -55,7 +53,6 @@ namespace Timecard
 
                 if (isValid && n > 0 && n <= MAX_NUM_HOURS_WORKED)
                 {
-                    System.Diagnostics.Debug.WriteLine("the time is: " + n.ToString("0.##"));
                     this.HoursWorked = n.ToString("0.##");
                     return null;
                 }

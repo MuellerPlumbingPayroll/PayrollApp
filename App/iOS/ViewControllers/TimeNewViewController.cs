@@ -1,8 +1,8 @@
 using System;
-
-using UIKit;
-using Timecard.Models;
 using System.Drawing;
+using System.Globalization;
+using Timecard.Models;
+using UIKit;
 
 namespace Timecard.iOS
 {
@@ -62,30 +62,24 @@ namespace Timecard.iOS
 
             btnSaveTime.TouchUpInside += (sender, e) =>
             {
-                Item item;
+                var item = new Item
+                {
+                    JobDate = DateTime.ParseExact(txtDateField.Text, ProjectSettings.DateFormat,
+                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal),
+                    JobDescription = txtJobDescription.Text,
+                    HoursWorked = txtHoursWorked.Text,
+                    CostCode = txtCostCode.Text
+                };
+
 
                 if (EditingItem == null) // Creating a new item
                 {
-                    item = new Item
-                    {
-                        JobDate = txtDateField.Text,
-                        JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment),
-                        JobDescription = txtJobDescription.Text,
-                        HoursWorked = txtHoursWorked.Text,
-                        CostCode = txtCostCode.Text
-                    };
+                    item.JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment);
                 }
                 else // Editing an existing item
                 {
-                    item = new Item
-                    {
-                        Id = EditingItem.Id,
-                        JobDate = txtDateField.Text,
-                        JobType = EditingItem.JobType,
-                        JobDescription = txtJobDescription.Text,
-                        HoursWorked = txtHoursWorked.Text,
-                        CostCode = txtCostCode.Text
-                    };
+                    item.Id = EditingItem.Id;
+                    item.JobType = EditingItem.JobType;
                 }
 
                 var errorMessage = item.CleanAndValidate();
@@ -117,10 +111,10 @@ namespace Timecard.iOS
             datePicker = new UIDatePicker
             {
                 Mode = UIDatePickerMode.Date,
-                MinimumDate = (Foundation.NSDate)DateTime.UtcNow.Date,
-                MaximumDate = (Foundation.NSDate)DateTime.UtcNow.Date.AddDays(7),
+                MinimumDate = (Foundation.NSDate)ProjectSettings.GetStartOfCurrentPayPeriod(),
+                MaximumDate = (Foundation.NSDate)ProjectSettings.GetEndOfCurrentPayPeriod()
             };
-
+            
             // Whenever the date changes, set the date text field to the value of the picker
             datePicker.ValueChanged += (sender, e) =>
             {
@@ -133,7 +127,9 @@ namespace Timecard.iOS
 
             if (EditingItem != null)
             {
-                txtDateField.Text = EditingItem.JobDate;
+                // If the user is editing this entry, set the picker to the previously selected date
+                txtDateField.Text = EditingItem.JobDate.ToString(ProjectSettings.DateFormat);
+                datePicker.SetDate((Foundation.NSDate)EditingItem.JobDate, false);
             }
         }
 
@@ -165,7 +161,7 @@ namespace Timecard.iOS
         {
             costCodePicker = new UIPickerView
             {
-
+                Model = new CostCodeModel(ViewModel, txtCostCode)
             };
 
             AddDoneButtonToTextField(txtCostCode);
@@ -177,6 +173,12 @@ namespace Timecard.iOS
             }
         }
 
+        /// <summary>
+        /// By default, the keyboard or view that pops up when selecting a 
+        // text field does not have a done button or way to dismiss the view.
+        /// This method adds a bar with a done button to the specified text field.
+        /// </summary>
+        /// <param name="textField">Text field.</param>
         private void AddDoneButtonToTextField(UITextField textField)
         {
             var toolbar = new UIToolbar(new RectangleF(0.0f, 0.0f, 50.0f, 44.0f));
@@ -213,6 +215,9 @@ namespace Timecard.iOS
     }
 
 
+    /// <summary>
+    /// Data source for the job picker.
+    /// </summary>
     class JobDescriptionModel : UIPickerViewModel
     {
         public string SelectedJobType { get; set; }
@@ -239,6 +244,42 @@ namespace Timecard.iOS
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
             return viewModel.JobDescriptions[SelectedJobType].Count;
+        }
+
+        public override nint GetComponentCount(UIPickerView pickerView)
+        {
+            return 1;
+        }
+    }
+
+
+    /// <summary>
+    /// Data source for cost code picker.
+    /// </summary>
+    class CostCodeModel : UIPickerViewModel
+    {
+        private ItemsViewModel viewModel;
+        private UITextField textField;
+
+        public CostCodeModel(ItemsViewModel viewModel, UITextField textField)
+        {
+            this.viewModel = viewModel;
+            this.textField = textField;
+        }
+
+        public override void Selected(UIPickerView pickerView, nint row, nint component)
+        {
+            textField.Text = viewModel.CostCodes[(int)row].Description;
+        }
+
+        public override string GetTitle(UIPickerView pickerView, nint row, nint component)
+        {
+            return viewModel.CostCodes[(int)row].Description;
+        }
+
+        public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
+        {
+            return viewModel.CostCodes.Count;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)

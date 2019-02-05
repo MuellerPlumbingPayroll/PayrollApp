@@ -1,13 +1,14 @@
-using Foundation;
 using System;
-using UIKit;
+using Foundation;
 using Timecard.ViewModels;
+using UIKit;
 
 namespace Timecard.iOS
 {
     public partial class HomeViewController : UIViewController
     {
         public HomeViewModel ViewModel { get; set; }
+        public ItemsViewModel AllItemsViewModel { get; set; }
 
         public HomeViewController (IntPtr handle) : base (handle)
         {
@@ -18,6 +19,7 @@ namespace Timecard.iOS
             base.ViewDidLoad();
 
             ViewModel = new HomeViewModel();
+            AllItemsViewModel = (this.TabBarController as TabBarController).AllItemsViewModel;
             Title = ViewModel.Title;
 
             txtUserName.Text = "Welcome, " + ViewModel.UserName;
@@ -30,7 +32,8 @@ namespace Timecard.iOS
         {
             base.ViewWillAppear(animated);
 
-            txtHoursWorkedToday.Text = "Today's Hours: " + ViewModel.NumberHoursWorkedToday();
+            txtHoursWorkedToday.Text = "Today: " + AllItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now.DayOfWeek) + " hrs";
+            txtHoursWorkedThisWeek.Text = "This Week: " + AllItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -38,7 +41,7 @@ namespace Timecard.iOS
             if (segue.Identifier == "NavigateFromHomeToNewTimeSegue")
             {
                 var controller = segue.DestinationViewController as TimeNewViewController;
-                controller.ViewModel = new ItemsViewModel();
+                controller.ViewModel = AllItemsViewModel;
             }
         }
     }

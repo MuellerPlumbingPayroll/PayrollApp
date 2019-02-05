@@ -122,6 +122,40 @@
                                     <outlet property="txtHoursWorked" destination="27627" id="name-outlet-27627"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="42809" customClass="HistoryTableViewSectionHeader" reuseIdentifier="SECTION_CELL" rowHeight="50">
+                                <rect key="frame" x="0.0" y="122" width="414" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="42809" id="42810">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="49.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42902" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
+                                            <rect key="frame" x="20" y="14" width="273" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42903" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
+                                            <rect key="frame" x="294" y="12" width="100" height="25"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint id="42904" firstAttribute="trailing" secondItem="42903" secondAttribute="trailing" constant="20"/>
+                                        <constraint id="42908" firstItem="42902" firstAttribute="leading" secondItem="42810" secondAttribute="leading" constant="20"/>
+                                        <constraint id="42909" firstItem="42903" firstAttribute="leading" secondItem="42902" secondAttribute="trailing" constant="10"/>
+                                        <constraint id="51629" firstAttribute="bottom" secondItem="42902" secondAttribute="bottom" constant="14"/>
+                                        <constraint id="51630" firstItem="42902" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="14"/>
+                                        <constraint id="51633" firstAttribute="bottom" secondItem="42903" secondAttribute="bottom" constant="12"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="txtHoursWorked" destination="42903" id="name-outlet-42903"/>
+                                    <outlet property="txtDate" destination="42902" id="name-outlet-42902"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="75" id="77"/>
@@ -402,6 +436,15 @@
                                     <constraint id="25619" firstAttribute="height" constant="40"/>
                                 </constraints>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40703" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="20" y="370" width="374" height="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <constraints>
+                                    <constraint id="40704" firstAttribute="height" constant="40"/>
+                                </constraints>
+                            </label>
                         </subviews>
                         <constraints>
                             <constraint id="18077" firstItem="17872" firstAttribute="top" secondItem="17989" secondAttribute="bottom" constant="20"/>
@@ -413,6 +456,9 @@
                             <constraint id="25620" firstItem="25618" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin"/>
                             <constraint id="25621" firstItem="25618" firstAttribute="trailing" secondItem="17875" secondAttribute="trailingMargin"/>
                             <constraint id="25622" firstItem="25618" firstAttribute="top" secondItem="20364" secondAttribute="bottom" constant="40"/>
+                            <constraint id="40705" firstItem="40703" firstAttribute="trailing" secondItem="17875" secondAttribute="trailingMargin"/>
+                            <constraint id="40706" firstItem="40703" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin"/>
+                            <constraint id="40708" firstItem="40703" firstAttribute="top" secondItem="25618" secondAttribute="bottom" constant="30"/>
                         </constraints>
                     </view>
                     <navigationItem title="Title" id="17985" key="navigationItem"/>
@@ -420,6 +466,7 @@
                         <outlet property="btnNewEntry" destination="17989" id="name-outlet-17989"/>
                         <outlet property="txtUserName" destination="20364" id="name-outlet-20364"/>
                         <outlet property="txtHoursWorkedToday" destination="25618" id="name-outlet-25618"/>
+                        <outlet property="txtHoursWorkedThisWeek" destination="40703" id="name-outlet-40703"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17876" userLabel="First Responder" sceneMemberID="firstResponder"/>
