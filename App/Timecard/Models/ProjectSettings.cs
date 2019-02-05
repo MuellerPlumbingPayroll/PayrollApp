@@ -6,10 +6,34 @@ namespace Timecard.Models
         public static readonly string DateFormat = "dddd, MMMM dd, yyyy";
         public static readonly DayOfWeek PayPeriodStartDay = DayOfWeek.Wednesday;
         public static readonly DayOfWeek PayPeriodEndDay = DayOfWeek.Tuesday;
-        public static readonly uint NumberWeeksInPayPeriod = 1;
+        public static readonly int NumberWeeksInPayPeriod = 1;
+
+        public static readonly int NumberHoursInWorkDay = 8;
+        public static readonly int NumberDaysInWorkWeek = 5;
+        public static readonly int NumberHoursInWorkWeek = NumberHoursInWorkDay * NumberDaysInWorkWeek;
 
         public static readonly string[] OtherTimeOptions = {
                 "Shop", "Vacation", "Holiday", "Sick"
             };
+
+        public static DateTime GetStartOfCurrentPayPeriod()
+        {
+            var payPeriodStart = DateTime.Now;
+            while (payPeriodStart.DayOfWeek != PayPeriodStartDay) 
+            {
+                payPeriodStart = payPeriodStart.AddDays(-1);
+            }
+            return payPeriodStart;
+        }
+
+        public static DateTime GetEndOfCurrentPayPeriod() 
+        {
+            var payPeriodEnd = DateTime.Now;
+            while (payPeriodEnd.DayOfWeek != PayPeriodEndDay)
+            {
+                payPeriodEnd = payPeriodEnd.AddDays(1);
+            }
+            return payPeriodEnd;
+        }
     }
 }
