@@ -22,5 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\JobType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProjectSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CostCode.cs" />
   </ItemGroup>
 </Project>

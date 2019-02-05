@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Timecard
         public Command UpdateItemCommand { get; set; }
         public Command DeleteItemCommand { get; set; }
         public Dictionary<string, List<string>> JobDescriptions { get; set; }
+        public ObservableCollection<CostCode> CostCodes { get; set; }
 
         public ItemsViewModel()
         {
@@ -33,23 +35,63 @@ namespace Timecard
                 {JobType.Service, new List<string>()},
                 {JobType.Other, new List<string>(ProjectSettings.OtherTimeOptions)}
             };
+
+            CostCodes = new ObservableCollection<CostCode>
+            {
+                // TODO: Instead of adding a dummy value, call the api to get the actual codes
+                new CostCode
+                {
+                    Id = "1",
+                    Code = "22-110",
+                    Description = "Groundwork"
+                }
+            };
         }
 
-        public float NumberHoursWorkedToday()
+        public List<Item>[] GetItemSections()
+        {
+            var numberSections = 7 * ProjectSettings.NumberWeeksInPayPeriod;
+            var sections = new List<Item>[numberSections];
+
+            var dayInPayPeriod = ProjectSettings.GetStartOfCurrentPayPeriod();
+
+            for (var i = 0; i < numberSections; i++)
+            {
+                sections[i] = Items.ToList()
+                    .Where(item => item.JobDate.DayOfWeek.Equals(dayInPayPeriod.DayOfWeek))
+                    .ToList();
+
+                dayInPayPeriod = dayInPayPeriod.AddDays(1);
+            }
+
+            return sections;
+        }
+
+        /// <summary>
+        /// Calculate the numbers the hours worked on a given day.
+        /// If no day is provided, the method calculates the total  
+        /// number of hours worked, regardless of the day.
+        /// </summary>
+        /// <returns>The hours worked on the specified day.</returns>
+        /// <param name="day">Day.</param>
+        public float NumberHoursWorkedOnDay(DayOfWeek? day = null)
         {
             if (Items.Count == 0)
                 LoadItemsCommand.Execute(null);
 
-            var today = DateTime.Now.ToString(ProjectSettings.DateFormat);
+            var timeEntries = Items.ToList();
+
+            if (day != null) 
+            {
+                timeEntries = timeEntries
+                    .Where(item => item.JobDate.DayOfWeek.Equals(day))
+                    .ToList();
+            }
 
             float hoursWorked = 0;
-            foreach (var item in Items)
+            foreach (var item in timeEntries)
             {
-                hoursWorked += 10;
-                if (item.JobDate == today)
-                {
-                    hoursWorked += float.Parse(item.HoursWorked);
-                }
+                hoursWorked += float.Parse(item.HoursWorked);
             }
 
             return hoursWorked;
@@ -89,6 +131,8 @@ namespace Timecard
 
         async Task UpdateItem(Item item)
         {
+            item.TimeUpdated = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
             var elementToRemove = -1;
             for (var i = 0; i < Items.Count; i++)
             {
