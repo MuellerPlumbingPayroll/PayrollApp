@@ -73,8 +73,13 @@ namespace Timecard.iOS
                 Direction = UISwipeGestureRecognizerDirection.Right
             };
 
-            View.AddGestureRecognizer(swipeLeft);
-            View.AddGestureRecognizer(swipeRight);
+            // Only add the swipe gestures if the user is editing an item
+            // Users are not allowed to change the job type when editing
+            if (EditingItem == null)
+            {
+                View.AddGestureRecognizer(swipeLeft);
+                View.AddGestureRecognizer(swipeRight);
+            }
         }
 
         private void ConfigureEditing()

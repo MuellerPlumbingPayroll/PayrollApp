@@ -131,14 +131,13 @@
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42902" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                             <rect key="frame" x="20" y="14" width="273" height="21"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42903" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
-                                            <rect key="frame" x="294" y="12" width="100" height="25"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                            <nil key="textColor"/>
+                                            <rect key="frame" x="294" y="14" width="100" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -148,7 +147,8 @@
                                         <constraint id="42909" firstItem="42903" firstAttribute="leading" secondItem="42902" secondAttribute="trailing" constant="10"/>
                                         <constraint id="51629" firstAttribute="bottom" secondItem="42902" secondAttribute="bottom" constant="14"/>
                                         <constraint id="51630" firstItem="42902" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="14"/>
-                                        <constraint id="51633" firstAttribute="bottom" secondItem="42903" secondAttribute="bottom" constant="12"/>
+                                        <constraint id="52434" firstAttribute="bottom" secondItem="42903" secondAttribute="bottom" constant="14"/>
+                                        <constraint id="52435" firstItem="42903" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="14"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

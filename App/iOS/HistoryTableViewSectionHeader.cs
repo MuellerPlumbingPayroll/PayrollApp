@@ -20,6 +20,10 @@ namespace Timecard.iOS
             txtDate.TextColor = UIColor.White;
             txtHoursWorked.TextColor = UIColor.White;
 
+            // Prevent text from accidentally overflowing either of the labels
+            txtDate.AdjustsFontSizeToFitWidth = true;
+            txtHoursWorked.AdjustsFontSizeToFitWidth = true;
+
             txtDate.Text = date.ToString(ProjectSettings.DateFormat);
             txtHoursWorked.Text = hoursWorked + " hrs";
 
