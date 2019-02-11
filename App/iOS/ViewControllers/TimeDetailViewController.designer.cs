@@ -16,6 +16,10 @@ namespace Timecard.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnDeleteTime { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton btnEditTime { get; set; }
 
         [Outlet]
@@ -40,6 +44,11 @@ namespace Timecard.iOS
 
         void ReleaseDesignerOutlets ()
         {
+            if (btnDeleteTime != null) {
+                btnDeleteTime.Dispose ();
+                btnDeleteTime = null;
+            }
+
             if (btnEditTime != null) {
                 btnEditTime.Dispose ();
                 btnEditTime = null;

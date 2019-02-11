@@ -185,6 +185,19 @@ namespace Timecard.iOS
             AddDoneButtonToTextField(txtJobDescription);
             txtJobDescription.InputView = jobDescriptionPicker;
 
+            txtJobDescription.EditingDidBegin += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(txtJobDescription.Text))
+                {
+                    // Try because getting the title may fail
+                    try
+                    {
+                        var model = jobDescriptionPicker.Model;
+                        txtJobDescription.Text = model.GetTitle(jobDescriptionPicker, 0, 0);
+                    } catch { }
+                }
+            };
+
             if (EditingItem != null)
             {
                 if (EditingItem.JobType == JobType.Service)
@@ -205,6 +218,19 @@ namespace Timecard.iOS
 
             AddDoneButtonToTextField(txtCostCode);
             txtCostCode.InputView = costCodePicker;
+
+            txtCostCode.EditingDidBegin += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(txtCostCode.Text))
+                {
+                    // Try because getting the title may fail
+                    try
+                    {
+                        var model = costCodePicker.Model;
+                        txtCostCode.Text = model.GetTitle(costCodePicker, 0, 0);
+                    } catch { }
+                }
+            };
 
             if (EditingItem != null)
             {

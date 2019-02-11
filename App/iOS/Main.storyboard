@@ -95,6 +95,7 @@
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" label="txtJobDescription"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="27627" translatesAutoresizingMaskIntoConstraints="NO" adjustsFontForContentSizeCategory="YES">
                                             <rect key="frame" x="293" y="15" width="75" height="70"/>
@@ -104,6 +105,7 @@
                                             <constraints>
                                                 <constraint id="30347" firstAttribute="width" constant="75"/>
                                             </constraints>
+                                            <accessibility key="accessibilityConfiguration" label="txtHoursWorked"/>
                                         </label>
                                     </subviews>
                                     <constraints>
@@ -134,11 +136,13 @@
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" label="txtDate"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42903" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                             <rect key="frame" x="294" y="14" width="100" height="21"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" label="txtHoursWorked"/>
                                         </label>
                                     </subviews>
                                     <constraints>
@@ -205,7 +209,7 @@
                                 <constraints>
                                     <constraint id="23586" firstAttribute="height" constant="40"/>
                                 </constraints>
-                                <accessibility key="accessibilityConfiguration">
+                                <accessibility key="accessibilityConfiguration" label="dateLabel">
                                     <accessibilityTraits key="traits" none="YES"/>
                                 </accessibility>
                             </label>
@@ -218,6 +222,7 @@
                                 <constraints>
                                     <constraint id="23593" firstAttribute="height" constant="40"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="hoursWorkedLabel"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="24574" misplaced="YES">
                                 <rect key="frame" x="20" y="252" width="374" height="40"/>
@@ -228,6 +233,7 @@
                                 <constraints>
                                     <constraint id="24575" firstAttribute="height" constant="40"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="jobTypeLabel"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="24638" misplaced="YES">
                                 <rect key="frame" x="20" y="322" width="374" height="40"/>
@@ -238,6 +244,7 @@
                                 <constraints>
                                     <constraint id="24639" firstAttribute="height" constant="40"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="jobDescriptionLabel"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="39282" translatesAutoresizingMaskIntoConstraints="NO" buttonType="roundedRect">
                                 <rect key="frame" x="40" y="666" width="334" height="50"/>
@@ -252,6 +259,7 @@
                                 <connections>
                                     <segue id="39936" destination="3274" kind="show" identifier="NavigateToEditTimeSegue"/>
                                 </connections>
+                                <accessibility key="accessibilityConfiguration" label="btnEditTime"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -283,6 +291,7 @@
                                 <connections>
                                     <action selector="DeleteButton_TouchUpInside:" destination="118" id="40321" eventType="touchUpInside"/>
                                 </connections>
+                                <accessibility key="accessibilityConfiguration" label="btnDeleteTime"/>
                             </button>
                         </barButtonItem>
                     </navigationItem>
@@ -292,6 +301,7 @@
                         <outlet property="jobTypeLabel" destination="24574" id="name-outlet-24574"/>
                         <outlet property="jobDescriptionLabel" destination="24638" id="name-outlet-24638"/>
                         <outlet property="btnEditTime" destination="39282" id="name-outlet-39282"/>
+                        <outlet property="btnDeleteTime" destination="40317" id="name-outlet-40317"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="120" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -338,24 +348,28 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
+                                <accessibility key="accessibilityConfiguration" label="txtHoursWorked"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="15433" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Date">
                                 <rect key="frame" x="20" y="178" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
+                                <accessibility key="accessibilityConfiguration" label="txtDateField"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="16070" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Job Description">
                                 <rect key="frame" x="20" y="298" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
+                                <accessibility key="accessibilityConfiguration" label="txtJobDescription"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="16643" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Cost Code">
                                 <rect key="frame" x="20" y="358" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
+                                <accessibility key="accessibilityConfiguration" label="txtCostCode"/>
                             </textField>
                         </subviews>
                         <constraints>
@@ -426,6 +440,7 @@
                                 <constraints>
                                     <constraint id="21548" firstAttribute="height" constant="150"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="txtUserName"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25618" translatesAutoresizingMaskIntoConstraints="NO">
                                 <rect key="frame" x="20" y="300" width="374" height="40"/>
@@ -435,6 +450,7 @@
                                 <constraints>
                                     <constraint id="25619" firstAttribute="height" constant="40"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="txtHoursWorkedToday"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40703" translatesAutoresizingMaskIntoConstraints="NO">
                                 <rect key="frame" x="20" y="370" width="374" height="40"/>
@@ -444,6 +460,7 @@
                                 <constraints>
                                     <constraint id="40704" firstAttribute="height" constant="40"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="txtHoursWorkedThisWeek"/>
                             </label>
                         </subviews>
                         <constraints>

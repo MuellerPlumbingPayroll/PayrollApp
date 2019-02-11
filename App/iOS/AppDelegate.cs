@@ -20,7 +20,9 @@ namespace Timecard.iOS
         {
             App.Initialize();
 
-
+            #if ENABLE_TEST_CLOUD
+                Xamarin.Calabash.Start();
+            #endif
 
             return true;
         }
