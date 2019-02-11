@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using CoreLocation;
 using Timecard.Models;
 using UIKit;
 
@@ -11,6 +12,7 @@ namespace Timecard.iOS
         public ItemsViewModel ViewModel { get; set; }
         public Item EditingItem { get; internal set; } = null;
 
+        private LocationManager locationManager;
         private UIDatePicker datePicker;
         private UIPickerView costCodePicker;
         private UIPickerView jobDescriptionPicker;
@@ -38,6 +40,9 @@ namespace Timecard.iOS
 
             ConfigureGestures();
             ConfigureEditing();
+
+            locationManager = new LocationManager();
+            locationManager.EnableLocationServices();
         }
 
         private void ConfigureGestures()
@@ -101,6 +106,17 @@ namespace Timecard.iOS
 
             btnSaveTime.TouchUpInside += (sender, e) =>
             {
+                CLLocationCoordinate2D location;
+                try
+                {
+                    location = locationManager.GetUserLocation();
+                }
+                catch (LocationNotAuthorizedException ex)
+                {
+                    DisplayAlertMessage(string.Format("Error saving time entry: {0}", ex.Message));
+                    return;
+                }
+
                 var item = new Item
                 {
                     JobDate = DateTime.ParseExact(txtDateField.Text, ProjectSettings.DateFormat,
@@ -114,11 +130,15 @@ namespace Timecard.iOS
                 if (EditingItem == null) // Creating a new item
                 {
                     item.JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment);
+                    item.LatitudeCreated = location.Latitude.ToString();
+                    item.LongitudeCreated = location.Longitude.ToString();
                 }
                 else // Editing an existing item
                 {
                     item.Id = EditingItem.Id;
                     item.JobType = EditingItem.JobType;
+                    item.LatitudeUpdated = location.Latitude.ToString();
+                    item.LongitudeUpdated = location.Longitude.ToString();
                 }
 
                 var errorMessage = item.CleanAndValidate();
@@ -137,12 +157,17 @@ namespace Timecard.iOS
                 }
                 else
                 {
-                    var alert = UIAlertController.Create("Error", errorMessage, UIAlertControllerStyle.Alert);
-                    alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
-
-                    PresentViewController(alert, animated: true, completionHandler: null);
+                    DisplayAlertMessage(errorMessage);  
                 }
             };
+        }
+
+        private void DisplayAlertMessage(string message)
+        {
+            var alert = UIAlertController.Create("Error", message, UIAlertControllerStyle.Alert);
+            alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
+
+            PresentViewController(alert, animated: true, completionHandler: null);
         }
 
         private void ConfigureDatePicker()

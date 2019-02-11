@@ -149,6 +149,7 @@
     <Compile Include="HistoryTableViewSectionHeader.designer.cs">
       <DependentUpon>HistoryTableViewSectionHeader.cs</DependentUpon>
     </Compile>
+    <Compile Include="LocationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />

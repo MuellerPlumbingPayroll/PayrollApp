@@ -23,5 +23,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProjectSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CostCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\LocationNotAuthorizedException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Exceptions\" />
   </ItemGroup>
 </Project>
