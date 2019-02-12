@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timecard.iOS", "iOS\Timecar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timecard.Droid", "Droid\Timecard.Droid.csproj", "{4983CA86-8F4C-4B75-A14A-970373384C1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timecard.UITests", "Timecard.UITests\Timecard.UITests.csproj", "{A7408DC5-CEC6-4386-B45F-A251091E5518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -41,5 +43,17 @@ Global
 		{4983CA86-8F4C-4B75-A14A-970373384C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4983CA86-8F4C-4B75-A14A-970373384C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4983CA86-8F4C-4B75-A14A-970373384C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Release|iPhone.Build.0 = Release|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7408DC5-CEC6-4386-B45F-A251091E5518}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
