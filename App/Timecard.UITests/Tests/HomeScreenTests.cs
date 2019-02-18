@@ -13,39 +13,38 @@ namespace Timecard.UITests
         [Test]
         public void TestClickNewEntryButton_CorrectlyTransitions()
         {
-            app.Tap("New Time Entry");   
+            app.Tap(NEW_ENTRY_BUTTON_TITLE);   
 
             // Search for a save button on the screen
             Assert.NotNull(app.Query(c => c.Marked("Save")).First().Text);
         }
 
         [Test]
-        public void TestAddNewEntry_UpdatesHoursToday()
+        public void TestAddNewEntry_UpdatesHoursLabels()
         {
             int numberHoursToAdd = 8;
+            string todayLabelName = "txtHoursWorkedToday";
+            string weekLabelName = "txtHoursWorkedThisWeek";
 
-            // Find the hours worked today label and parse it to get the starting hours
-            var todayLabelText = app.Query(c => c.Marked("txtHoursWorkedToday")).First().Text;
-            var todayHoursString = todayLabelText.Replace("Today: ", string.Empty).Replace(" hrs", string.Empty);
-            float startingHoursToday = float.Parse(todayHoursString);
+            float startingHoursToday = GetHoursFromLabel(todayLabelName);
+            float startingHoursWeek = GetHoursFromLabel(weekLabelName);
 
-            app.Tap("New Time Entry");
+            app.Tap(NEW_ENTRY_BUTTON_TITLE);
+            FillOutEntry(CONSTRUCTION_SEGMENT_TITLE, numberHoursToAdd);
+            app.WaitForElement(NEW_ENTRY_BUTTON_TITLE);
 
-            app.Tap("Hours");
-            app.EnterText(numberHoursToAdd.ToString());
-
-            app.Tap("Job Description");
-            app.Tap("Cost Code");
-            app.DismissKeyboard();
-
-            app.Tap("Save");
-
-            app.WaitForElement(c => c.Marked("txtHoursWorkedToday"));
-            todayLabelText = app.Query(c => c.Marked("txtHoursWorkedToday")).First().Text;
-            var newTodayHoursString = todayLabelText.Replace("Today: ", string.Empty).Replace(" hrs", string.Empty);
-            float endingHoursToday = float.Parse(newTodayHoursString);
+            float endingHoursToday = GetHoursFromLabel(todayLabelName);
+            float endingHoursWeek = GetHoursFromLabel(weekLabelName);
 
             Assert.AreEqual(startingHoursToday + numberHoursToAdd, endingHoursToday);
+            Assert.AreEqual(startingHoursWeek + numberHoursToAdd, endingHoursWeek);
+        }
+
+        private float GetHoursFromLabel(string labelName) 
+        {
+            var labelText = app.Query(c => c.Marked(labelName)).First().Text;
+            var hoursString = labelText.Replace(" hrs", string.Empty).Split(' ').Last();
+            return float.Parse(hoursString);
         }
     }
 }

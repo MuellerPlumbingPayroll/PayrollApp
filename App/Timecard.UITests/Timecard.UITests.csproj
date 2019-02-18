@@ -38,7 +38,6 @@
     <Compile Include="AppInitializer.cs" />
     <Compile Include="Tests\HomeScreenTests.cs" />
     <Compile Include="Tests\BaseTests.cs" />
-    <Compile Include="Tests\NewEntryScreenGestureTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
