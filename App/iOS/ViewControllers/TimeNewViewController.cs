@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using CoreLocation;
+using Timecard.Exceptions;
 using Timecard.iOS.ViewControllers.PickerViewModels;
 using Timecard.Models;
 using UIKit;
@@ -142,24 +143,20 @@ namespace Timecard.iOS
                     item.LongitudeUpdated = location.Longitude.ToString();
                 }
 
-                var errorMessage = item.CleanAndValidate();
-                if (string.IsNullOrWhiteSpace(errorMessage)) // Nothing wrong with the item
+                try
                 {
+                    item.Clean();
                     if (EditingItem == null)
-                    {
                         ViewModel.AddItemCommand.Execute(item);
-                    }
                     else
-                    {
                         ViewModel.UpdateItemCommand.Execute(item);
-                    }
-
-                    NavigationController.PopToRootViewController(true);
                 }
-                else
+                catch (InvalidItemException ex)
                 {
-                    DisplayAlertMessage(errorMessage);  
+                    DisplayAlertMessage(ex.Message);
                 }
+
+                NavigationController.PopToRootViewController(true);
             };
         }
 

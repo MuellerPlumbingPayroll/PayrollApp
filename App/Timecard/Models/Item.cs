@@ -1,11 +1,13 @@
 ﻿using System;
+using Timecard.Exceptions;
+using Timecard.Models;
+
+using System.Text.RegularExpressions;
 
 namespace Timecard
 {
     public class Item
     {
-        private readonly static float MAX_NUM_HOURS_WORKED = 18;
-
         public string Id { get; set; }
         public DateTime JobDate { get; set; }
         public string ConstructionJobId { get; set; }
@@ -27,41 +29,53 @@ namespace Timecard
             this.TimeUpdated = this.TimeCreated;
         }
 
-        public string CleanAndValidate()
+        public void Clean()
         {
-            this.JobDescription = this.JobDescription?.Trim();
-            if (this.JobType == Models.JobType.Other)
-                this.CostCode = string.Empty;
-            return this.Validate();
-        }
-
-        private string Validate()
-        {
-            if (this.JobType != Models.JobType.Other)
+            switch (JobType)
             {
-                if (string.IsNullOrEmpty(this.CostCode))
-                {
-                    return "Cost code must have a value";
-                }
+                case Models.JobType.Construction:
+                case Models.JobType.Service:
+                    if (string.IsNullOrEmpty(CostCode)) 
+                        throw new InvalidItemException("Cost code must have a value.");
+                    break;
+                case Models.JobType.Other:
+                    CostCode = string.Empty;
+                    break;
             }
 
-            if (string.IsNullOrEmpty(this.JobDescription))
+            if (string.IsNullOrEmpty(JobDescription))
             {
-                return "Job Description must have a value";
+                throw new InvalidItemException("Job description must have a value.");
             }
             else // Validate number of hours worked
             {
-                var isValid = float.TryParse(this.HoursWorked, out float n);
+                HoursWorked = HoursWorked?.Trim();
 
-                if (isValid && n > 0 && n <= MAX_NUM_HOURS_WORKED)
-                {
-                    this.HoursWorked = n.ToString("0.##");
-                    return null;
-                }
-                else
-                {
-                    return string.Format($"Invalid number of hours. The value must be between 0 and {MAX_NUM_HOURS_WORKED}");
-                }
+                // Hours worked is supposed to be a string in the format hours:minutes
+                // Minutes can only be in increments of 15
+
+                string regexPattern = "\\A\\d{1,2}:\\d{2}\\z";
+                var match = Regex.Match(HoursWorked, regexPattern);
+                if (!match.Success)
+                    throw new InvalidItemException("Invalid time format.");
+
+                var times = HoursWorked.Split(":");
+                var isValidHours = int.TryParse(times[0], out int hours);
+                var isValidMinutes = int.TryParse(times[1], out int minutes);
+
+                if (!isValidHours || !isValidMinutes)
+                    throw new InvalidItemException("Invalid time format.");
+                else if (hours == 0 && minutes == 0)
+                    throw new InvalidItemException("Time must be greater than zero.");
+                else if (hours > ProjectSettings.MaxNumberHoursInWorkDay)
+                    throw new InvalidItemException(string.Format(
+                        $"Invalid number of hours. The value must be between 0 and {ProjectSettings.MaxNumberHoursInWorkDay}."));
+                else if (minutes > 45 || minutes % 15 != 0)
+                    throw new InvalidItemException("Invalid number of minutes. The value must be 0, 15, 30, or 45.");
+
+                var time = new Decimal(hours + (float)minutes / 60);
+                HoursWorked = string.Format($"{Decimal.Round(time, 2)}");
+                System.Diagnostics.Debug.WriteLine("hours worked is: " + HoursWorked);
             }
         }
     }

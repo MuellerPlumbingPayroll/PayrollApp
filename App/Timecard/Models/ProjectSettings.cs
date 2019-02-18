@@ -11,9 +11,10 @@ namespace Timecard.Models
         public static readonly int NumberHoursInWorkDay = 8;
         public static readonly int NumberDaysInWorkWeek = 5;
         public static readonly int NumberHoursInWorkWeek = NumberHoursInWorkDay * NumberDaysInWorkWeek;
+        public static readonly int MaxNumberHoursInWorkDay = 2 * NumberHoursInWorkDay;
 
         public static readonly string[] OtherTimeOptions = {
-                "Shop", "Vacation", "Holiday", "Sick"
+                "Shop", "Vacation", "Holiday", "Sick", "Unpaid Leave"
             };
 
         public static DateTime GetStartOfCurrentPayPeriod()
