@@ -141,15 +141,15 @@
     <Compile Include="ViewControllers\TimeDetailViewController.designer.cs">
       <DependentUpon>TimeDetailViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="HistoryTableViewCell.cs" />
-    <Compile Include="HistoryTableViewCell.designer.cs">
+    <Compile Include="TableViewCells\HistoryTableViewCell.cs" />
+    <Compile Include="TableViewCells\HistoryTableViewCell.designer.cs">
       <DependentUpon>HistoryTableViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="HistoryTableViewSectionHeader.cs" />
-    <Compile Include="HistoryTableViewSectionHeader.designer.cs">
+    <Compile Include="TableViewCells\HistoryTableViewSectionHeader.cs" />
+    <Compile Include="TableViewCells\HistoryTableViewSectionHeader.designer.cs">
       <DependentUpon>HistoryTableViewSectionHeader.cs</DependentUpon>
     </Compile>
-    <Compile Include="LocationManager.cs" />
+    <Compile Include="Utilities\LocationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
@@ -159,6 +159,10 @@
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TableViewCells\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="..\Timecard\Timecard.projitems" Label="Shared" Condition="Exists('..\Timecard\Timecard.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
