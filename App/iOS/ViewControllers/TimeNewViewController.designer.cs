@@ -24,19 +24,19 @@ namespace Timecard.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField txtCostCode { get; set; }
+        Timecard.iOS.TextFieldWithDoneButton txtCostCode { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField txtDateField { get; set; }
+        Timecard.iOS.TextFieldWithDoneButton txtDateField { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField txtHoursWorked { get; set; }
+        Timecard.iOS.TextFieldWithDoneButton txtHoursWorked { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField txtJobDescription { get; set; }
+        Timecard.iOS.TextFieldWithDoneButton txtJobDescription { get; set; }
 
         [Action ("JobTypeSegControl_ValueChanged:")]
         [GeneratedCode ("iOS Designer", "1.0")]

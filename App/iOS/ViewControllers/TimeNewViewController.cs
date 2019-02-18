@@ -38,8 +38,6 @@ namespace Timecard.iOS
             jobTypeSegControl.SetTitle(JobType.Service, 1);
             jobTypeSegControl.SetTitle(JobType.Other, 2);
  
-            AddDoneButtonToTextField(txtHoursWorked);
-
             ConfigureGestures();
             ConfigureEditing();
 
@@ -154,6 +152,7 @@ namespace Timecard.iOS
                 catch (InvalidItemException ex)
                 {
                     DisplayAlertMessage(ex.Message);
+                    return;
                 }
 
                 NavigationController.PopToRootViewController(true);
@@ -183,7 +182,6 @@ namespace Timecard.iOS
                 txtDateField.Text = ((DateTime)datePicker.Date).ToString(ProjectSettings.DateFormat);
             };
 
-            AddDoneButtonToTextField(txtDateField);
             txtDateField.Text = DateTime.Now.ToString(ProjectSettings.DateFormat);
             txtDateField.InputView = datePicker;
 
@@ -205,7 +203,6 @@ namespace Timecard.iOS
                 Model = jobDescriptionModel
             };
 
-            AddDoneButtonToTextField(txtJobDescription);
             txtJobDescription.InputView = jobDescriptionPicker;
 
             txtJobDescription.EditingDidBegin += (sender, e) =>
@@ -239,7 +236,6 @@ namespace Timecard.iOS
                 Model = new CostCodePickerModel(ViewModel, txtCostCode)
             };
 
-            AddDoneButtonToTextField(txtCostCode);
             txtCostCode.InputView = costCodePicker;
 
             txtCostCode.EditingDidBegin += (sender, e) =>
@@ -259,28 +255,6 @@ namespace Timecard.iOS
             {
                 txtCostCode.Text = EditingItem.CostCode;
             }
-        }
-
-        /// <summary>
-        /// By default, the keyboard or view that pops up when selecting a 
-        // text field does not have a done button or way to dismiss the view.
-        /// This method adds a bar with a done button to the specified text field.
-        /// </summary>
-        /// <param name="textField">Text field.</param>
-        private void AddDoneButtonToTextField(UITextField textField)
-        {
-            var toolbar = new UIToolbar(new RectangleF(0.0f, 0.0f, 50.0f, 44.0f));
-            var doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, delegate
-            {
-                textField.ResignFirstResponder();
-            });
-
-            toolbar.Items = new UIBarButtonItem[] {
-                new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
-                doneButton
-            };
-
-            textField.InputAccessoryView = toolbar;
         }
 
         /* Event Handlers */

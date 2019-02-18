@@ -343,28 +343,28 @@
                                     <constraint id="7348" firstAttribute="height" constant="50"/>
                                 </constraints>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="15432" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Hours" clearButtonMode="whileEditing">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="15432" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Hours" clearButtonMode="whileEditing" customClass="TextFieldWithDoneButton">
                                 <rect key="frame" x="20" y="238" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                                 <accessibility key="accessibilityConfiguration" label="txtHoursWorked"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="15433" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Date">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="15433" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Date" customClass="TextFieldWithDoneButton">
                                 <rect key="frame" x="20" y="178" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                                 <accessibility key="accessibilityConfiguration" label="txtDateField"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="16070" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Job Description">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="16070" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Job Description" customClass="TextFieldWithDoneButton">
                                 <rect key="frame" x="20" y="298" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                                 <accessibility key="accessibilityConfiguration" label="txtJobDescription"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="16643" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Cost Code">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="18" id="16643" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Cost Code" customClass="TextFieldWithDoneButton">
                                 <rect key="frame" x="20" y="358" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>

@@ -152,6 +152,10 @@
     <Compile Include="Utilities\LocationManager.cs" />
     <Compile Include="ViewControllers\PickerViewModels\JobDescriptionPickerModel.cs" />
     <Compile Include="ViewControllers\PickerViewModels\CostCodePickerModel.cs" />
+    <Compile Include="CustomWidgets\TextFieldWithDoneButton.cs" />
+    <Compile Include="CustomWidgets\TextFieldWithDoneButton.designer.cs">
+      <DependentUpon>TextFieldWithDoneButton.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
@@ -166,6 +170,7 @@
     <Folder Include="TableViewCells\" />
     <Folder Include="Utilities\" />
     <Folder Include="ViewControllers\PickerViewModels\" />
+    <Folder Include="CustomWidgets\" />
   </ItemGroup>
   <Import Project="..\Timecard\Timecard.projitems" Label="Shared" Condition="Exists('..\Timecard\Timecard.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
