@@ -150,6 +150,8 @@
       <DependentUpon>HistoryTableViewSectionHeader.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\LocationManager.cs" />
+    <Compile Include="ViewControllers\PickerViewModels\JobDescriptionPickerModel.cs" />
+    <Compile Include="ViewControllers\PickerViewModels\CostCodePickerModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
@@ -163,6 +165,7 @@
   <ItemGroup>
     <Folder Include="TableViewCells\" />
     <Folder Include="Utilities\" />
+    <Folder Include="ViewControllers\PickerViewModels\" />
   </ItemGroup>
   <Import Project="..\Timecard\Timecard.projitems" Label="Shared" Condition="Exists('..\Timecard\Timecard.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

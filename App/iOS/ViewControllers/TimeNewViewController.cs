@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using CoreLocation;
+using Timecard.iOS.ViewControllers.PickerViewModels;
 using Timecard.Models;
 using UIKit;
 
@@ -16,7 +17,7 @@ namespace Timecard.iOS
         private UIDatePicker datePicker;
         private UIPickerView costCodePicker;
         private UIPickerView jobDescriptionPicker;
-        private JobDescriptionModel jobDescriptionModel;
+        private JobDescriptionPickerModel jobDescriptionModel;
 
         public TimeNewViewController(IntPtr handle) : base(handle)
         {
@@ -201,7 +202,7 @@ namespace Timecard.iOS
         {
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
-            jobDescriptionModel = new JobDescriptionModel(ViewModel, txtJobDescription, selectedJobType);
+            jobDescriptionModel = new JobDescriptionPickerModel(ViewModel, txtJobDescription, selectedJobType);
             jobDescriptionPicker = new UIPickerView
             {
                 Model = jobDescriptionModel
@@ -238,7 +239,7 @@ namespace Timecard.iOS
         {
             costCodePicker = new UIPickerView
             {
-                Model = new CostCodeModel(ViewModel, txtCostCode)
+                Model = new CostCodePickerModel(ViewModel, txtCostCode)
             };
 
             AddDoneButtonToTextField(txtCostCode);
@@ -301,80 +302,6 @@ namespace Timecard.iOS
 
             jobDescriptionModel.SelectedJobType = segmentTitle;
             jobDescriptionPicker.ReloadAllComponents();
-        }
-    }
-
-
-    /// <summary>
-    /// Data source for the job picker.
-    /// </summary>
-    class JobDescriptionModel : UIPickerViewModel
-    {
-        public string SelectedJobType { get; set; }
-        private ItemsViewModel viewModel;
-        private UITextField textField;
-
-        public JobDescriptionModel(ItemsViewModel viewModel, UITextField textField, string selectedJobType)
-        {
-            this.viewModel = viewModel;
-            this.textField = textField;
-            this.SelectedJobType = selectedJobType;
-        }
-
-        public override void Selected(UIPickerView pickerView, nint row, nint component)
-        {
-            textField.Text = viewModel.JobDescriptions[SelectedJobType][(int) row];
-        }
-
-        public override string GetTitle(UIPickerView pickerView, nint row, nint component)
-        {
-            return viewModel.JobDescriptions[SelectedJobType][(int) row];
-        }
-
-        public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
-        {
-            return viewModel.JobDescriptions[SelectedJobType].Count;
-        }
-
-        public override nint GetComponentCount(UIPickerView pickerView)
-        {
-            return 1;
-        }
-    }
-
-
-    /// <summary>
-    /// Data source for cost code picker.
-    /// </summary>
-    class CostCodeModel : UIPickerViewModel
-    {
-        private ItemsViewModel viewModel;
-        private UITextField textField;
-
-        public CostCodeModel(ItemsViewModel viewModel, UITextField textField)
-        {
-            this.viewModel = viewModel;
-            this.textField = textField;
-        }
-
-        public override void Selected(UIPickerView pickerView, nint row, nint component)
-        {
-            textField.Text = viewModel.CostCodes[(int)row].Description;
-        }
-
-        public override string GetTitle(UIPickerView pickerView, nint row, nint component)
-        {
-            return viewModel.CostCodes[(int)row].Description;
-        }
-
-        public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
-        {
-            return viewModel.CostCodes.Count;
-        }
-
-        public override nint GetComponentCount(UIPickerView pickerView)
-        {
-            return 1;
         }
     }
 }
