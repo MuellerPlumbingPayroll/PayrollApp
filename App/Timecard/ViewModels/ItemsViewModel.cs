@@ -58,7 +58,7 @@ namespace Timecard
             for (var i = 0; i < numberSections; i++)
             {
                 sections[i] = Items.ToList()
-                    .Where(item => item.JobDate.DayOfWeek.Equals(dayInPayPeriod.DayOfWeek))
+                    .Where(item => item.JobDate.Equals(dayInPayPeriod.ToString(ProjectSettings.DateFormat)))
                     .ToList();
 
                 dayInPayPeriod = dayInPayPeriod.AddDays(1);
@@ -84,7 +84,7 @@ namespace Timecard
             if (day != null) 
             {
                 timeEntries = timeEntries
-                    .Where(item => item.JobDate.DayOfWeek.Equals(day))
+                    .Where(item => (bool)ProjectSettings.LocalDateFromString(item.JobDate)?.DayOfWeek.Equals(day))
                     .ToList();
             }
 

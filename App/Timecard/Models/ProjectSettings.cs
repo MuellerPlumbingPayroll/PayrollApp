@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 namespace Timecard.Models
 {
     public static class ProjectSettings
@@ -35,6 +37,15 @@ namespace Timecard.Models
                 payPeriodEnd = payPeriodEnd.AddDays(1);
             }
             return payPeriodEnd;
+        }
+
+        public static DateTime? LocalDateFromString(string s)
+        {
+            var isValid = DateTime.TryParseExact(s, DateFormat, CultureInfo.InvariantCulture, 
+                                                 DateTimeStyles.AssumeLocal, out DateTime date);
+            if (isValid)
+                return date;
+            return null;
         }
     }
 }

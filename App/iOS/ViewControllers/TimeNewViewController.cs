@@ -16,8 +16,6 @@ namespace Timecard.iOS
 
         private LocationManager locationManager;
         private UIDatePicker datePicker;
-        private UIPickerView costCodePicker;
-        private UIPickerView jobDescriptionPicker;
         private JobDescriptionPickerModel jobDescriptionModel;
 
         public TimeNewViewController(IntPtr handle) : base(handle)
@@ -30,6 +28,7 @@ namespace Timecard.iOS
             Title = EditingItem == null ? "New Entry" : "Editing Entry";
 
             ConfigureDatePicker();
+            ConfigureHoursWorkedPicker();
             ConfigureJobDescriptionPicker();
             ConfigureCostCodePicker();
             ConfigureSaveButton();
@@ -94,7 +93,6 @@ namespace Timecard.iOS
                 // Prevent user from being able to change the job type
                 jobTypeSegControl.Hidden = true;
                 txtCostCode.Hidden = EditingItem.JobType == JobType.Other;
-                txtHoursWorked.Text = EditingItem.HoursWorked;
             }
         }
 
@@ -119,8 +117,7 @@ namespace Timecard.iOS
 
                 var item = new Item
                 {
-                    JobDate = DateTime.ParseExact(txtDateField.Text, ProjectSettings.DateFormat,
-                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal),
+                    JobDate = txtDateField.Text,
                     JobDescription = txtJobDescription.Text,
                     HoursWorked = txtHoursWorked.Text,
                     CostCode = txtCostCode.Text
@@ -155,7 +152,7 @@ namespace Timecard.iOS
                     return;
                 }
 
-                NavigationController.PopToRootViewController(true);
+                base.NavigationController.PopToRootViewController(true);
             };
         }
 
@@ -165,6 +162,15 @@ namespace Timecard.iOS
             alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
 
             PresentViewController(alert, animated: true, completionHandler: null);
+        }
+
+        private void ConfigureHoursWorkedPicker()
+        {
+            if (EditingItem != null)
+            {
+                var time = string.Format($"{EditingItem.GetHoursWorkedHoursPart()}:{EditingItem.GetHoursWorkedMinutesPart()}");
+                txtHoursWorked.Text = time;
+            }
         }
 
         private void ConfigureDatePicker()
@@ -188,8 +194,9 @@ namespace Timecard.iOS
             if (EditingItem != null)
             {
                 // If the user is editing this entry, set the picker to the previously selected date
-                txtDateField.Text = EditingItem.JobDate.ToString(ProjectSettings.DateFormat);
-                datePicker.SetDate((Foundation.NSDate)EditingItem.JobDate, false);
+                txtDateField.Text = EditingItem.JobDate;
+                datePicker.SetDate((Foundation.NSDate)ProjectSettings.LocalDateFromString(EditingItem.JobDate), false);
+   
             }
         }
 
@@ -197,67 +204,29 @@ namespace Timecard.iOS
         {
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
-            jobDescriptionModel = new JobDescriptionPickerModel(ViewModel, txtJobDescription, selectedJobType);
-            jobDescriptionPicker = new UIPickerView
-            {
-                Model = jobDescriptionModel
-            };
-
-            txtJobDescription.InputView = jobDescriptionPicker;
-
-            txtJobDescription.EditingDidBegin += (sender, e) =>
-            {
-                if (string.IsNullOrWhiteSpace(txtJobDescription.Text))
-                {
-                    // Try because getting the title may fail
-                    try
-                    {
-                        var model = jobDescriptionPicker.Model;
-                        txtJobDescription.Text = model.GetTitle(jobDescriptionPicker, 0, 0);
-                    } catch { }
-                }
-            };
+            jobDescriptionModel = new JobDescriptionPickerModel(ViewModel, selectedJobType);
+            txtJobDescription.AddPickerToTextField(jobDescriptionModel);
 
             if (EditingItem != null)
             {
                 if (EditingItem.JobType == JobType.Service)
                 {
-                    txtJobDescription.InputView = null;
+                    txtJobDescription.SetPickerActive(false);
                 }
-
                 txtJobDescription.Text = EditingItem.JobDescription;
             }
         }
 
         private void ConfigureCostCodePicker()
         {
-            costCodePicker = new UIPickerView
-            {
-                Model = new CostCodePickerModel(ViewModel, txtCostCode)
-            };
-
-            txtCostCode.InputView = costCodePicker;
-
-            txtCostCode.EditingDidBegin += (sender, e) =>
-            {
-                if (string.IsNullOrWhiteSpace(txtCostCode.Text))
-                {
-                    // Try because getting the title may fail
-                    try
-                    {
-                        var model = costCodePicker.Model;
-                        txtCostCode.Text = model.GetTitle(costCodePicker, 0, 0);
-                    } catch { }
-                }
-            };
+            var model = new CostCodePickerModel(ViewModel);
+            txtCostCode.AddPickerToTextField(model);
 
             if (EditingItem != null)
-            {
                 txtCostCode.Text = EditingItem.CostCode;
-            }
         }
 
-        /* Event Handlers */
+        /***** Event Handlers *****/
 
         partial void JobTypeSegControl_ValueChanged(UISegmentedControl sender)
         {
@@ -265,14 +234,13 @@ namespace Timecard.iOS
             View.EndEditing(true);
 
             var segmentTitle = sender.TitleAt(sender.SelectedSegment);
-
-            txtJobDescription.InputView = segmentTitle == JobType.Service ? null : jobDescriptionPicker;
-            txtJobDescription.Text = string.Empty;
-
-            txtCostCode.Hidden = segmentTitle == JobType.Other;
-
             jobDescriptionModel.SelectedJobType = segmentTitle;
-            jobDescriptionPicker.ReloadAllComponents();
+
+            txtJobDescription.Text = string.Empty;
+            txtJobDescription.SetPickerActive(segmentTitle != JobType.Service);
+
+            // Cost code is not needed for "Other" job type so hide it
+            txtCostCode.Hidden = segmentTitle == JobType.Other;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Timecard
     public class Item
     {
         public string Id { get; set; }
-        public DateTime JobDate { get; set; }
+        public string JobDate { get; set; }
         public string ConstructionJobId { get; set; }
         public string JobDescription { get; set; }
         public string JobType { get; set; }
@@ -43,10 +43,14 @@ namespace Timecard
                     break;
             }
 
-            if (string.IsNullOrEmpty(JobDescription))
-            {
+            if (string.IsNullOrWhiteSpace(JobDate) || ProjectSettings.LocalDateFromString(JobDate) == null)
+                throw new InvalidItemException("Job date is invalid.");
+            if (string.IsNullOrWhiteSpace(HoursWorked))
+                throw new InvalidItemException("Hours worked must have a value.");
+            else if (string.IsNullOrWhiteSpace(HoursWorked))
+                throw new InvalidItemException("Hours worked must have a value.");
+            else if (string.IsNullOrEmpty(JobDescription))
                 throw new InvalidItemException("Job description must have a value.");
-            }
             else // Validate number of hours worked
             {
                 HoursWorked = HoursWorked?.Trim();
@@ -75,8 +79,35 @@ namespace Timecard
 
                 var time = new Decimal(hours + (float)minutes / 60);
                 HoursWorked = string.Format($"{Decimal.Round(time, 2)}");
-                System.Diagnostics.Debug.WriteLine("hours worked is: " + HoursWorked);
             }
+        }
+
+        public string GetHoursWorkedHoursPart()
+        {
+            if (!string.IsNullOrWhiteSpace(HoursWorked))
+                return HoursWorked.Split('.')[0];
+            return "0";
+        }
+
+        public string GetHoursWorkedMinutesPart()
+        {
+            if (!string.IsNullOrWhiteSpace(HoursWorked))
+            {
+                var times = HoursWorked.Split('.');
+                if (times.Length > 1)
+                {
+                    switch (times[1])
+                    {
+                        case "25":
+                            return "15";
+                        case "5":
+                            return "30";
+                        case "75":
+                            return "45";
+                    }
+                }
+            }
+            return "00";
         }
     }
 }

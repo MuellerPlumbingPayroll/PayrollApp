@@ -12,15 +12,6 @@ namespace Timecard
         public MockDataStore()
         {
             items = new List<Item>();
-            var _items = new List<Item>
-            {
-                new Item { Id = Guid.NewGuid().ToString(), JobDate=DateTime.Now, JobType="Other", JobDescription="Sick", HoursWorked = "8"}
-            };
-
-            foreach (Item item in _items)
-            {
-                items.Add(item);
-            }
         }
 
         public async Task<bool> AddItemAsync(Item item)

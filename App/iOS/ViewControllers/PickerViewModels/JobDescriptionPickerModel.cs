@@ -6,16 +6,17 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
     /// <summary>
     /// Data source for the job picker.
     /// </summary>
-    class JobDescriptionPickerModel : UIPickerViewModel
+    class JobDescriptionPickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
+        private static readonly string DEFAULT_JOB_DESCRIPTION_VALUE = "Not Listed";
+
         public string SelectedJobType { get; set; }
         private ItemsViewModel viewModel;
         private UITextField textField;
 
-        public JobDescriptionPickerModel(ItemsViewModel viewModel, UITextField textField, string selectedJobType)
+        public JobDescriptionPickerModel(ItemsViewModel viewModel, string selectedJobType)
         {
             this.viewModel = viewModel;
-            this.textField = textField;
             this.SelectedJobType = selectedJobType;
         }
 
@@ -37,6 +38,23 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
         public override nint GetComponentCount(UIPickerView pickerView)
         {
             return 1;
+        }
+
+        public string GetDefaultTextFieldValue()
+        {
+            try
+            {
+                return GetTitle(null, 0, 0);
+            }
+            catch (Exception)
+            {
+                return DEFAULT_JOB_DESCRIPTION_VALUE;
+            }
+        }
+
+        public void SetValueChangedView(UIView textField)
+        {
+            this.textField = (UITextField)textField;
         }
     }
 }

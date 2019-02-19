@@ -6,20 +6,22 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
     /// <summary>
     /// Data source for cost code picker.
     /// </summary>
-    class CostCodePickerModel : UIPickerViewModel
+    class CostCodePickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
-        private ItemsViewModel viewModel;
-        private UITextField textField;
+        private static readonly string DEFAULT_COST_CODE_VALUE = "Not Listed";
 
-        public CostCodePickerModel(ItemsViewModel viewModel, UITextField textField)
+        private UITextField textField;
+        private ItemsViewModel viewModel;
+
+        public CostCodePickerModel(ItemsViewModel viewModel)
         {
             this.viewModel = viewModel;
-            this.textField = textField;
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            textField.Text = viewModel.CostCodes[(int)row].Description;
+            if (textField != null) 
+                textField.Text = viewModel.CostCodes[(int)row].Description;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
@@ -35,6 +37,23 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
         public override nint GetComponentCount(UIPickerView pickerView)
         {
             return 1;
+        }
+
+        public string GetDefaultTextFieldValue()
+        {
+            try
+            {
+                return GetTitle(null, 0, 0);
+            }
+            catch (Exception)
+            {
+                return DEFAULT_COST_CODE_VALUE;
+            }
+        }
+
+        public void SetValueChangedView(UIView textField)
+        {
+            this.textField = (UITextField)textField;
         }
     }
 }
