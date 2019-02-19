@@ -7,7 +7,7 @@ namespace Timecard.iOS
 {
     public partial class TextFieldWithDoneButton : UITextField
     {
-        private UIPickerView PickerView;
+        public UIPickerView PickerView { get; set; }
 
         public TextFieldWithDoneButton(IntPtr handle) : base(handle)
         {

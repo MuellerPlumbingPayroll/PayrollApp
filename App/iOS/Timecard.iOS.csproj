@@ -157,6 +157,7 @@
       <DependentUpon>TextFieldWithDoneButton.cs</DependentUpon>
     </Compile>
     <Compile Include="ICustomPickerViewModel.cs" />
+    <Compile Include="ViewControllers\PickerViewModels\HoursWorkedPickerModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />

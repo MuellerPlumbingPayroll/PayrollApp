@@ -148,15 +148,6 @@ namespace Timecard.iOS
             PresentViewController(alert, animated: true, completionHandler: null);
         }
 
-        private void ConfigureHoursWorkedPicker()
-        {
-            if (EditingItem != null)
-            {
-                var time = string.Format($"{EditingItem.GetHoursWorkedHoursPart()}:{EditingItem.GetHoursWorkedMinutesPart()}");
-                txtHoursWorked.Text = time;
-            }
-        }
-
         private void ConfigureDatePicker()
         {
             datePicker = new UIDatePicker
@@ -181,6 +172,25 @@ namespace Timecard.iOS
                 txtDateField.Text = EditingItem.JobDate;
                 datePicker.SetDate((Foundation.NSDate)ProjectSettings.LocalDateFromString(EditingItem.JobDate), false);
    
+            }
+        }
+
+        private void ConfigureHoursWorkedPicker()
+        {
+            txtHoursWorked.AddPickerToTextField(new HoursWorkedPickerModel());
+            txtHoursWorked.PickerView.Select(2, 0, true);
+            txtHoursWorked.PickerView.Select(1, 1, true);
+
+            if (EditingItem != null)
+            {
+                var hoursString = EditingItem.GetHoursWorkedHoursPart();
+                var minutesString = EditingItem.GetHoursWorkedMinutesPart();
+
+                txtHoursWorked.PickerView.Select(int.Parse(hoursString) + 1, 0, true);
+                txtHoursWorked.PickerView.Select(int.Parse(minutesString) / 15 + 1, 1, true);
+
+                var time = string.Format($"{hoursString}:{minutesString}");
+                txtHoursWorked.Text = time;
             }
         }
 
@@ -212,7 +222,7 @@ namespace Timecard.iOS
 
         /***** Event Handlers *****/
 
-        public void HandleSwipeGesture(UISwipeGestureRecognizerDirection direction)
+        private void HandleSwipeGesture(UISwipeGestureRecognizerDirection direction)
         {
             switch (direction)
             {

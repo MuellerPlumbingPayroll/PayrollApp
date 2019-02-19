@@ -6,6 +6,6 @@ namespace Timecard.iOS
     public interface ICustomPickerViewModel
     {
         string GetDefaultTextFieldValue();
-        void SetValueChangedView(UIView textField);
+        void SetValueChangedView(UIView view);
     }
 }
