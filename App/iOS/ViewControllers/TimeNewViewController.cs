@@ -51,28 +51,12 @@ namespace Timecard.iOS
             View.AddGestureRecognizer(tapGesture);
 
             // When the user swipes left or right, change the value of the selected job type
-            var swipeLeft = new UISwipeGestureRecognizer((s) =>
-            {
-                if (jobTypeSegControl.SelectedSegment == 0)
-                    jobTypeSegControl.SelectedSegment = jobTypeSegControl.NumberOfSegments - 1;
-                else
-                    jobTypeSegControl.SelectedSegment -= 1;
-
-                JobTypeSegControl_ValueChanged(jobTypeSegControl);
-            })
+            var swipeLeft = new UISwipeGestureRecognizer((s) => HandleSwipeGesture(UISwipeGestureRecognizerDirection.Left))
             {
                 Direction = UISwipeGestureRecognizerDirection.Left
             };
-
-            var swipeRight = new UISwipeGestureRecognizer((s) =>
-            {
-                if (jobTypeSegControl.SelectedSegment == jobTypeSegControl.NumberOfSegments - 1)
-                    jobTypeSegControl.SelectedSegment = 0;
-                else
-                    jobTypeSegControl.SelectedSegment += 1;
-
-                JobTypeSegControl_ValueChanged(jobTypeSegControl);
-            })
+            
+            var swipeRight = new UISwipeGestureRecognizer((s) => HandleSwipeGesture(UISwipeGestureRecognizerDirection.Right))
             {
                 Direction = UISwipeGestureRecognizerDirection.Right
             };
@@ -227,6 +211,27 @@ namespace Timecard.iOS
         }
 
         /***** Event Handlers *****/
+
+        public void HandleSwipeGesture(UISwipeGestureRecognizerDirection direction)
+        {
+            switch (direction)
+            {
+                case UISwipeGestureRecognizerDirection.Left:
+                    if (jobTypeSegControl.SelectedSegment == 0)
+                        jobTypeSegControl.SelectedSegment = jobTypeSegControl.NumberOfSegments - 1;
+                    else
+                        jobTypeSegControl.SelectedSegment -= 1;
+                    break;
+                case UISwipeGestureRecognizerDirection.Right:
+                    if (jobTypeSegControl.SelectedSegment == jobTypeSegControl.NumberOfSegments - 1)
+                        jobTypeSegControl.SelectedSegment = 0;
+                    else
+                        jobTypeSegControl.SelectedSegment += 1;
+                    break;
+            }
+
+            JobTypeSegControl_ValueChanged(jobTypeSegControl);
+        }
 
         partial void JobTypeSegControl_ValueChanged(UISegmentedControl sender)
         {
