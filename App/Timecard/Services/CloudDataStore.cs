@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using Plugin.Connectivity;
+using Timecard.Models;
 
 namespace Timecard
 {
@@ -14,6 +16,7 @@ namespace Timecard
     {
         HttpClient client;
         IEnumerable<Item> items;
+        IEnumerable<CostCode> costCodes;
 
         public CloudDataStore()
         {
@@ -21,6 +24,7 @@ namespace Timecard
             client.BaseAddress = new Uri($"{App.BackendUrl}/");
 
             items = new List<Item>();
+            costCodes = new List<CostCode>();
         }
 
         public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
@@ -79,6 +83,17 @@ namespace Timecard
             var response = await client.DeleteAsync($"api/item/{id}");
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<IEnumerable<CostCode>> GetCostCodesAsync()
+        {
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                var json = await client.GetStringAsync("cost-code/");
+                costCodes = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<CostCode>>(json));
+            }
+            
+            return costCodes;
         }
     }
 }

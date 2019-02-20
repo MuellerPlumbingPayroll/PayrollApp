@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Timecard.Models;
 
 namespace Timecard
 {
@@ -10,5 +11,7 @@ namespace Timecard
         Task<bool> DeleteItemAsync(string id);
         Task<T> GetItemAsync(string id);
         Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
+
+        Task<IEnumerable<CostCode>> GetCostCodesAsync();
     }
 }

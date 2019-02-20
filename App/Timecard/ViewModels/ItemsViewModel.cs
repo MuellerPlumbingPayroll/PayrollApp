@@ -16,6 +16,9 @@ namespace Timecard
         public Command AddItemCommand { get; set; }
         public Command UpdateItemCommand { get; set; }
         public Command DeleteItemCommand { get; set; }
+
+        public Command LoadCostCodesCommand { get; set; }
+
         public Dictionary<string, List<string>> JobDescriptions { get; set; }
         public ObservableCollection<CostCode> CostCodes { get; set; }
 
@@ -23,10 +26,14 @@ namespace Timecard
         {
             Title = "History";
             Items = new ObservableCollection<Item>();
+            CostCodes = new ObservableCollection<CostCode>();
+
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AddItemCommand = new Command<Item>(async (Item item) => await AddItem(item));
             UpdateItemCommand = new Command<Item>(async (Item item) => await UpdateItem(item));
             DeleteItemCommand = new Command<Item>(async (Item item) => await DeleteItem(item));
+
+            LoadCostCodesCommand = new Command(async () => await ExecuteLoadCostCodesCommand());
 
             JobDescriptions = new Dictionary<string, List<string>>
             {
@@ -36,16 +43,7 @@ namespace Timecard
                 {JobType.Other, new List<string>(ProjectSettings.OtherTimeOptions)}
             };
 
-            CostCodes = new ObservableCollection<CostCode>
-            {
-                // TODO: Instead of adding a dummy value, call the api to get the actual codes
-                new CostCode
-                {
-                    Id = "1",
-                    Code = "22-110",
-                    Description = "Groundwork"
-                }
-            };
+            LoadCostCodesCommand.Execute(null);
         }
 
         public List<Item>[] GetItemSections()
@@ -155,6 +153,32 @@ namespace Timecard
         {
             Items.Remove(item);
             await DataStore.DeleteItemAsync(item.Id);
+        }
+
+        async Task ExecuteLoadCostCodesCommand()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
+            try
+            {
+                CostCodes.Clear();
+                var costCodes = await DataStore.GetCostCodesAsync();
+                foreach (var costCode in costCodes)
+                {
+                    CostCodes.Add(costCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }
