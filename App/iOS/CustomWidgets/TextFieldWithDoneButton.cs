@@ -1,4 +1,3 @@
-using Foundation;
 using System;
 using System.Drawing;
 using UIKit;
@@ -45,17 +44,23 @@ namespace Timecard.iOS
             InputView = PickerView;
         }
 
-        public void SetPickerActive(bool active = true)
+        public void SetPickerActive(bool active = true, bool fieldVisible = true, bool clearText = false)
         {
             if (active)
             {
                 InputView = PickerView;
                 PickerView.ReloadAllComponents();
+                PickerView.Select(0, 0, true); // Select the first row in the picker
             }
             else
             {
                 InputView = null;
             }
+
+            Hidden = !fieldVisible;
+
+            if (clearText)
+                Text = string.Empty;
         }
     }
 }

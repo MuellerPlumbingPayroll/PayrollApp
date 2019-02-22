@@ -20,13 +20,12 @@ namespace Timecard
         public Command LoadCostCodesCommand { get; set; }
 
         public Dictionary<string, List<string>> JobDescriptions { get; set; }
-        public ObservableCollection<CostCode> CostCodes { get; set; }
+        public Dictionary<string, List<CostCode>> CostCodes { get; set; }
 
         public ItemsViewModel()
         {
             Title = "History";
             Items = new ObservableCollection<Item>();
-            CostCodes = new ObservableCollection<CostCode>();
 
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AddItemCommand = new Command<Item>(async (Item item) => await AddItem(item));
@@ -42,6 +41,8 @@ namespace Timecard
                 {JobType.Service, new List<string>()},
                 {JobType.Other, new List<string>(ProjectSettings.OtherTimeOptions)}
             };
+
+            CostCodes = new Dictionary<string, List<CostCode>>();
 
             LoadCostCodesCommand.Execute(null);
         }
@@ -165,10 +166,21 @@ namespace Timecard
             try
             {
                 CostCodes.Clear();
+
                 var costCodes = await DataStore.GetCostCodesAsync();
                 foreach (var costCode in costCodes)
                 {
-                    CostCodes.Add(costCode);
+                    var costCodeGroup = costCode.CodeGroup;
+                    if (CostCodes.ContainsKey(costCodeGroup)) 
+                    {
+                        CostCodes[costCodeGroup].Add(costCode);
+                    }
+                    else
+                    {
+                        CostCodes.Add(costCodeGroup, new List<CostCode> {
+                            costCode
+                        });
+                    }
                 }
             }
             catch (Exception ex)

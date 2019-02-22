@@ -1,4 +1,5 @@
 ﻿using System;
+using Timecard.Models;
 using UIKit;
 
 namespace Timecard.iOS.ViewControllers.PickerViewModels
@@ -10,28 +11,38 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
     {
         private static readonly string DEFAULT_COST_CODE_VALUE = "Not Listed";
 
+        public string SelectedJobType { get; set; }
         private UITextField textField;
         private ItemsViewModel viewModel;
 
-        public CostCodePickerModel(ItemsViewModel viewModel)
+        public CostCodePickerModel(ItemsViewModel viewModel, string selectedJobType)
         {
             this.viewModel = viewModel;
+            this.SelectedJobType = selectedJobType;
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
             if (textField != null) 
-                textField.Text = viewModel.CostCodes[(int)row].Description;
+                textField.Text = viewModel.CostCodes[SelectedJobTypeToCodeGroup()][(int)row].Description;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return viewModel.CostCodes[(int)row].Description;
+            var codeGroup = SelectedJobTypeToCodeGroup();
+
+            if (viewModel.CostCodes.ContainsKey(codeGroup))
+                return viewModel.CostCodes[codeGroup][(int)row].Description;
+            return DEFAULT_COST_CODE_VALUE;
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return viewModel.CostCodes.Count;
+            var codeGroup = SelectedJobTypeToCodeGroup();
+
+            if (viewModel.CostCodes.ContainsKey(codeGroup))
+                return viewModel.CostCodes[SelectedJobTypeToCodeGroup()].Count;
+            return 0;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
@@ -54,6 +65,19 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
         public void SetValueChangedView(UIView textField)
         {
             this.textField = (UITextField)textField;
+        }
+
+        private string SelectedJobTypeToCodeGroup()
+        {
+            switch(SelectedJobType)
+            {
+                case JobType.Construction:
+                    return CostCode.PlumbingCodeGroup;
+                case JobType.Service:
+                    return CostCode.ServiceCodeGroup;
+                default:
+                    return null;
+            }
         }
     }
 }

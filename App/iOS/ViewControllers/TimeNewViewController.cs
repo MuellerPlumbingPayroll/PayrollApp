@@ -1,6 +1,4 @@
 using System;
-using System.Drawing;
-using System.Globalization;
 using CoreLocation;
 using Timecard.Exceptions;
 using Timecard.iOS.ViewControllers.PickerViewModels;
@@ -17,6 +15,7 @@ namespace Timecard.iOS
         private LocationManager locationManager;
         private UIDatePicker datePicker;
         private JobDescriptionPickerModel jobDescriptionModel;
+        private CostCodePickerModel costCodeModel;
 
         public TimeNewViewController(IntPtr handle) : base(handle)
         {
@@ -213,8 +212,10 @@ namespace Timecard.iOS
 
         private void ConfigureCostCodePicker()
         {
-            var model = new CostCodePickerModel(ViewModel);
-            txtCostCode.AddPickerToTextField(model);
+            var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
+
+            costCodeModel = new CostCodePickerModel(ViewModel, selectedJobType);
+            txtCostCode.AddPickerToTextField(costCodeModel);
 
             if (EditingItem != null)
                 txtCostCode.Text = EditingItem.CostCode;
@@ -250,12 +251,17 @@ namespace Timecard.iOS
 
             var segmentTitle = sender.TitleAt(sender.SelectedSegment);
             jobDescriptionModel.SelectedJobType = segmentTitle;
+            costCodeModel.SelectedJobType = segmentTitle;
 
-            txtJobDescription.Text = string.Empty;
-            txtJobDescription.SetPickerActive(segmentTitle != JobType.Service);
+            // Cost code is only needed for the non-other tabs
+            txtCostCode.SetPickerActive(active: segmentTitle != JobType.Other,
+                                        fieldVisible: segmentTitle != JobType.Other,
+                                        clearText: true);
 
-            // Cost code is not needed for "Other" job type so hide it
-            txtCostCode.Hidden = segmentTitle == JobType.Other;
+            // Job description should not have a picker if on the service tab
+            txtJobDescription.SetPickerActive(active: segmentTitle != JobType.Service,
+                                              fieldVisible: true,
+                                              clearText: true);
         }
     }
 }
