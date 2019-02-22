@@ -14,5 +14,8 @@ namespace Timecard.iOS
     [Register ("TextFieldWithDoneButton")]
     partial class TextFieldWithDoneButton
     {
+        void ReleaseDesignerOutlets ()
+        {
+        }
     }
 }

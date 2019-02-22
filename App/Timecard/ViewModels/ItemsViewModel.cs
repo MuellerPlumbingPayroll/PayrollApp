@@ -37,7 +37,7 @@ namespace Timecard
             JobDescriptions = new Dictionary<string, List<string>>
             {
                 // TODO: Instead of adding a dummy value, call the api to get the actual jobs
-                {JobType.Construction, new List<string>{"testing"}},
+                {JobType.Construction, new List<string>{"Job Name 1", "Job Name 2"}},
                 {JobType.Service, new List<string>()},
                 {JobType.Other, new List<string>(ProjectSettings.OtherTimeOptions)}
             };

@@ -20,6 +20,10 @@ namespace Timecard.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnSubmit { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel txtHoursWorkedThisWeek { get; set; }
 
         [Outlet]
@@ -35,6 +39,11 @@ namespace Timecard.iOS
             if (btnNewEntry != null) {
                 btnNewEntry.Dispose ();
                 btnNewEntry = null;
+            }
+
+            if (btnSubmit != null) {
+                btnSubmit.Dispose ();
+                btnSubmit = null;
             }
 
             if (txtHoursWorkedThisWeek != null) {

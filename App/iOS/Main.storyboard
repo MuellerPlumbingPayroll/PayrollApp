@@ -443,7 +443,7 @@
                                 <accessibility key="accessibilityConfiguration" label="txtUserName"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25618" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="300" width="374" height="40"/>
+                                <rect key="frame" x="20" y="280" width="374" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -453,7 +453,7 @@
                                 <accessibility key="accessibilityConfiguration" label="txtHoursWorkedToday"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40703" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="370" width="374" height="40"/>
+                                <rect key="frame" x="20" y="340" width="374" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -462,6 +462,18 @@
                                 </constraints>
                                 <accessibility key="accessibilityConfiguration" label="txtHoursWorkedThisWeek"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="53153" translatesAutoresizingMaskIntoConstraints="NO" buttonType="roundedRect">
+                                <rect key="frame" x="40" y="596" width="334" height="50"/>
+                                <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0.58823529411764708" blue="1" alpha="1"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Submit Timecard">
+                                    <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                </state>
+                                <constraints>
+                                    <constraint id="53156" firstAttribute="height" constant="50"/>
+                                </constraints>
+                                <accessibility key="accessibilityConfiguration" label="btnSubmit"/>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint id="18077" firstItem="17872" firstAttribute="top" secondItem="17989" secondAttribute="bottom" constant="20"/>
@@ -472,10 +484,13 @@
                             <constraint id="22742" firstAttribute="trailingMargin" secondItem="17989" secondAttribute="trailing" constant="20"/>
                             <constraint id="25620" firstItem="25618" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin"/>
                             <constraint id="25621" firstItem="25618" firstAttribute="trailing" secondItem="17875" secondAttribute="trailingMargin"/>
-                            <constraint id="25622" firstItem="25618" firstAttribute="top" secondItem="20364" secondAttribute="bottom" constant="40"/>
+                            <constraint id="25622" firstItem="25618" firstAttribute="top" secondItem="20364" secondAttribute="bottom" constant="20"/>
                             <constraint id="40705" firstItem="40703" firstAttribute="trailing" secondItem="17875" secondAttribute="trailingMargin"/>
                             <constraint id="40706" firstItem="40703" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin"/>
-                            <constraint id="40708" firstItem="40703" firstAttribute="top" secondItem="25618" secondAttribute="bottom" constant="30"/>
+                            <constraint id="40708" firstItem="40703" firstAttribute="top" secondItem="25618" secondAttribute="bottom" constant="20"/>
+                            <constraint id="53264" firstItem="53153" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="53265" firstAttribute="trailingMargin" secondItem="53153" secondAttribute="trailing" constant="20"/>
+                            <constraint id="53266" firstItem="17989" firstAttribute="top" secondItem="53153" secondAttribute="bottom" constant="20"/>
                         </constraints>
                     </view>
                     <navigationItem title="Title" id="17985" key="navigationItem"/>
@@ -484,6 +499,7 @@
                         <outlet property="txtUserName" destination="20364" id="name-outlet-20364"/>
                         <outlet property="txtHoursWorkedToday" destination="25618" id="name-outlet-25618"/>
                         <outlet property="txtHoursWorkedThisWeek" destination="40703" id="name-outlet-40703"/>
+                        <outlet property="btnSubmit" destination="53153" id="name-outlet-53153"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17876" userLabel="First Responder" sceneMemberID="firstResponder"/>
