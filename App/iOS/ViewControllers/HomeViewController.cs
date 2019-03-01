@@ -23,6 +23,7 @@ namespace Timecard.iOS
             AllItemsViewModel = (this.TabBarController as TabBarController).AllItemsViewModel;
             Title = ViewModel.Title;
 
+            txtUserName.Editable = false;
             txtUserName.Text = "Welcome, " + ViewModel.UserName;
 
             btnNewEntry.Layer.CornerRadius = 10;

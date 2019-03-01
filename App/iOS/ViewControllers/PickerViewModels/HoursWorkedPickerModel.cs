@@ -6,8 +6,9 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
 {
     public class HoursWorkedPickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
-        private string selectedHour = "1";
-        private string selectedMinutes = "00";
+        public string SelectedHour { get; set; } = "1";
+        public  string SelectedMinutes { get; set; } = "00";
+
         private readonly string[] hours;
         private readonly string[] minutes = { "Minutes", "00", "15", "30", "45" };
 
@@ -29,11 +30,11 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
             string textFormat = "{0}:{1}";
 
             if (component == 0)
-                selectedHour = hours[row];
+                SelectedHour = hours[row];
             else
-                selectedMinutes = minutes[row];
+                SelectedMinutes = minutes[row];
 
-            textField.Text = string.Format(textFormat, selectedHour, selectedMinutes);
+            textField.Text = string.Format(textFormat, SelectedHour, SelectedMinutes);
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
@@ -58,7 +59,7 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
 
         public string GetDefaultTextFieldValue()
         {
-            return string.Format("{0}:{1}", selectedHour, selectedMinutes);
+            return string.Format("{0}:{1}", SelectedHour, SelectedMinutes);
         }
 
         public void SetValueChangedView(UIView textField)

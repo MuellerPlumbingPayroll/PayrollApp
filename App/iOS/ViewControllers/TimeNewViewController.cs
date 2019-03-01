@@ -176,7 +176,9 @@ namespace Timecard.iOS
 
         private void ConfigureHoursWorkedPicker()
         {
-            txtHoursWorked.AddPickerToTextField(new HoursWorkedPickerModel());
+            var model = new HoursWorkedPickerModel();
+
+            txtHoursWorked.AddPickerToTextField(model);
             txtHoursWorked.PickerView.Select(2, 0, true);
             txtHoursWorked.PickerView.Select(1, 1, true);
 
@@ -184,6 +186,9 @@ namespace Timecard.iOS
             {
                 var hoursString = EditingItem.GetHoursWorkedHoursPart();
                 var minutesString = EditingItem.GetHoursWorkedMinutesPart();
+
+                model.SelectedHour = hoursString;
+                model.SelectedMinutes = minutesString;
 
                 txtHoursWorked.PickerView.Select(int.Parse(hoursString) + 1, 0, true);
                 txtHoursWorked.PickerView.Select(int.Parse(minutesString) / 15 + 1, 1, true);
