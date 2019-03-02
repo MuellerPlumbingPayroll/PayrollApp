@@ -51,6 +51,7 @@ namespace Timecard.iOS
 
             if (isUserAuthorized)
             {
+                userInfo.SaveToDevice();
                 PerformSegueToHome(userInfo.GivenName);
             }
             else

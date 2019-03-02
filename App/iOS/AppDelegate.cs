@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation;
+using Timecard.Services;
 using UIKit;
 
 namespace Timecard.iOS
@@ -24,6 +25,22 @@ namespace Timecard.iOS
             #if ENABLE_TEST_CLOUD
                 Xamarin.Calabash.Start();
             #endif
+
+            GoogleUserInfo userInfo = GoogleUserInfo.ReadFromDevice().Result;
+
+            if (userInfo != null)
+            {
+                var mainStoryboard = UIStoryboard.FromName("Main", null);
+                var tabBarController = mainStoryboard.InstantiateViewController("tabViewController") as TabBarController;
+
+                var navigationController = tabBarController.ViewControllers[0] as UINavigationController;
+                var homeViewController = navigationController.ViewControllers[0] as HomeViewController;
+
+                homeViewController.ViewModel = new ViewModels.HomeViewModel(userInfo.GivenName);
+
+                // Set the tab bar controller as root
+                Window.RootViewController = tabBarController;
+            }
 
             return true;
         }

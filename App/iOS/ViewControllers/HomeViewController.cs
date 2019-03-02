@@ -1,6 +1,7 @@
 using System;
 using Foundation;
 using Timecard.Models;
+using Timecard.Services;
 using Timecard.ViewModels;
 using UIKit;
 
@@ -113,7 +114,7 @@ namespace Timecard.iOS
 
         private void LogOut()
         {
-            // TODO: Remove this user's locally stored credentials.
+            GoogleUserInfo.RemoveFromDevice();
 
             var rootNavController = this.Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
 
