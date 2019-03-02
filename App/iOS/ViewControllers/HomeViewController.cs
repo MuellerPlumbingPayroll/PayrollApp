@@ -19,7 +19,9 @@ namespace Timecard.iOS
         {
             base.ViewDidLoad();
 
-            ViewModel = new HomeViewModel();
+            if (ViewModel == null)
+                ViewModel = new HomeViewModel();
+
             AllItemsViewModel = (this.TabBarController as TabBarController).AllItemsViewModel;
             Title = ViewModel.Title;
 
@@ -58,8 +60,8 @@ namespace Timecard.iOS
             // TODO: Update with actual value
             bool hasSubmittedTimecard = false;
 
-            // If today is the first day of a new pay period, the user should submit
-            // the previous period's entries.
+            // If today is the first day of a new pay period, the user should 
+            // submit the previous period's entries.
             bool shouldSubmitTimecardToday = 
                 new DateTime().Day.Equals(ProjectSettings.PayPeriodStartDay);
 
@@ -68,26 +70,31 @@ namespace Timecard.iOS
             else
                 btnSubmit.BackgroundColor = UIColor.LightGray;
 
-            btnSubmit.TouchUpInside += (sender, e) =>
+            btnSubmit.TouchUpInside += OnSubmitButtonClicked;
+        }
+
+        private void OnSubmitButtonClicked(object sender, EventArgs e)
+        {
+            float numHoursWorked = AllItemsViewModel.NumberHoursWorkedOnDay();
+
+            if (numHoursWorked < ProjectSettings.NumberHoursInWorkWeek)
             {
-                float numHoursWorked = AllItemsViewModel.NumberHoursWorkedOnDay();
+                var alert = UIAlertController.Create(
+                    "Are you sure you want to submit your timecard?",
+                    string.Format("You have recorded less than {0} hours this week.", ProjectSettings.NumberHoursInWorkWeek),
+                    UIAlertControllerStyle.ActionSheet);
 
-                if (numHoursWorked < ProjectSettings.NumberHoursInWorkWeek)
+                alert.AddAction(UIAlertAction.Create("Continue", UIAlertActionStyle.Default, (UIAlertAction) =>
                 {
-                    var alert = UIAlertController.Create(
-                        "Are you sure you want to submit your timecard?",
-                        string.Format("You have only recorded {0} hours this week.", numHoursWorked),
-                        UIAlertControllerStyle.ActionSheet);
-
-                    alert.AddAction(UIAlertAction.Create("Continue", UIAlertActionStyle.Default, (UIAlertAction) =>
+                    if (numHoursWorked > 0)
                     {
                         // TODO: Submit this timecard
-                    }));
+                    }
+                }));
 
-                    alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
-                    PresentViewController(alert, animated: true, completionHandler: null);
-                }
-            };
+                alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+                PresentViewController(alert, animated: true, completionHandler: null);
+            }
         }
     }
 }
