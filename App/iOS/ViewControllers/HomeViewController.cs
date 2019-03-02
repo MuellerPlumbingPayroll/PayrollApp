@@ -11,7 +11,7 @@ namespace Timecard.iOS
         public HomeViewModel ViewModel { get; set; }
         public ItemsViewModel AllItemsViewModel { get; set; }
 
-        public HomeViewController (IntPtr handle) : base (handle)
+        public HomeViewController(IntPtr handle) : base(handle)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Timecard.iOS
 
             ConfigureSubmitButton();
         }
-        
+
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
@@ -62,7 +62,7 @@ namespace Timecard.iOS
 
             // If today is the first day of a new pay period, the user should 
             // submit the previous period's entries.
-            bool shouldSubmitTimecardToday = 
+            bool shouldSubmitTimecardToday =
                 new DateTime().Day.Equals(ProjectSettings.PayPeriodStartDay);
 
             if (!hasSubmittedTimecard && shouldSubmitTimecardToday)
@@ -95,6 +95,30 @@ namespace Timecard.iOS
                 alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
                 PresentViewController(alert, animated: true, completionHandler: null);
             }
+        }
+
+        partial void BtnLogOut_TouchUpInside(UIButton sender)
+        {
+            var alert = UIAlertController.Create("Are you sure you want to log out?",
+                                                 string.Empty, UIAlertControllerStyle.ActionSheet);
+
+            alert.AddAction(UIAlertAction.Create("Log Out", UIAlertActionStyle.Destructive, (UIAlertAction) =>
+            {
+                LogOut();
+            }));
+
+            alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+            PresentViewController(alert, animated: true, completionHandler: null);
+        }
+
+        private void LogOut()
+        {
+            // TODO: Remove this user's locally stored credentials.
+
+            var rootNavController = this.Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
+
+            var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate;
+            appDelegate.Window.RootViewController = rootNavController;
         }
     }
 }

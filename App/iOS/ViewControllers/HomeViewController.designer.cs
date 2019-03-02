@@ -16,6 +16,10 @@ namespace Timecard.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnLogOut { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton btnNewEntry { get; set; }
 
         [Outlet]
@@ -34,8 +38,17 @@ namespace Timecard.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextView txtUserName { get; set; }
 
+        [Action ("BtnLogOut_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void BtnLogOut_TouchUpInside (UIKit.UIButton sender);
+
         void ReleaseDesignerOutlets ()
         {
+            if (btnLogOut != null) {
+                btnLogOut.Dispose ();
+                btnLogOut = null;
+            }
+
             if (btnNewEntry != null) {
                 btnNewEntry.Dispose ();
                 btnNewEntry = null;

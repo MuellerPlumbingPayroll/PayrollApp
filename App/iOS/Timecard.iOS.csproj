@@ -76,6 +76,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
+    <CodesignProvision>iOS Team Provisioning Profile: com.eduroam.timecard</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,6 +102,10 @@
     <Reference Include="Calabash">
       <HintPath>..\packages\Xamarin.TestCloud.Agent.0.21.7\lib\Xamarin.iOS\Calabash.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Auth">
+      <HintPath>..\packages\Xamarin.Auth.1.6.0.4\lib\Xamarin.iOS10\Xamarin.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Json" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -150,14 +155,19 @@
       <DependentUpon>HistoryTableViewSectionHeader.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\LocationManager.cs" />
-    <Compile Include="ViewControllers\PickerViewModels\JobDescriptionPickerModel.cs" />
-    <Compile Include="ViewControllers\PickerViewModels\CostCodePickerModel.cs" />
     <Compile Include="CustomWidgets\TextFieldWithDoneButton.cs" />
     <Compile Include="CustomWidgets\TextFieldWithDoneButton.designer.cs">
       <DependentUpon>TextFieldWithDoneButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="ICustomPickerViewModel.cs" />
-    <Compile Include="ViewControllers\PickerViewModels\HoursWorkedPickerModel.cs" />
+    <Compile Include="GoogleConfiguration.cs" />
+    <Compile Include="ViewControllers\AuthViewController.cs" />
+    <Compile Include="ViewControllers\AuthViewController.designer.cs">
+      <DependentUpon>AuthViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PickerViewModels\CostCodePickerModel.cs" />
+    <Compile Include="PickerViewModels\HoursWorkedPickerModel.cs" />
+    <Compile Include="PickerViewModels\ICustomPickerViewModel.cs" />
+    <Compile Include="PickerViewModels\JobDescriptionPickerModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
@@ -171,8 +181,8 @@
   <ItemGroup>
     <Folder Include="TableViewCells\" />
     <Folder Include="Utilities\" />
-    <Folder Include="ViewControllers\PickerViewModels\" />
     <Folder Include="CustomWidgets\" />
+    <Folder Include="PickerViewModels\" />
   </ItemGroup>
   <Import Project="..\Timecard\Timecard.projitems" Label="Shared" Condition="Exists('..\Timecard\Timecard.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
