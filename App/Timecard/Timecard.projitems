@@ -25,8 +25,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\CostCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\LocationNotAuthorizedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidItemException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authentication\GoogleAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authentication\IGoogleAuthenticationDelegate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authentication\GoogleOAuthToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Google\GoogleService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Google\GoogleUserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Exceptions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Authentication\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Services\Google\" />
   </ItemGroup>
 </Project>
