@@ -7,7 +7,7 @@
 	<key>CFBundleName</key>
 	<string>Timecard</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.eduroam.Timecard</string>
+	<string>com.eduroam.timecard</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -17,7 +17,6 @@
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
-		<integer>2</integer>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
@@ -46,5 +45,20 @@
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Timecard records your location when creating a new time entry or editing an existing one.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Google Auth</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.eduroam.timecard</string>
+			</array>
+			<key>CFBundleURLTypes</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
+	<key>MinimumOSVersion</key>
+	<string>11.0</string>
 </dict>
 </plist>
