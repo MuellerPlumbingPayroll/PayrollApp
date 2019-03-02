@@ -89,7 +89,7 @@ namespace Timecard
         {
             if (CrossConnectivity.Current.IsConnected)
             {
-                var json = await client.GetStringAsync("cost-code/");
+                var json = await client.GetStringAsync("cost-code");
                 costCodes = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<CostCode>>(json));
             }
             

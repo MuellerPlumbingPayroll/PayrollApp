@@ -5,7 +5,7 @@ namespace Timecard
     public class App
     {
         public static bool UseMockDataStore = false;
-        public static string BackendUrl = "https://mueller-plumbing-salary.appspot.com";
+        public static string BackendUrl = "https://api-dot-muller-plumbing-salary.appspot.com";
 
         public static void Initialize()
         {
