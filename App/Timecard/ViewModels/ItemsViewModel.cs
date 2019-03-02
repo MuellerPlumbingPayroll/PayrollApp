@@ -158,11 +158,6 @@ namespace Timecard
 
         async Task ExecuteLoadCostCodesCommand()
         {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
             try
             {
                 CostCodes.Clear();
@@ -186,10 +181,6 @@ namespace Timecard
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
     }

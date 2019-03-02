@@ -4,10 +4,10 @@
     {
         public string UserName { get; set; }
 
-        public HomeViewModel()
+        public HomeViewModel(string userName = "User")
         {
             Title = "Home";
-            UserName = "Hardcoded User";
+            UserName = userName;
         }
     }
 }
