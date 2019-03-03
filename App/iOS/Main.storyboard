@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="60757">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="75262">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -531,45 +531,57 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="54124" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="586" width="374" height="50"/>
-                                <state key="normal" title="Login With Google"/>
-                                <accessibility key="accessibilityConfiguration" label="GoogleLoginButton"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="74713" translatesAutoresizingMaskIntoConstraints="NO" buttonType="roundedRect">
+                                <rect key="frame" x="40" y="636" width="334" height="50"/>
+                                <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0.58823529411764708" blue="1" alpha="1"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Sign In With Google">
+                                    <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                </state>
                                 <constraints>
-                                    <constraint id="54950" firstAttribute="height" constant="50"/>
+                                    <constraint id="74716" firstAttribute="height" constant="50"/>
                                 </constraints>
+                                <accessibility key="accessibilityConfiguration" label="GoogleLoginButton"/>
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint id="54951" firstItem="54124" firstAttribute="leading" secondItem="53691" secondAttribute="leadingMargin"/>
-                            <constraint id="54952" firstItem="54124" firstAttribute="trailing" secondItem="53691" secondAttribute="trailingMargin"/>
-                            <constraint id="55370" firstItem="53688" firstAttribute="top" secondItem="54124" secondAttribute="bottom" constant="100"/>
+                            <constraint id="74833" firstAttribute="trailingMargin" secondItem="74713" secondAttribute="trailing" constant="20"/>
+                            <constraint id="74834" firstItem="74713" firstAttribute="leading" secondItem="53691" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="74835" firstItem="53688" firstAttribute="top" secondItem="74713" secondAttribute="bottom" constant="50"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="GoogleLoginButton" destination="54124" id="name-outlet-54124"/>
                         <segue id="60010" destination="49e-Tb-3d3" kind="show" identifier="NavigateToTabBarSegue"/>
+                        <outlet property="GoogleLoginButton" destination="74713" id="name-outlet-74713"/>
                     </connections>
                     <navigationItem title="Title" id="60834" key="navigationItem"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="53692" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-556" y="3"/>
+            <point key="canvasLocation" x="-571" y="2"/>
         </scene>
-        <scene sceneID="60756">
+        <scene sceneID="75261">
             <objects>
-                <navigationController id="60757" sceneMemberID="viewController" storyboardIdentifier="navLoginController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="60759">
+                <navigationController title="Browse" automaticallyAdjustsScrollViewInsets="NO" id="75262" sceneMemberID="viewController" storyboardIdentifier="navLoginController">
+                    <tabBarItem key="tabBarItem" title="First" image="First" id="75265"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="75266">
                         <rect key="frame" x="0.0" y="20" width="414" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.11372549019607843" green="0.50196078431372548" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
                     </navigationBar>
+                    <nil name="viewControllers"/>
                     <connections>
-                        <segue id="60835" destination="53690" kind="relationship" relationship="rootViewController"/>
+                        <segue id="75374" destination="53690" kind="relationship" relationship="rootViewController"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="60760" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="75267" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1180" y="2"/>
+            <point key="canvasLocation" x="-1157" y="7"/>
         </scene>
     </scenes>
     <resources>

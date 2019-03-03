@@ -17,13 +17,20 @@ namespace Timecard.iOS
         {
             base.ViewDidLoad();
 
-            Title = "Login";
+            Title = "Sign In";
 
             Auth = new GoogleAuthenticator(GoogleConfiguration.ClientId, 
                                            GoogleConfiguration.Scope,
                                            GoogleConfiguration.RedirectUrl,
                                            this);
-            
+            ConfigureGoogleLoginButton();
+        }
+
+        private void ConfigureGoogleLoginButton()
+        {
+            GoogleLoginButton.Layer.CornerRadius = 10;
+            GoogleLoginButton.ClipsToBounds = true;
+
             GoogleLoginButton.TouchUpInside += OnGoogleLoginButtonClicked;
         }
 
@@ -42,9 +49,8 @@ namespace Timecard.iOS
             var googleService = new GoogleService();
             var userInfo = await googleService.GetUserInfoAsync(token.TokenType, token.AccessToken);
 
-            // TODO: Save the user's info to the device
 
-            GoogleLoginButton.SetTitle($"Connected with {userInfo.Email}", UIControlState.Normal);
+            GoogleLoginButton.SetTitle($"Signed In As {userInfo.Email}", UIControlState.Normal);
 
             // TODO: Check if user is authorized to access the app
             var isUserAuthorized = true;
@@ -64,13 +70,6 @@ namespace Timecard.iOS
         {
             // SFSafariViewController doesn't dismiss itself
             DismissViewController(true, null);
-
-            var alertController = new UIAlertController
-            {
-                Title = "Authentication canceled",
-                Message = "You didn't complete the authentication process"
-            };
-            PresentViewController(alertController, true, null);
         }
 
         public void OnAuthenticationFailed(string message, Exception exception)
