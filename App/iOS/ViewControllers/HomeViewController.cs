@@ -1,5 +1,6 @@
 using System;
 using Foundation;
+using Timecard.Authentication;
 using Timecard.Models;
 using Timecard.Services;
 using Timecard.ViewModels;
@@ -115,6 +116,7 @@ namespace Timecard.iOS
         private void LogOut()
         {
             GoogleUserInfo.RemoveFromDevice();
+            GoogleOAuthToken.RemoveFromDevice();
 
             var rootNavController = this.Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
 

@@ -36,9 +36,19 @@ namespace Timecard.iOS
 
         private void OnGoogleLoginButtonClicked(object sender, EventArgs e)
         {
-            var authenticator = Auth.GetAuthenticator();
-            var viewController = authenticator.GetUI();
-            PresentViewController(viewController, true, null);
+            var googleToken = GoogleOAuthToken.ReadFromDevice().Result;
+            var userInfo = GoogleUserInfo.ReadFromDevice().Result;
+
+            if (googleToken == null || userInfo == null)
+            {
+                var authenticator = Auth.GetAuthenticator();
+                var viewController = authenticator.GetUI();
+                PresentViewController(viewController, true, null);
+            }
+            else
+            {
+                PerformSegueToHome(userInfo.GivenName);
+            }
         }
 
         public async void OnAuthenticationCompleted(GoogleOAuthToken token)
@@ -46,8 +56,11 @@ namespace Timecard.iOS
             // SFSafariViewController doesn't dismiss itself
             DismissViewController(true, null);
 
+            token.SaveToDevice();
+
             var googleService = new GoogleService();
             var userInfo = await googleService.GetUserInfoAsync(token.TokenType, token.AccessToken);
+            userInfo.SaveToDevice();
 
 
             GoogleLoginButton.SetTitle($"Signed In As {userInfo.Email}", UIControlState.Normal);
@@ -57,7 +70,6 @@ namespace Timecard.iOS
 
             if (isUserAuthorized)
             {
-                userInfo.SaveToDevice();
                 PerformSegueToHome(userInfo.GivenName);
             }
             else

@@ -54,7 +54,10 @@ namespace Timecard.Services
 
         public static void RemoveFromDevice()
         {
-            SecureStorage.RemoveAll();
+            SecureStorage.Remove("Email");
+            SecureStorage.Remove("Name");
+            SecureStorage.Remove("GivenName");
+            SecureStorage.Remove("FamilyName");
         }
     }
 }
