@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using Foundation;
+using ObjCRuntime;
 using UIKit;
 
 namespace Timecard.iOS
@@ -24,6 +26,13 @@ namespace Timecard.iOS
             };
 
             InputAccessoryView = toolbar;
+        }
+
+        // Prevent user from copying or pasting anything into this text field
+        public override bool CanPerform(Selector action, NSObject withSender)
+        {
+            UIMenuController.SharedMenuController.MenuVisible = false;
+            return false;
         }
 
         public void AddPickerToTextField(ICustomPickerViewModel pickerViewModel)
