@@ -17,6 +17,7 @@ namespace Timecard
         HttpClient client;
         IEnumerable<Item> items;
         IEnumerable<CostCode> costCodes;
+        IEnumerable<Job> jobs;
 
         public CloudDataStore()
         {
@@ -25,6 +26,7 @@ namespace Timecard
 
             items = new List<Item>();
             costCodes = new List<CostCode>();
+            jobs = new List<Job>();
         }
 
         public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
@@ -94,6 +96,17 @@ namespace Timecard
             }
             
             return costCodes;
+        }
+
+        public async Task<IEnumerable<Job>> GetJobsAsync()
+        {
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                var json = await client.GetStringAsync("jobs");
+                jobs = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Job>>(json));
+            }
+
+            return jobs;
         }
     }
 }

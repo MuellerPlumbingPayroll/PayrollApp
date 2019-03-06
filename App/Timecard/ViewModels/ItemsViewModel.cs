@@ -17,9 +17,10 @@ namespace Timecard
         public Command UpdateItemCommand { get; set; }
         public Command DeleteItemCommand { get; set; }
 
+        public Command LoadJobsCommand { get; set; }
         public Command LoadCostCodesCommand { get; set; }
 
-        public Dictionary<string, List<string>> JobDescriptions { get; set; }
+        public Dictionary<string, List<string>> Jobs { get; set; }
         public Dictionary<string, List<CostCode>> CostCodes { get; set; }
 
         public ItemsViewModel()
@@ -32,18 +33,19 @@ namespace Timecard
             UpdateItemCommand = new Command<Item>(async (Item item) => await UpdateItem(item));
             DeleteItemCommand = new Command<Item>(async (Item item) => await DeleteItem(item));
 
+            LoadJobsCommand = new Command(async () => await ExecuteLoadJobsCommand());
             LoadCostCodesCommand = new Command(async () => await ExecuteLoadCostCodesCommand());
 
-            JobDescriptions = new Dictionary<string, List<string>>
+            Jobs = new Dictionary<string, List<string>>
             {
-                // TODO: Instead of adding a dummy value, call the api to get the actual jobs
-                {JobType.Construction, new List<string>{"Job Name 1", "Job Name 2"}},
+                {JobType.Construction, new List<string>()},
                 {JobType.Service, new List<string>()},
                 {JobType.Other, new List<string>(ProjectSettings.OtherTimeOptions)}
             };
 
-            CostCodes = new Dictionary<string, List<CostCode>>();
+            LoadJobsCommand.Execute(null);
 
+            CostCodes = new Dictionary<string, List<CostCode>>();
             LoadCostCodesCommand.Execute(null);
         }
 
@@ -176,6 +178,24 @@ namespace Timecard
                             costCode
                         });
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        async Task ExecuteLoadJobsCommand()
+        {
+            try
+            {
+                Jobs[JobType.Construction].Clear();
+
+                var jobs = await DataStore.GetJobsAsync();
+                foreach (var job in jobs)
+                {
+                    Jobs[JobType.Construction].Add(job.Address);
                 }
             }
             catch (Exception ex)

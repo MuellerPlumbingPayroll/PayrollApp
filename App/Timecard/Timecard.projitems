@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Authentication\GoogleOAuthToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Google\GoogleService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Google\GoogleUserInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Job.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Exceptions\" />

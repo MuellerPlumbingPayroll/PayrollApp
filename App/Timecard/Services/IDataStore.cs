@@ -13,5 +13,6 @@ namespace Timecard
         Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
 
         Task<IEnumerable<CostCode>> GetCostCodesAsync();
+        Task<IEnumerable<Job>> GetJobsAsync();
     }
 }

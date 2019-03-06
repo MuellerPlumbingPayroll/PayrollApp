@@ -10,11 +10,13 @@ namespace Timecard
     {
         List<Item> items;
         List<CostCode> costCodes;
+        List<Job> jobs;
 
         public MockDataStore()
         {
             items = new List<Item>();
             costCodes = new List<CostCode>();
+            jobs = new List<Job>();
         }
 
         public async Task<bool> AddItemAsync(Item item)
@@ -54,6 +56,11 @@ namespace Timecard
         public async Task<IEnumerable<CostCode>> GetCostCodesAsync()
         {
             return await Task.FromResult(costCodes);
+        }
+
+        public async Task<IEnumerable<Job>> GetJobsAsync()
+        {
+            return await Task.FromResult(jobs);
         }
     }
 }

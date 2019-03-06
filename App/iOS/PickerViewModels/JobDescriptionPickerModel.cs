@@ -22,17 +22,17 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            textField.Text = viewModel.JobDescriptions[SelectedJobType][(int)row];
+            textField.Text = viewModel.Jobs[SelectedJobType][(int)row];
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return viewModel.JobDescriptions[SelectedJobType][(int)row];
+            return viewModel.Jobs[SelectedJobType][(int)row];
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return viewModel.JobDescriptions[SelectedJobType].Count;
+            return viewModel.Jobs[SelectedJobType].Count;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
