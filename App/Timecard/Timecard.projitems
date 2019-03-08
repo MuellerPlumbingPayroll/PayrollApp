@@ -19,7 +19,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemDetailViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\JobType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProjectSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CostCode.cs" />
@@ -31,6 +30,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Google\GoogleService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Google\GoogleUserInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Job.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JobType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TimeWorked.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Exceptions\" />
