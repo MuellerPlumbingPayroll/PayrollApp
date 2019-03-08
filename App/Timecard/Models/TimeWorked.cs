@@ -8,32 +8,44 @@
         static TimeWorked()
         {
             int maxHours = ProjectSettings.MaxNumberHoursInWorkDay;
-            Hours = new string[maxHours + 1];
+            Hours = new string[maxHours + 2];
 
-            for (int i = 0; i < maxHours; i++)
-                Hours[i] = i.ToString();
+            Hours[0] = "Hours";
+            for (int i = 0; i <= maxHours; i++)
+                Hours[i + 1] = i.ToString();
 
-            Minutes = new string[]{ "00", "15", "30", "45" };
+            Minutes = new string[]{ "Minutes", "00", "15", "30", "45" };
         }
 
-        private readonly string hoursPart;
-        private readonly string minutesPart;
+        public string HoursPart { get; set; }
+        public string MinutesPart { get; set; }
+
+        public TimeWorked()
+        {
+            HoursPart = Hours[2];
+            MinutesPart = Minutes[1];
+        }
 
         public TimeWorked(string hours, string minutes)
         {
-            hoursPart = hours;
-            minutesPart = minutes;
+            HoursPart = hours;
+            MinutesPart = minutes;
         }
 
         public string ToDecimalFormat()
         {
-            var minutes = float.Parse(minutesPart) / 60;
-            return string.Format($"{0}.{1}", hoursPart, minutes.ToString("0.00"));
+            var minutes = float.Parse(MinutesPart) / 60;
+            return string.Format("{0}.{1}", HoursPart, minutes.ToString("0.00"));
         }
 
         public string ToColonFormat()
         {
-            return string.Format($"{0}:{1}", hoursPart, minutesPart);
+            return string.Format("{0}:{1}", HoursPart, MinutesPart);
+        }
+
+        public float AsFloat()
+        {
+            return float.Parse(ToDecimalFormat());
         }
 
         public static TimeWorked FromDecimalFormat(string df)
