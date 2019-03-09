@@ -1,6 +1,7 @@
 using System;
 using Foundation;
 using UIKit;
+using Timecard.Models;
 
 namespace Timecard.iOS
 {
@@ -19,10 +20,10 @@ namespace Timecard.iOS
 
             Title = ViewModel.Title;
 
-            dateLabel.Text = ViewModel.Item.JobDate;
-            hoursWorkedLabel.Text = "Hours Worked:   " + ViewModel.Item.HoursWorked;
+            dateLabel.Text = ViewModel.Item.JobDate.ToString(ProjectSettings.DateFormat);
+            hoursWorkedLabel.Text = "Time Worked:   " + ViewModel.Item.TimeWorked.ToColonFormat();
             jobTypeLabel.Text = "Type:   " + ViewModel.Item.JobType;
-            jobDescriptionLabel.Text = "Job:   " + ViewModel.Item.JobDescription;
+            jobDescriptionLabel.Text = "Job:   " + ViewModel.Item.Job.Address;
 
             btnEditTime.Layer.CornerRadius = 10;
             btnEditTime.ClipsToBounds = true;

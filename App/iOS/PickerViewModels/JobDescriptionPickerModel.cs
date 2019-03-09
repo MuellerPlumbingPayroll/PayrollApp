@@ -1,38 +1,45 @@
 ﻿using System;
 using UIKit;
+using Timecard.Models;
 
 namespace Timecard.iOS.ViewControllers.PickerViewModels
 {
     /// <summary>
     /// Data source for the job picker.
     /// </summary>
-    class JobDescriptionPickerModel : UIPickerViewModel, ICustomPickerViewModel
+    internal class JobDescriptionPickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
         private static readonly string DEFAULT_JOB_DESCRIPTION_VALUE = "Not Listed";
 
-        public string SelectedJobType { get; set; }
+        private JobType selectedJobType;
+        private Job selectedJob;
         private ItemsViewModel viewModel;
         private UITextField textField;
 
-        public JobDescriptionPickerModel(ItemsViewModel viewModel, string selectedJobType)
+        public JobDescriptionPickerModel(ItemsViewModel viewModel, JobType selectedJobType)
         {
             this.viewModel = viewModel;
-            this.SelectedJobType = selectedJobType;
+            this.selectedJobType = selectedJobType;
+
+            this.selectedJob = viewModel.Jobs[selectedJobType][0];
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            textField.Text = viewModel.Jobs[SelectedJobType][(int)row];
+            selectedJob = viewModel.Jobs[selectedJobType][(int)row];
+
+            if (textField != null)
+                textField.Text = selectedJob.Address;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return viewModel.Jobs[SelectedJobType][(int)row];
+            return viewModel.Jobs[selectedJobType][(int)row].Address;
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return viewModel.Jobs[SelectedJobType].Count;
+            return viewModel.Jobs[selectedJobType].Count;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
@@ -55,6 +62,26 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
         public void SetValueChangedView(UIView textField)
         {
             this.textField = (UITextField)textField;
+        }
+
+        public object GetSelectedPickerObject()
+        {
+            return selectedJob;
+        }
+
+        public void SetSelectedPickerObject(object o)
+        {
+            selectedJob = (Job)o;
+        }
+
+        public void SetSelectedJobType(JobType jobType)
+        {
+            selectedJobType = jobType;
+
+            if (jobType != JobType.Service)
+            {
+                selectedJob = viewModel.Jobs[jobType][0];
+            }
         }
     }
 }

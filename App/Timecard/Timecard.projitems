@@ -23,7 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CostCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\LocationNotAuthorizedException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidItemException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authentication\GoogleAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authentication\IGoogleAuthenticationDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authentication\GoogleOAuthToken.cs" />

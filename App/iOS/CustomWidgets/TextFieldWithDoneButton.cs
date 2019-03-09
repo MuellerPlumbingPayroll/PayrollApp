@@ -53,6 +53,11 @@ namespace Timecard.iOS
             InputView = PickerView;
         }
 
+        public void SetSelectedPickerObject(object o)
+        {
+            (PickerView.Model as ICustomPickerViewModel).SetSelectedPickerObject(o);
+        }
+
         public void SetPickerActive(bool active = true, bool fieldVisible = true, bool clearText = false)
         {
             if (active)
@@ -70,6 +75,13 @@ namespace Timecard.iOS
 
             if (clearText)
                 Text = string.Empty;
+        }
+
+        public object GetSelectedPickerObject()
+        {
+            if (InputView != null)
+                return (PickerView.Model as ICustomPickerViewModel).GetSelectedPickerObject();
+            return null;
         }
     }
 }

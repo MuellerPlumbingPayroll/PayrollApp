@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.ObjectModel;
-
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Timecard.Models;
 
@@ -20,8 +19,8 @@ namespace Timecard
         public Command LoadJobsCommand { get; set; }
         public Command LoadCostCodesCommand { get; set; }
 
-        public Dictionary<string, List<string>> Jobs { get; set; }
-        public Dictionary<string, List<CostCode>> CostCodes { get; set; }
+        public Dictionary<JobType, List<Job>> Jobs { get; set; }
+        public Dictionary<JobType, List<CostCode>> CostCodes { get; set; }
 
         public ItemsViewModel()
         {
@@ -36,16 +35,16 @@ namespace Timecard
             LoadJobsCommand = new Command(async () => await ExecuteLoadJobsCommand());
             LoadCostCodesCommand = new Command(async () => await ExecuteLoadCostCodesCommand());
 
-            Jobs = new Dictionary<string, List<string>>
+            Jobs = new Dictionary<JobType, List<Job>>
             {
-                {JobType.Construction, new List<string>()},
-                {JobType.Service, new List<string>()},
-                {JobType.Other, new List<string>(ProjectSettings.OtherTimeOptions)}
+                {JobType.Construction, new List<Job>()},
+                {JobType.Service, new List<Job>{new Job()} },
+                {JobType.Other, Job.GetOtherTypeJobs()}
             };
 
             LoadJobsCommand.Execute(null);
 
-            CostCodes = new Dictionary<string, List<CostCode>>();
+            CostCodes = new Dictionary<JobType, List<CostCode>>();
             LoadCostCodesCommand.Execute(null);
         }
 
@@ -59,7 +58,7 @@ namespace Timecard
             for (var i = 0; i < numberSections; i++)
             {
                 sections[i] = Items.ToList()
-                    .Where(item => item.JobDate.Equals(dayInPayPeriod.ToString(ProjectSettings.DateFormat)))
+                    .Where(item => item.JobDate.DayOfWeek.Equals(dayInPayPeriod.DayOfWeek))
                     .ToList();
 
                 dayInPayPeriod = dayInPayPeriod.AddDays(1);
@@ -85,14 +84,14 @@ namespace Timecard
             if (day != null) 
             {
                 timeEntries = timeEntries
-                    .Where(item => (bool)ProjectSettings.LocalDateFromString(item.JobDate)?.DayOfWeek.Equals(day))
+                    .Where(item => (bool)item.JobDate.DayOfWeek.Equals(day))
                     .ToList();
             }
 
             float hoursWorked = 0;
             foreach (var item in timeEntries)
             {
-                hoursWorked += float.Parse(item.HoursWorked);
+                hoursWorked += item.TimeWorked.AsFloat();
             }
 
             return hoursWorked;
@@ -132,8 +131,6 @@ namespace Timecard
 
         async Task UpdateItem(Item item)
         {
-            item.TimeUpdated = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-
             var elementToRemove = -1;
             for (var i = 0; i < Items.Count; i++)
             {
@@ -162,19 +159,27 @@ namespace Timecard
         {
             try
             {
+                var costCodes = await DataStore.GetCostCodesAsync();
+
                 CostCodes.Clear();
 
-                var costCodes = await DataStore.GetCostCodesAsync();
                 foreach (var costCode in costCodes)
                 {
-                    var costCodeGroup = costCode.CodeGroup;
-                    if (CostCodes.ContainsKey(costCodeGroup)) 
+                    JobType key;
+                    if (costCode.CodeGroup == CostCode.PlumbingCodeGroup)
+                        key = JobType.Construction;
+                    else if (costCode.CodeGroup == CostCode.ServiceCodeGroup)
+                        key = JobType.Service;
+                    else
+                        key = JobType.Other;
+                        
+                    if (CostCodes.ContainsKey(key)) 
                     {
-                        CostCodes[costCodeGroup].Add(costCode);
+                        CostCodes[key].Add(costCode);
                     }
                     else
                     {
-                        CostCodes.Add(costCodeGroup, new List<CostCode> {
+                        CostCodes.Add(key, new List<CostCode> {
                             costCode
                         });
                     }
@@ -190,12 +195,18 @@ namespace Timecard
         {
             try
             {
+                var jobs = await DataStore.GetJobsAsync();
+
                 Jobs[JobType.Construction].Clear();
 
-                var jobs = await DataStore.GetJobsAsync();
                 foreach (var job in jobs)
                 {
-                    Jobs[JobType.Construction].Add(job.Address);
+                    Jobs[JobType.Construction].Add(job);
+                }
+
+                if (Jobs[JobType.Construction].Count == 0)
+                {
+                    Jobs[JobType.Construction].Add(Job.DummyJob());
                 }
             }
             catch (Exception ex)

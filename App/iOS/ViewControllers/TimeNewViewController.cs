@@ -1,6 +1,6 @@
 using System;
 using CoreLocation;
-using Timecard.Exceptions;
+using Foundation;
 using Timecard.iOS.ViewControllers.PickerViewModels;
 using Timecard.Models;
 using UIKit;
@@ -14,7 +14,7 @@ namespace Timecard.iOS
 
         private LocationManager locationManager;
         private UIDatePicker datePicker;
-        private JobDescriptionPickerModel jobDescriptionModel;
+        private JobDescriptionPickerModel jobDescriptionPickerModel;
         private CostCodePickerModel costCodeModel;
 
         public TimeNewViewController(IntPtr handle) : base(handle)
@@ -32,10 +32,10 @@ namespace Timecard.iOS
             ConfigureCostCodePicker();
             ConfigureSaveButton();
 
-            jobTypeSegControl.SetTitle(JobType.Construction, 0);
-            jobTypeSegControl.SetTitle(JobType.Service, 1);
-            jobTypeSegControl.SetTitle(JobType.Other, 2);
- 
+            jobTypeSegControl.SetTitle(JobType.Construction.ToString(), 0);
+            jobTypeSegControl.SetTitle(JobType.Service.ToString(), 1);
+            jobTypeSegControl.SetTitle(JobType.Other.ToString(), 2);
+
             ConfigureGestures();
             ConfigureEditing();
 
@@ -85,58 +85,7 @@ namespace Timecard.iOS
             btnSaveTime.Layer.CornerRadius = 10;
             btnSaveTime.ClipsToBounds = true;
 
-            btnSaveTime.TouchUpInside += (sender, e) =>
-            {
-                CLLocationCoordinate2D location;
-                try
-                {
-                    location = locationManager.GetUserLocation();
-                }
-                catch (LocationNotAuthorizedException ex)
-                {
-                    DisplayAlertMessage(string.Format("Error saving time entry: {0}", ex.Message));
-                    return;
-                }
-
-                var item = new Item
-                {
-                    JobDate = txtDateField.Text,
-                    JobDescription = txtJobDescription.Text,
-                    HoursWorked = txtHoursWorked.Text,
-                    CostCode = txtCostCode.Text
-                };
-
-
-                if (EditingItem == null) // Creating a new item
-                {
-                    item.JobType = jobTypeSegControl.TitleAt(jobTypeSegControl.SelectedSegment);
-                    item.LatitudeCreated = location.Latitude.ToString();
-                    item.LongitudeCreated = location.Longitude.ToString();
-                }
-                else // Editing an existing item
-                {
-                    item.Id = EditingItem.Id;
-                    item.JobType = EditingItem.JobType;
-                    item.LatitudeUpdated = location.Latitude.ToString();
-                    item.LongitudeUpdated = location.Longitude.ToString();
-                }
-
-                try
-                {
-                    item.Clean();
-                    if (EditingItem == null)
-                        ViewModel.AddItemCommand.Execute(item);
-                    else
-                        ViewModel.UpdateItemCommand.Execute(item);
-                }
-                catch (InvalidItemException ex)
-                {
-                    DisplayAlertMessage(ex.Message);
-                    return;
-                }
-
-                base.NavigationController.PopToRootViewController(true);
-            };
+            btnSaveTime.TouchUpInside += OnSaveButtonClicked;
         }
 
         private void DisplayAlertMessage(string message)
@@ -152,8 +101,9 @@ namespace Timecard.iOS
             datePicker = new UIDatePicker
             {
                 Mode = UIDatePickerMode.Date,
-                MinimumDate = (Foundation.NSDate)ProjectSettings.GetStartOfCurrentPayPeriod(),
-                MaximumDate = (Foundation.NSDate)ProjectSettings.GetEndOfCurrentPayPeriod()
+                MinimumDate = (NSDate)ProjectSettings.GetStartOfCurrentPayPeriod(),
+                MaximumDate = (NSDate)ProjectSettings.GetEndOfCurrentPayPeriod(),
+                TimeZone = NSTimeZone.LocalTimeZone
             };
             
             // Whenever the date changes, set the date text field to the value of the picker
@@ -168,8 +118,8 @@ namespace Timecard.iOS
             if (EditingItem != null)
             {
                 // If the user is editing this entry, set the picker to the previously selected date
-                txtDateField.Text = EditingItem.JobDate;
-                datePicker.SetDate((Foundation.NSDate)ProjectSettings.LocalDateFromString(EditingItem.JobDate), false);
+                txtDateField.Text = EditingItem.JobDate.ToString(ProjectSettings.DateFormat);
+                datePicker.SetDate((Foundation.NSDate)EditingItem.JobDate, false);
    
             }
         }
@@ -184,17 +134,8 @@ namespace Timecard.iOS
 
             if (EditingItem != null)
             {
-                var hoursString = EditingItem.GetHoursWorkedHoursPart();
-                var minutesString = EditingItem.GetHoursWorkedMinutesPart();
-
-                model.SelectedHour = hoursString;
-                model.SelectedMinutes = minutesString;
-
-                txtHoursWorked.PickerView.Select(int.Parse(hoursString) + 1, 0, true);
-                txtHoursWorked.PickerView.Select(int.Parse(minutesString) / 15 + 1, 1, true);
-
-                var time = string.Format($"{hoursString}:{minutesString}");
-                txtHoursWorked.Text = time;
+                txtHoursWorked.SetSelectedPickerObject(EditingItem.TimeWorked);
+                txtHoursWorked.Text = EditingItem.TimeWorked.ToColonFormat();
             }
         }
 
@@ -202,8 +143,8 @@ namespace Timecard.iOS
         {
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
-            jobDescriptionModel = new JobDescriptionPickerModel(ViewModel, selectedJobType);
-            txtJobDescription.AddPickerToTextField(jobDescriptionModel);
+            jobDescriptionPickerModel = new JobDescriptionPickerModel(ViewModel, selectedJobType);
+            txtJobDescription.AddPickerToTextField(jobDescriptionPickerModel);
 
             if (EditingItem != null)
             {
@@ -211,7 +152,9 @@ namespace Timecard.iOS
                 {
                     txtJobDescription.SetPickerActive(false);
                 }
-                txtJobDescription.Text = EditingItem.JobDescription;
+
+                txtJobDescription.SetSelectedPickerObject(EditingItem.Job);
+                txtJobDescription.Text = EditingItem.Job.Address;
             }
         }
 
@@ -220,13 +163,17 @@ namespace Timecard.iOS
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
             costCodeModel = new CostCodePickerModel(ViewModel, selectedJobType);
-            txtCostCode.AddPickerToTextField(costCodeModel);
 
             if (EditingItem != null)
-                txtCostCode.Text = EditingItem.CostCode;
+            {
+                costCodeModel.SetSelectedPickerObject(EditingItem.CostCode);
+                txtCostCode.Text = EditingItem.CostCode.Description;
+            }
+
+            txtCostCode.AddPickerToTextField(costCodeModel);
         }
 
-        /***** Event Handlers *****/
+        /*************************** Event Handlers ***************************/
 
         private void HandleSwipeGesture(UISwipeGestureRecognizerDirection direction)
         {
@@ -254,19 +201,99 @@ namespace Timecard.iOS
             // Hide the picker or keyboard that's currently on the screen
             View.EndEditing(true);
 
-            var segmentTitle = sender.TitleAt(sender.SelectedSegment);
-            jobDescriptionModel.SelectedJobType = segmentTitle;
-            costCodeModel.SelectedJobType = segmentTitle;
+            string segmentTitle = sender.TitleAt(sender.SelectedSegment);
+            JobType segmentJobType = (JobType)Enum.Parse(typeof(JobType), segmentTitle);
+
+            jobDescriptionPickerModel.SetSelectedJobType(segmentJobType);
+            costCodeModel.SetSelectedJobType(segmentJobType);
 
             // Cost code is only needed for the non-other tabs
-            txtCostCode.SetPickerActive(active: segmentTitle != JobType.Other,
-                                        fieldVisible: segmentTitle != JobType.Other,
+            txtCostCode.SetPickerActive(active: segmentJobType != JobType.Other,
+                                        fieldVisible: segmentJobType != JobType.Other,
                                         clearText: true);
 
             // Job description should not have a picker if on the service tab
-            txtJobDescription.SetPickerActive(active: segmentTitle != JobType.Service,
+            txtJobDescription.SetPickerActive(active: segmentJobType != JobType.Service,
                                               fieldVisible: true,
                                               clearText: true);
+        }
+
+        private void OnSaveButtonClicked(object sender, EventArgs e)
+        {
+            var item = new Item
+            {
+                CostCode = (CostCode)txtCostCode.GetSelectedPickerObject(),
+                JobDate = (DateTime)datePicker.Date,
+                TimeWorked = (TimeWorked)txtHoursWorked.GetSelectedPickerObject()
+            };
+
+            if (EditingItem != null)
+            {
+                try
+                {
+                    // Attempt to get the user's location
+                    CLLocationCoordinate2D location = locationManager.GetUserLocation();
+                    item.Latitude = location.Latitude.ToString();
+                    item.Longitude = location.Longitude.ToString();
+                }
+                catch (LocationNotAuthorizedException ex)
+                {
+                    DisplayAlertMessage(string.Format("Error saving time entry: {0}", ex.Message));
+                    return;
+                }
+            }
+
+            if (EditingItem == null) // Creating a new item
+            {
+                item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
+            }
+            else // Editing an existing item
+            {
+                item.Id = EditingItem.Id;
+                item.JobType = EditingItem.JobType;
+            }
+
+            // Service jobs are entered via a number pad
+            if (item.JobType == JobType.Service)
+            {
+                item.Job = new Job()
+                {
+                    Address = txtJobDescription.Text,
+                    ClientName = txtJobDescription.Text
+                };
+            }
+            else
+            {
+                item.Job = (Job)txtJobDescription.GetSelectedPickerObject();
+            }
+
+            try
+            {
+                CheckForEmptyTextFields(item.JobType);
+                if (EditingItem == null)
+                    ViewModel.AddItemCommand.Execute(item);
+                else
+                    ViewModel.UpdateItemCommand.Execute(item);
+            }
+            catch (InvalidOperationException ex)
+            {
+                DisplayAlertMessage(ex.Message);
+                return;
+            }
+
+            base.NavigationController.PopToRootViewController(true);
+        }
+
+        private void CheckForEmptyTextFields(JobType selectedJobType)
+        {
+            if (string.IsNullOrWhiteSpace(txtDateField.Text))
+                throw new InvalidOperationException("Job date is required.");
+            if (string.IsNullOrWhiteSpace(txtHoursWorked.Text))
+                throw new InvalidOperationException("Hours worked is required.");
+            if (string.IsNullOrWhiteSpace(txtJobDescription.Text))
+                throw new InvalidOperationException("Job description is required.");
+            if (string.IsNullOrWhiteSpace(txtDateField.Text) && selectedJobType != JobType.Other)
+                throw new InvalidOperationException("Cost code is required.");
         }
     }
 }

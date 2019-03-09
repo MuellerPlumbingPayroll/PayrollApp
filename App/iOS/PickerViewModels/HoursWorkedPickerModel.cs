@@ -6,49 +6,41 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
 {
     public class HoursWorkedPickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
-        public string SelectedHour { get; set; } = "1";
-        public  string SelectedMinutes { get; set; } = "00";
-
-        private readonly string[] hours;
-        private readonly string[] minutes = { "Minutes", "00", "15", "30", "45" };
-
+        private TimeWorked timeWorked;
         private UITextField textField;
 
-        public HoursWorkedPickerModel()
+        public HoursWorkedPickerModel() : this(new TimeWorked()) { }
+
+        public HoursWorkedPickerModel(TimeWorked timeWorked)
         {
-            hours = new string[ProjectSettings.MaxNumberHoursInWorkDay + 1 + 1];
-            hours[0] = "Hours";
-            for (var i = 0; i <= ProjectSettings.MaxNumberHoursInWorkDay; i++)
-                hours[i + 1] = i.ToString();
+            this.timeWorked = timeWorked;
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
             if (row == 0)
                 row = 1;
-
-            string textFormat = "{0}:{1}";
-
+                
             if (component == 0)
-                SelectedHour = hours[row];
+                timeWorked.HoursPart = TimeWorked.Hours[row];
             else
-                SelectedMinutes = minutes[row];
+                timeWorked.MinutesPart = TimeWorked.Minutes[row];
 
-            textField.Text = string.Format(textFormat, SelectedHour, SelectedMinutes);
+            textField.Text = timeWorked.ToColonFormat();
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
             if (component == 0)
-                return hours[row];
-            return minutes[row];
+                return TimeWorked.Hours[row];
+            return TimeWorked.Minutes[row];
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
             if (component == 0)
-                return hours.Length;
-            return minutes.Length;
+                return TimeWorked.Hours.Length;
+            return TimeWorked.Minutes.Length;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
@@ -59,13 +51,28 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
 
         public string GetDefaultTextFieldValue()
         {
-            return string.Format("{0}:{1}", SelectedHour, SelectedMinutes);
+            return timeWorked.ToColonFormat();
         }
 
         public void SetValueChangedView(UIView textField)
         {
             this.textField = (UITextField)textField;
         }
+
+        public object GetSelectedPickerObject()
+        {
+            return timeWorked;
+        }
+
+        public void SetSelectedPickerObject(object o)
+        {
+            timeWorked = (TimeWorked)o;
+        }
+
+        public void SetSelectedJobType(JobType jobType)
+        {
+            // This method should never be called for this picker
+            throw new NotImplementedException();
+        }
     }
 }
-

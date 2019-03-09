@@ -1,16 +1,9 @@
-﻿using System;
-namespace Timecard.Models
+﻿namespace Timecard.Models
 {
-    public static class JobType
+    public enum JobType
     {
-        public const string Construction = "Construction";
-        public const string Service = "Service";
-        public const string Other = "Other";
-        public static readonly string[] Types =
-        {
-            Construction,
-            Service,
-            Other
-        };
+        Construction,
+        Service,
+        Other
     }
 }

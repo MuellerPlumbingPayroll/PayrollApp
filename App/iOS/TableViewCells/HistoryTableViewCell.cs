@@ -1,4 +1,3 @@
-using Foundation;
 using System;
 using UIKit;
 
@@ -15,8 +14,8 @@ namespace Timecard.iOS
             txtHoursWorked.AdjustsFontSizeToFitWidth = true;
             txtJobDescription.AdjustsFontSizeToFitWidth = true;
 
-            txtJobDescription.Text = item.JobType + " - " + item.JobDescription;
-            txtHoursWorked.Text = item.HoursWorked + " hrs";
+            txtJobDescription.Text = item.JobType.ToString() + " - " + item.Job.Address;
+            txtHoursWorked.Text = item.TimeWorked.ToDecimalFormat();
         }
     }
 }

@@ -11,37 +11,40 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
     {
         private static readonly string DEFAULT_COST_CODE_VALUE = "Not Listed";
 
-        public string SelectedJobType { get; set; }
+        private JobType selectedJobType;
+        private CostCode selectedCostCode;
         private UITextField textField;
         private ItemsViewModel viewModel;
 
-        public CostCodePickerModel(ItemsViewModel viewModel, string selectedJobType)
+        public CostCodePickerModel(ItemsViewModel viewModel, JobType selectedJobType)
         {
             this.viewModel = viewModel;
-            this.SelectedJobType = selectedJobType;
+            this.selectedJobType = selectedJobType;
+
+            selectedCostCode = viewModel.CostCodes[this.selectedJobType][0];
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            if (textField != null) 
-                textField.Text = viewModel.CostCodes[SelectedJobTypeToCodeGroup()][(int)row].Description;
+            selectedCostCode = viewModel.CostCodes[selectedJobType][(int)row];
+
+            if (textField != null)
+                textField.Text = selectedCostCode.Description;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            var codeGroup = SelectedJobTypeToCodeGroup();
+            if (viewModel.CostCodes.ContainsKey(selectedJobType))
+                return viewModel.CostCodes[selectedJobType][(int)row].Description;
 
-            if (viewModel.CostCodes.ContainsKey(codeGroup))
-                return viewModel.CostCodes[codeGroup][(int)row].Description;
             return DEFAULT_COST_CODE_VALUE;
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            var codeGroup = SelectedJobTypeToCodeGroup();
+            if (viewModel.CostCodes.ContainsKey(selectedJobType))
+                return viewModel.CostCodes[selectedJobType].Count;
 
-            if (viewModel.CostCodes.ContainsKey(codeGroup))
-                return viewModel.CostCodes[SelectedJobTypeToCodeGroup()].Count;
             return 0;
         }
 
@@ -67,16 +70,26 @@ namespace Timecard.iOS.ViewControllers.PickerViewModels
             this.textField = (UITextField)textField;
         }
 
-        private string SelectedJobTypeToCodeGroup()
+        public object GetSelectedPickerObject()
         {
-            switch(SelectedJobType)
+            return selectedCostCode;
+        }
+
+        public void SetSelectedPickerObject(object o)
+        {
+            selectedCostCode = (CostCode)o;
+        }
+
+        public void SetSelectedJobType(JobType jobType)
+        {
+            selectedJobType = jobType;
+            if (jobType != JobType.Other)
             {
-                case JobType.Construction:
-                    return CostCode.PlumbingCodeGroup;
-                case JobType.Service:
-                    return CostCode.ServiceCodeGroup;
-                default:
-                    return null;
+                selectedCostCode = viewModel.CostCodes[jobType][0];
+            }
+            else
+            {
+                selectedCostCode = null;
             }
         }
     }
