@@ -34,8 +34,10 @@
 
         public string ToDecimalFormat()
         {
+            var hours = float.Parse(HoursPart);
             var minutes = float.Parse(MinutesPart) / 60;
-            return string.Format("{0}.{1}", HoursPart, minutes.ToString("0.00"));
+
+            return string.Format("{0:F2}", hours + minutes);
         }
 
         public string ToColonFormat()

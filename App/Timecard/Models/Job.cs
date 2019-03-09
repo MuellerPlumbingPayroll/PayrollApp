@@ -8,6 +8,16 @@ namespace Timecard.Models
         public string Address { get; set; }
         public string ClientName { get; set; }
 
+        public static Job DummyJob()
+        {
+            return new Job()
+            {
+                Id = "0",
+                Address = "Not Listed",
+                ClientName = "Not Listed"
+            };
+        }
+
         public static List<Job> GetOtherTypeJobs()
         {
             var jobs = new List<Job>();
