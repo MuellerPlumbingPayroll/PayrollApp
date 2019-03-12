@@ -1,4 +1,7 @@
-﻿namespace Timecard.Models
+﻿using System;
+using Newtonsoft.Json;
+
+namespace Timecard.Models
 {
     public class TimeWorked
     {
@@ -14,7 +17,7 @@
             for (int i = 0; i <= maxHours; i++)
                 Hours[i + 1] = i.ToString();
 
-            Minutes = new string[]{ "Minutes", "00", "15", "30", "45" };
+            Minutes = new string[] { "Minutes", "00", "15", "30", "45" };
         }
 
         public string HoursPart { get; set; }
@@ -56,7 +59,7 @@
             string hours = times[0];
 
             string minutes;
-            switch(times[1])
+            switch (times[1])
             {
                 case "75":
                     minutes = "45";
@@ -82,6 +85,27 @@
             string minutes = times[1];
 
             return new TimeWorked(hours, minutes);
+        }
+    }
+
+
+    class TimeWorkedConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var timeWorked = value as TimeWorked;
+            writer.WriteValue(timeWorked.AsFloat());
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            float timeWorked = (float)existingValue;
+            return TimeWorked.FromDecimalFormat(timeWorked.ToString("0.00"));
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(TimeWorked);
         }
     }
 }
