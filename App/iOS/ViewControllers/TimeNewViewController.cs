@@ -101,6 +101,7 @@ namespace Timecard.iOS
             datePicker = new UIDatePicker
             {
                 Mode = UIDatePickerMode.Date,
+                Date = (NSDate)DateTime.Now,
                 MinimumDate = (NSDate)ProjectSettings.GetStartOfCurrentPayPeriod(),
                 MaximumDate = (NSDate)ProjectSettings.GetEndOfCurrentPayPeriod(),
                 TimeZone = NSTimeZone.LocalTimeZone
@@ -227,25 +228,24 @@ namespace Timecard.iOS
                 TimeWorked = (TimeWorked)txtHoursWorked.GetSelectedPickerObject()
             };
 
-            if (EditingItem != null)
+
+            if (EditingItem == null) // Creating a new item
             {
+                item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
+
                 try
                 {
                     // Attempt to get the user's location
+                    // Location is only recorded when creating a new time entry
                     CLLocationCoordinate2D location = locationManager.GetUserLocation();
-                    item.Latitude = location.Latitude.ToString();
-                    item.Longitude = location.Longitude.ToString();
+                    item.Latitude = location.Latitude;
+                    item.Longitude = location.Longitude;
                 }
                 catch (LocationNotAuthorizedException ex)
                 {
                     DisplayAlertMessage(string.Format("Error saving time entry: {0}", ex.Message));
                     return;
                 }
-            }
-
-            if (EditingItem == null) // Creating a new item
-            {
-                item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
             }
             else // Editing an existing item
             {
