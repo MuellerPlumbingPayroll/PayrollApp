@@ -59,7 +59,7 @@ namespace Timecard
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var date = (DateTime)value;
-            writer.WriteValue(date.ToString("yyyy-MM-dd"));
+            writer.WriteValue(date.ToString());
         }
     }
 }
