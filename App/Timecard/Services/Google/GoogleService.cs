@@ -17,5 +17,14 @@ namespace Timecard.Services
 
             return userInfo;
         }
+
+        public async Task<bool> RevokeTokenAsync(string tokenType, string accessToken)
+        {
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
+
+            var response = await httpClient.GetAsync($"https://accounts.google.com/o/oauth2/revoke?token={accessToken}");
+            return response.IsSuccessStatusCode;
+        }
     }
 }
