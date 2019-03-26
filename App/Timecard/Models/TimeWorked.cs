@@ -59,20 +59,28 @@ namespace Timecard.Models
             string hours = times[0];
 
             string minutes;
-            switch (times[1])
+
+            if (times.Length > 1)
             {
-                case "75":
-                    minutes = "45";
-                    break;
-                case "50":
-                    minutes = "30";
-                    break;
-                case "25":
-                    minutes = "15";
-                    break;
-                default:
-                    minutes = "00";
-                    break;
+                switch (times[1])
+                {
+                    case "75":
+                        minutes = "45";
+                        break;
+                    case "50":
+                        minutes = "30";
+                        break;
+                    case "25":
+                        minutes = "15";
+                        break;
+                    default:
+                        minutes = "00";
+                        break;
+                }
+            }
+            else
+            {
+                minutes = "00";
             }
 
             return new TimeWorked(hours, minutes);
@@ -99,7 +107,7 @@ namespace Timecard.Models
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            float timeWorked = (float)existingValue;
+            float timeWorked = serializer.Deserialize<float>(reader);
             return TimeWorked.FromDecimalFormat(timeWorked.ToString("0.00"));
         }
 

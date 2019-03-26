@@ -20,7 +20,7 @@ namespace Timecard.Models
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var jobTypeString = existingValue as string;
+            var jobTypeString = serializer.Deserialize<string>(reader);
             return (JobType)Enum.Parse(typeof(JobType), jobTypeString);
         }
 
