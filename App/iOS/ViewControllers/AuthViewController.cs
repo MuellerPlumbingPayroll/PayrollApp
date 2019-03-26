@@ -1,6 +1,7 @@
 using System;
 using Timecard.Authentication;
 using Timecard.Services;
+using Timecard.ViewModels;
 using UIKit;
 
 namespace Timecard.iOS
@@ -8,6 +9,8 @@ namespace Timecard.iOS
     public partial class AuthViewController : UIViewController, IGoogleAuthenticationDelegate
     {
         public static GoogleAuthenticator Auth;
+
+        private AuthViewModel _authViewModel;
 
         public AuthViewController(IntPtr handle) : base(handle)
         {
@@ -17,7 +20,8 @@ namespace Timecard.iOS
         {
             base.ViewDidLoad();
 
-            Title = "Sign In";
+            _authViewModel = new AuthViewModel();
+            Title = _authViewModel.Title;
 
             Auth = new GoogleAuthenticator(GoogleConfiguration.ClientId, 
                                            GoogleConfiguration.Scope,
@@ -56,25 +60,27 @@ namespace Timecard.iOS
             // SFSafariViewController doesn't dismiss itself
             DismissViewController(true, null);
 
-            token.SaveToDevice();
+            var googleUserInfo = await _authViewModel.RetrieveGoogleUserInfoAsync(token.TokenType, token.AccessToken);
+            var firebaseUserInfo = await _authViewModel.AuthenticateUserWithFirebaseAsync(googleUserInfo);
 
-            var googleService = new GoogleService();
-            var userInfo = await googleService.GetUserInfoAsync(token.TokenType, token.AccessToken);
-            userInfo.SaveToDevice();
-
-
-            GoogleLoginButton.SetTitle($"Signed In As {userInfo.Email}", UIControlState.Normal);
-
-            // TODO: Check if user is authorized to access the app
-            var isUserAuthorized = true;
-
-            if (isUserAuthorized)
+            if (firebaseUserInfo != null)
             {
-                PerformSegueToHome(userInfo.GivenName);
+                token.SaveToDevice();
+                googleUserInfo.SaveToDevice();
+                firebaseUserInfo.SaveToDevice();
+
+                PerformSegueToHome(googleUserInfo.GivenName);
             }
             else
             {
-                // TODO: Display appropriate message on UI
+                // This doesn't need to be awaited since its result is not used
+                _authViewModel.RevokeTokenAsync(token.TokenType, token.AccessToken);
+
+                string message = _authViewModel.FirebaseNotAuthorizedErrorMessage;
+                var alert = UIAlertController.Create("Error", message, UIAlertControllerStyle.Alert);
+                alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
+
+                PresentViewController(alert, true, null);
             }
         }
 
@@ -104,7 +110,7 @@ namespace Timecard.iOS
             var navigationController = tabBarController.ViewControllers[0] as UINavigationController;
             var homeViewController = navigationController.ViewControllers[0] as HomeViewController;
 
-            homeViewController.ViewModel = new ViewModels.HomeViewModel(userName);
+            homeViewController.ViewModel = new HomeViewModel(userName);
 
             // Set the tab bar controller as root
             var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate;

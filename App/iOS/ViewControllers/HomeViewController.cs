@@ -117,6 +117,7 @@ namespace Timecard.iOS
         {
             GoogleUserInfo.RemoveFromDevice();
             GoogleOAuthToken.RemoveFromDevice();
+            FirebaseUserInfo.RemoveFromDevice();
 
             var rootNavController = this.Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
 
