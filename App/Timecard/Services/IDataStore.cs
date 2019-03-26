@@ -9,7 +9,7 @@ namespace Timecard
     {
         Task<FirebaseUserInfo> AuthenticateUser(GoogleUserInfo googleUserInfo);
 
-        Task<bool> AddItemAsync(T item);
+        Task<string> AddItemAsync(T item);
         Task<bool> UpdateItemAsync(T item);
         Task<bool> DeleteItemAsync(string id);
         Task<T> GetItemAsync(string id);

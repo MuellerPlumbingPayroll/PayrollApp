@@ -18,7 +18,8 @@ namespace Timecard
         IEnumerable<CostCode> costCodes;
         IEnumerable<Job> jobs;
 
-        private JsonSerializerSettings serializerSettings;
+        private readonly JsonSerializerSettings _serializerSettings;
+        private FirebaseUserInfo _firebaseUserInfo;
 
         public CloudDataStore()
         {
@@ -29,7 +30,7 @@ namespace Timecard
             costCodes = new List<CostCode>();
             jobs = new List<Job>();
 
-            serializerSettings = new JsonSerializerSettings
+            _serializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
@@ -58,7 +59,7 @@ namespace Timecard
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
-                var firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+                var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
                 if (firebaseUserInfo != null)
                 {
                     var json = await client.GetStringAsync($"entries/{firebaseUserInfo.Id}");
@@ -80,33 +81,32 @@ namespace Timecard
             return null;
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public async Task<string> AddItemAsync(Item item)
         {
-            var firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
 
             if (item == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
-                return false;
+                return null;
 
-            var serializedItem = JsonConvert.SerializeObject(item, serializerSettings);
+            var serializedItem = JsonConvert.SerializeObject(item, _serializerSettings);
             var response = await client.PostAsync($"entry/{firebaseUserInfo.Id}", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
-
+            
             if (response.IsSuccessStatusCode)
             {
-                string id = await response.Content.ReadAsStringAsync();
-                // TODO: Use this ID
+                return await response.Content.ReadAsStringAsync();
             }
 
-            return response.IsSuccessStatusCode;
+            return null;
         }
 
         public async Task<bool> UpdateItemAsync(Item item)
         {
-            var firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
 
             if (item == null || item.Id == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var serializedItem = JsonConvert.SerializeObject(item, serializerSettings);
+            var serializedItem = JsonConvert.SerializeObject(item, _serializerSettings);
             var response = await client.PostAsync($"entry/{firebaseUserInfo.Id}/{item.Id}", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
@@ -114,11 +114,13 @@ namespace Timecard
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            if (string.IsNullOrEmpty(id) && !CrossConnectivity.Current.IsConnected)
+            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+
+            if (string.IsNullOrEmpty(id) || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var response = await client.DeleteAsync($"api/item/{id}");
-
+            var response = await client.DeleteAsync($"entry/{id}/{firebaseUserInfo.Id}");
+            
             return response.IsSuccessStatusCode;
         }
 
@@ -142,6 +144,17 @@ namespace Timecard
             }
 
             return jobs;
+        }
+
+        // Method to reduce the number of reads from the device's storage
+        private FirebaseUserInfo ReadFirebaseUserInfoFromDevice()
+        {
+            if (_firebaseUserInfo == null)
+            {
+                _firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+            }
+
+            return _firebaseUserInfo;
         }
     }
 }

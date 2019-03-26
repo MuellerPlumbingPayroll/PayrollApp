@@ -25,11 +25,12 @@ namespace Timecard
             return null;
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public async Task<string> AddItemAsync(Item item)
         {
             items.Add(item);
 
-            return await Task.FromResult(true);
+            // Return a random string
+            return await Task.FromResult(Guid.NewGuid().ToString());
         }
 
         public async Task<bool> UpdateItemAsync(Item item)

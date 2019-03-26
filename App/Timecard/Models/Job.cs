@@ -7,7 +7,8 @@ namespace Timecard.Models
         public string Id { get; set; }
         public string Address { get; set; }
         public string ClientName { get; set; }
-        public bool IsActive { get; set; }
+        public string JobNumber { get; set; } = "00-000";
+        public bool IsActive { get; set; } = true;
 
         public static Job DummyJob()
         {
@@ -26,6 +27,7 @@ namespace Timecard.Models
             {
                 jobs.Add(new Job()
                 {
+                    Id = job,
                     Address = job,
                     ClientName = job
                 });
