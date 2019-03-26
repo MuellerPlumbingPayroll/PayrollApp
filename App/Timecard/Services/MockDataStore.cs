@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Timecard.Models;
+using Timecard.Services;
 
 namespace Timecard
 {
@@ -17,6 +18,11 @@ namespace Timecard
             items = new List<Item>();
             costCodes = new List<CostCode>();
             jobs = new List<Job>();
+        }
+
+        public Task<FirebaseUserInfo> AuthenticateUser(GoogleUserInfo googleUserInfo)
+        {
+            return null;
         }
 
         public async Task<bool> AddItemAsync(Item item)

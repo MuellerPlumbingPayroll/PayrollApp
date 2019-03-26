@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Plugin.Connectivity;
 using Timecard.Models;
+using Timecard.Services;
 
 namespace Timecard
 {
@@ -19,6 +18,8 @@ namespace Timecard
         IEnumerable<CostCode> costCodes;
         IEnumerable<Job> jobs;
 
+        private JsonSerializerSettings serializerSettings;
+
         public CloudDataStore()
         {
             client = new HttpClient();
@@ -27,14 +28,42 @@ namespace Timecard
             items = new List<Item>();
             costCodes = new List<CostCode>();
             jobs = new List<Job>();
+
+            serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+        }
+
+        public async Task<FirebaseUserInfo> AuthenticateUser(GoogleUserInfo googleUserInfo)
+        {
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                var response = await client.GetAsync($"authenticate/{googleUserInfo.Email}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string id = await response.Content.ReadAsStringAsync();
+                    return new FirebaseUserInfo()
+                    {
+                        Id = id
+                    };
+                }
+            }
+
+            return null;
         }
 
         public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
-                var json = await client.GetStringAsync($"api/item");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Item>>(json));
+                var firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+                if (firebaseUserInfo != null)
+                {
+                    var json = await client.GetStringAsync($"entries/{firebaseUserInfo.Id}");
+                    items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Item>>(json));
+                }
             }
 
             return items;
@@ -53,26 +82,32 @@ namespace Timecard
 
         public async Task<bool> AddItemAsync(Item item)
         {
-            if (item == null || !CrossConnectivity.Current.IsConnected)
+            var firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+
+            if (item == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var serializedItem = JsonConvert.SerializeObject(item);
+            var serializedItem = JsonConvert.SerializeObject(item, serializerSettings);
+            var response = await client.PostAsync($"entry/{firebaseUserInfo.Id}", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
-            var response = await client.PostAsync($"api/item", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
+            {
+                string id = await response.Content.ReadAsStringAsync();
+                // TODO: Use this ID
+            }
 
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> UpdateItemAsync(Item item)
         {
-            if (item == null || item.Id == null || !CrossConnectivity.Current.IsConnected)
+            var firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
+
+            if (item == null || item.Id == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var serializedItem = JsonConvert.SerializeObject(item);
-            var buffer = Encoding.UTF8.GetBytes(serializedItem);
-            var byteContent = new ByteArrayContent(buffer);
-
-            var response = await client.PutAsync(new Uri($"api/item/{item.Id}"), byteContent);
+            var serializedItem = JsonConvert.SerializeObject(item, serializerSettings);
+            var response = await client.PostAsync($"entry/{firebaseUserInfo.Id}/{item.Id}", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
         }
