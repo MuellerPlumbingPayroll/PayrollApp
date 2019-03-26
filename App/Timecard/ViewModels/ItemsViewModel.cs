@@ -112,6 +112,8 @@ namespace Timecard
                 {
                     Items.Add(item);
                 }
+
+                Debug.WriteLine($"Successfully loaded {Items.Count} items.");
             }
             catch (Exception ex)
             {
@@ -125,8 +127,19 @@ namespace Timecard
 
         async Task AddItem(Item item)
         {
-            Items.Add(item);
-            await DataStore.AddItemAsync(item);
+            string itemId = await DataStore.AddItemAsync(item);
+
+            if (itemId != null)
+            {
+                Debug.WriteLine($"Successfully added new item: {itemId}.");
+
+                item.Id = itemId;
+                Items.Add(item);
+            }
+            else
+            {
+                Debug.WriteLine("Failed to add new item.");
+            }
         }
 
         async Task UpdateItem(Item item)
@@ -143,16 +156,34 @@ namespace Timecard
 
             if (elementToRemove >= 0)
             {
-                Items.RemoveAt(elementToRemove);
-                Items.Insert(elementToRemove, item);
-                await DataStore.UpdateItemAsync(item);
+                bool success = await DataStore.UpdateItemAsync(item);
+
+                if (success)
+                {
+                    Debug.WriteLine($"Successfully updated item: {item.Id}.");
+                    Items.RemoveAt(elementToRemove);
+                    Items.Insert(elementToRemove, item);
+                }
+                else
+                {
+                    Debug.WriteLine($"Failed to update item: {item.Id}.");
+                }
             }
         }
 
         async Task DeleteItem(Item item)
         {
-            Items.Remove(item);
-            await DataStore.DeleteItemAsync(item.Id);
+            bool success = await DataStore.DeleteItemAsync(item.Id);
+
+            if (success)
+            {
+                Debug.WriteLine($"Successfully deleted item: {item.Id}.");
+                Items.Remove(item);
+            }
+            else
+            {
+                Debug.WriteLine($"Failed to delete item: {item.Id}.");
+            }
         }
 
         async Task ExecuteLoadCostCodesCommand()
@@ -184,6 +215,8 @@ namespace Timecard
                         });
                     }
                 }
+
+                Debug.WriteLine($"Successfully added {CostCodes.Count} cost codes.");
             }
             catch (Exception ex)
             {
@@ -206,7 +239,12 @@ namespace Timecard
 
                 if (Jobs[JobType.Construction].Count == 0)
                 {
+                    Debug.WriteLine($"Failed to find any jobs. Adding a dummy job.");
                     Jobs[JobType.Construction].Add(Job.DummyJob());
+                }
+                else
+                {
+                    Debug.WriteLine($"Successfully added {Jobs[JobType.Construction].Count} construction jobs.");
                 }
             }
             catch (Exception ex)
