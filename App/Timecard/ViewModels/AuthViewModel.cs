@@ -6,7 +6,7 @@ namespace Timecard.ViewModels
 {
     public class AuthViewModel : BaseViewModel
     {
-        public string FirebaseNotAuthorizedErrorMessage { get; set; }
+        public string FirebaseNotAuthorizedErrorMessage { get; }
         private readonly GoogleService _googleService;
 
         public AuthViewModel()

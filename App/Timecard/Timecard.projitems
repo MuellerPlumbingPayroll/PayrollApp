@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\TimeWorked.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\FirebaseUserInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AuthViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SubmitTimecardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Exceptions\" />
