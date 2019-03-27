@@ -583,6 +583,83 @@
             </objects>
             <point key="canvasLocation" x="-1157" y="7"/>
         </scene>
+        <scene sceneID="75815">
+            <objects>
+                <viewController id="75816" sceneMemberID="viewController" customClass="SubmitTimecardViewController" storyboardIdentifier="submitTimecardController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="75813"/>
+                        <viewControllerLayoutGuide type="bottom" id="75814"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="75817">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="76421" translatesAutoresizingMaskIntoConstraints="NO" text="Consent text" editable="NO" selectable="NO" scrollEnabled="NO" adjustsFontForContentSizeCategory="YES">
+                                <rect key="frame" x="40" y="40" width="334" height="150"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24" weight="medium"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <constraints>
+                                    <constraint id="76422" firstAttribute="height" constant="150"/>
+                                </constraints>
+                                <accessibility key="accessibilityConfiguration" label="txtConsent"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="76427" translatesAutoresizingMaskIntoConstraints="NO" buttonType="roundedRect">
+                                <rect key="frame" x="40" y="666" width="334" height="50"/>
+                                <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0.58823529411764708" blue="1" alpha="1"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Submit">
+                                    <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                </state>
+                                <constraints>
+                                    <constraint id="76428" firstAttribute="height" constant="50"/>
+                                </constraints>
+                                <accessibility key="accessibilityConfiguration" label="btnSubmit"/>
+                                <connections>
+                                    <action selector="BtnSubmit_TouchUpInside:" destination="75816" id="76557" eventType="touchUpInside"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Work Injury Question" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="80111" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="0" misplaced="YES">
+                                <rect key="frame" x="35" y="209" width="334" height="67"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="81032" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" customClass="TextFieldWithDoneButton" placeholder="Answer">
+                                <rect key="frame" x="35" y="302" width="334" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <accessibility key="accessibilityConfiguration" label="txtAnswer"/>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint id="76423" firstItem="76421" firstAttribute="leading" secondItem="75817" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="76424" firstAttribute="trailingMargin" secondItem="76421" secondAttribute="trailing" constant="20"/>
+                            <constraint id="76429" firstItem="76427" firstAttribute="leading" secondItem="75817" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="76430" firstItem="75814" firstAttribute="top" secondItem="76427" secondAttribute="bottom" constant="20"/>
+                            <constraint id="76431" firstAttribute="trailingMargin" secondItem="76427" secondAttribute="trailing" constant="20"/>
+                            <constraint id="80110" firstItem="76421" firstAttribute="top" secondItem="75813" secondAttribute="bottom" constant="20"/>
+                            <constraint id="80576" firstItem="80111" firstAttribute="leading" secondItem="75817" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="80577" firstAttribute="trailingMargin" secondItem="80111" secondAttribute="trailing" constant="20"/>
+                            <constraint id="81033" firstItem="81032" firstAttribute="leading" secondItem="75817" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="81034" firstAttribute="trailingMargin" secondItem="81032" secondAttribute="trailing" constant="20"/>
+                            <constraint id="81038" firstItem="80111" firstAttribute="top" secondItem="76421" secondAttribute="bottom" constant="20"/>
+                            <constraint id="81039" firstItem="81032" firstAttribute="top" secondItem="80111" secondAttribute="bottom" constant="20"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="txtConsent" destination="76421" id="name-outlet-76421"/>
+                        <outlet property="btnSubmit" destination="76427" id="name-outlet-76427"/>
+                        <outlet property="txtWorkInjury" destination="80111" id="name-outlet-80111"/>
+                        <outlet property="txtAnswer" destination="81032" id="name-outlet-81032"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="75818" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2401" y="-1083"/>
+        </scene>
     </scenes>
     <resources>
         <image name="First" width="32" height="30"/>
