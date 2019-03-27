@@ -28,7 +28,7 @@ namespace Timecard.iOS
             Title = ViewModel.Title;
 
             txtUserName.Editable = false;
-            txtUserName.Text = "Welcome, " + ViewModel.UserName;
+            txtUserName.Text = "Hello, " + ViewModel.UserName;
 
             btnNewEntry.Layer.CornerRadius = 10;
             btnNewEntry.ClipsToBounds = true;
@@ -90,13 +90,23 @@ namespace Timecard.iOS
                 {
                     if (numHoursWorked > 0)
                     {
-                        // TODO: Submit this timecard
+                        PerformSegueToSubmitTimecard();
                     }
                 }));
 
                 alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
                 PresentViewController(alert, animated: true, completionHandler: null);
             }
+            else
+            {
+                PerformSegueToSubmitTimecard();
+            }
+        }
+
+        private void PerformSegueToSubmitTimecard()
+        {
+            var submitTimeController = Storyboard.InstantiateViewController("submitTimecardController") as UIViewController;
+            NavigationController.PushViewController(submitTimeController, true);
         }
 
         partial void BtnLogOut_TouchUpInside(UIButton sender)

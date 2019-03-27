@@ -172,6 +172,11 @@
     <Compile Include="PickerViewModels\HoursWorkedPickerModel.cs" />
     <Compile Include="PickerViewModels\ICustomPickerViewModel.cs" />
     <Compile Include="PickerViewModels\JobDescriptionPickerModel.cs" />
+    <Compile Include="PickerViewModels\WorkInjuryPickerModel.cs" />
+    <Compile Include="ViewControllers\SubmitTimecardViewController.cs" />
+    <Compile Include="ViewControllers\SubmitTimecardViewController.designer.cs">
+      <DependentUpon>SubmitTimecardViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
