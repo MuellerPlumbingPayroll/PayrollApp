@@ -24,7 +24,7 @@ namespace Timecard.iOS
             if (ViewModel == null)
                 ViewModel = new HomeViewModel();
 
-            AllItemsViewModel = (this.TabBarController as TabBarController).AllItemsViewModel;
+            AllItemsViewModel = (TabBarController as TabBarController).AllItemsViewModel;
             Title = ViewModel.Title;
 
             txtUserName.Editable = false;
@@ -59,54 +59,44 @@ namespace Timecard.iOS
             btnSubmit.Layer.CornerRadius = 10;
             btnSubmit.ClipsToBounds = true;
 
-            // TODO: Update with actual value
-            bool hasSubmittedTimecard = false;
-
-            // If today is the first day of a new pay period, the user should 
-            // submit the previous period's entries.
+            // Determine if today is beginning or end of the pay period
             bool shouldSubmitTimecardToday =
-                new DateTime().Day.Equals(ProjectSettings.PayPeriodStartDay);
+                DateTime.Now.DayOfWeek.Equals(ProjectSettings.PayPeriodEndDay) ||
+                DateTime.Now.DayOfWeek.Equals(ProjectSettings.PayPeriodStartDay);
 
-            if (!hasSubmittedTimecard && shouldSubmitTimecardToday)
+            if (shouldSubmitTimecardToday)
                 btnSubmit.BackgroundColor = UIColor.DarkGray;
             else
                 btnSubmit.BackgroundColor = UIColor.LightGray;
-
-            btnSubmit.TouchUpInside += OnSubmitButtonClicked;
         }
 
-        private void OnSubmitButtonClicked(object sender, EventArgs e)
+        public override bool ShouldPerformSegue(string segueIdentifier, NSObject sender)
         {
-            float numHoursWorked = AllItemsViewModel.NumberHoursWorkedOnDay();
-
-            if (numHoursWorked < ProjectSettings.NumberHoursInWorkWeek)
+            if (segueIdentifier == "NavigateFromHomeToSubmit")
             {
-                var alert = UIAlertController.Create(
-                    "Are you sure you want to submit your timecard?",
-                    string.Format("You have recorded less than {0} hours this week.", ProjectSettings.NumberHoursInWorkWeek),
-                    UIAlertControllerStyle.ActionSheet);
+                float numHoursWorked = AllItemsViewModel.NumberHoursWorkedOnDay();
 
-                alert.AddAction(UIAlertAction.Create("Continue", UIAlertActionStyle.Default, (UIAlertAction) =>
+                if (numHoursWorked < ProjectSettings.NumberHoursInWorkWeek)
                 {
-                    if (numHoursWorked > 0)
+                    // The user hasn't worked at least 40 hours this week so display an alert message 
+                    var alert = UIAlertController.Create(
+                        "Are you sure you want to submit your timecard?",
+                        string.Format("You have recorded less than {0} hours this week.", ProjectSettings.NumberHoursInWorkWeek),
+                        UIAlertControllerStyle.ActionSheet);
+
+                    alert.AddAction(UIAlertAction.Create("Continue", UIAlertActionStyle.Default, (UIAlertAction) =>
                     {
-                        PerformSegueToSubmitTimecard();
-                    }
-                }));
+                        PerformSegue("NavigateFromHomeToSubmit", null);
+                    }));
 
-                alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
-                PresentViewController(alert, animated: true, completionHandler: null);
-            }
-            else
-            {
-                PerformSegueToSubmitTimecard();
-            }
-        }
+                    alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+                    PresentViewController(alert, animated: true, completionHandler: null);
 
-        private void PerformSegueToSubmitTimecard()
-        {
-            var submitTimeController = Storyboard.InstantiateViewController("submitTimecardController") as UIViewController;
-            NavigationController.PushViewController(submitTimeController, true);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         partial void BtnLogOut_TouchUpInside(UIButton sender)
@@ -129,7 +119,7 @@ namespace Timecard.iOS
             GoogleOAuthToken.RemoveFromDevice();
             FirebaseUserInfo.RemoveFromDevice();
 
-            var rootNavController = this.Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
+            var rootNavController = Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
 
             var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate;
             appDelegate.Window.RootViewController = rootNavController;

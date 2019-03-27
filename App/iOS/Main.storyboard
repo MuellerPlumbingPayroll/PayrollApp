@@ -473,6 +473,9 @@
                                     <constraint id="53156" firstAttribute="height" constant="50"/>
                                 </constraints>
                                 <accessibility key="accessibilityConfiguration" label="btnSubmit"/>
+                                <connections>
+                                    <segue id="84514" destination="75816" kind="show" identifier="NavigateFromHomeToSubmit"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>
@@ -595,7 +598,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="76421" translatesAutoresizingMaskIntoConstraints="NO" text="Consent text" editable="NO" selectable="NO" scrollEnabled="NO" adjustsFontForContentSizeCategory="YES">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="76421" translatesAutoresizingMaskIntoConstraints="NO" text="Consent text" editable="NO" selectable="NO" scrollEnabled="NO" adjustsFontForContentSizeCategory="YES" misplaced="YES">
                                 <rect key="frame" x="40" y="40" width="334" height="150"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24" weight="medium"/>

@@ -40,7 +40,7 @@ namespace Timecard.iOS
             else
             {
                 // The user did not answer the question. Make the border red.
-                txtAnswer.Layer.BorderWidth = 1;
+                txtAnswer.Layer.BorderWidth = 4;
                 txtAnswer.Layer.BorderColor = UIColor.Red.CGColor;
             }
         }
