@@ -17,5 +17,7 @@ namespace Timecard
 
         Task<IEnumerable<CostCode>> GetCostCodesAsync();
         Task<IEnumerable<Job>> GetJobsAsync();
+
+        Task<bool> SubmitTimecardAsync(TimecardSubmission timecardSubmission);
     }
 }

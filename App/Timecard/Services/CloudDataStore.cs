@@ -156,5 +156,18 @@ namespace Timecard
 
             return _firebaseUserInfo;
         }
+
+        public async Task<bool> SubmitTimecardAsync(TimecardSubmission timecardSubmission)
+        {
+            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+
+            if (timecardSubmission == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
+                return false;
+
+            var serializedSubmission = JsonConvert.SerializeObject(timecardSubmission, _serializerSettings);
+            var response = await client.PostAsync($"submit/{firebaseUserInfo.Id}", new StringContent(serializedSubmission, Encoding.UTF8, "application/json"));
+            
+            return response.IsSuccessStatusCode;
+        }
     }
 }

@@ -69,5 +69,10 @@ namespace Timecard
         {
             return await Task.FromResult(jobs);
         }
+
+        public async Task<bool> SubmitTimecardAsync(TimecardSubmission timecardSubmission)
+        {
+            return await Task.FromResult(true);
+        }
     }
 }
