@@ -20,7 +20,7 @@ namespace Timecard.iOS
 
             Title = ViewModel.Title;
 
-            dateLabel.Text = ViewModel.Item.JobDate.ToString(ProjectSettings.DateFormat);
+            dateLabel.Text = ViewModel.Item.JobDate.ToLocalTime().ToString(ProjectSettings.DateFormat);
             hoursWorkedLabel.Text = "Time Worked:   " + ViewModel.Item.TimeWorked.ToColonFormat();
             jobTypeLabel.Text = "Type:   " + ViewModel.Item.JobType;
             jobDescriptionLabel.Text = "Job:   " + ViewModel.Item.Job.Address;
