@@ -119,7 +119,7 @@ namespace Timecard
             if (string.IsNullOrEmpty(id) || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var response = await client.DeleteAsync($"entry/{id}/{firebaseUserInfo.Id}");
+            var response = await client.DeleteAsync($"entry/{firebaseUserInfo.Id}/{id}");
             
             return response.IsSuccessStatusCode;
         }
