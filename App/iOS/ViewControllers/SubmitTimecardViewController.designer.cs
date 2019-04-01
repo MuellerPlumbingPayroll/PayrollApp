@@ -32,7 +32,7 @@ namespace Timecard.iOS
 
         [Action ("BtnSubmit_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
-        partial void BtnSubmit_TouchUpInside (UIKit.UIButton sender);
+        partial void BtnSubmit_TouchUpInsideAsync (UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {

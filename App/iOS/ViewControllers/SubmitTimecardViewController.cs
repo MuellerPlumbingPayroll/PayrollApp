@@ -29,13 +29,14 @@ namespace Timecard.iOS
             btnSubmit.ClipsToBounds = true;
         }
 
-        partial void BtnSubmit_TouchUpInside(UIButton sender)
+        async partial void BtnSubmit_TouchUpInsideAsync(UIButton sender)
         {
             if (!string.IsNullOrWhiteSpace(txtAnswer.Text))
             {
                 uint answer = (uint)txtAnswer.PickerView.SelectedRowInComponent(0);
-                _submitTimecardViewModel.SubmitTimecard(answer);
-                NavigationController.PopToRootViewController(true);
+                bool success = await _submitTimecardViewModel.SubmitTimecardAsync(answer);
+                if (success)
+                    NavigationController.PopToRootViewController(true);
             }
             else
             {
