@@ -165,7 +165,7 @@ namespace Timecard.iOS
 
             costCodeModel = new CostCodePickerModel(ViewModel, selectedJobType);
 
-            if (EditingItem != null)
+            if (EditingItem != null && selectedJobType != JobType.Other)
             {
                 costCodeModel.SetSelectedPickerObject(EditingItem.CostCode);
                 txtCostCode.Text = EditingItem.CostCode.Description;

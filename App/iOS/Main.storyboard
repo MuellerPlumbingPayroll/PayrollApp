@@ -619,9 +619,7 @@
                                     <constraint id="76428" firstAttribute="height" constant="50"/>
                                 </constraints>
                                 <accessibility key="accessibilityConfiguration" label="btnSubmit"/>
-                                <connections>
-                                    <action selector="BtnSubmit_TouchUpInside:" destination="75816" id="76557" eventType="touchUpInside"/>
-                                </connections>
+                                <connections/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Work Injury Question" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="80111" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="0" misplaced="YES">
                                 <rect key="frame" x="35" y="209" width="334" height="67"/>

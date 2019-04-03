@@ -27,9 +27,10 @@ namespace Timecard.iOS
 
             btnSubmit.Layer.CornerRadius = 10;
             btnSubmit.ClipsToBounds = true;
+            btnSubmit.TouchUpInside += BtnSubmit_TouchUpInside;
         }
 
-        async partial void BtnSubmit_TouchUpInsideAsync(UIButton sender)
+        private async void BtnSubmit_TouchUpInside(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(txtAnswer.Text))
             {

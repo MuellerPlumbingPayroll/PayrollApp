@@ -30,10 +30,6 @@ namespace Timecard.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel txtWorkInjury { get; set; }
 
-        [Action ("BtnSubmit_TouchUpInside:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void BtnSubmit_TouchUpInsideAsync (UIKit.UIButton sender);
-
         void ReleaseDesignerOutlets ()
         {
             if (btnSubmit != null) {
