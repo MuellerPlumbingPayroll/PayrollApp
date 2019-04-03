@@ -18,6 +18,7 @@ namespace Timecard
         [JsonConverter(typeof(JobTypeConverter))]
         public JobType JobType { get; set; }
 
+        [JsonConverter(typeof(JobConverter))]
         public Job Job { get; set; }
 
         [JsonConverter(typeof(TimeWorkedConverter))]
