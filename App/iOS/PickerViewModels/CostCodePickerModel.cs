@@ -2,7 +2,7 @@
 using Timecard.Models;
 using UIKit;
 
-namespace Timecard.iOS.ViewControllers.PickerViewModels
+namespace Timecard.iOS.PickerViewModels
 {
     /// <summary>
     /// Data source for cost code picker.

@@ -32,6 +32,8 @@ namespace Timecard
             UpdateItemCommand = new Command<Item>(async (Item item) => await UpdateItem(item));
             DeleteItemCommand = new Command<Item>(async (Item item) => await DeleteItem(item));
 
+            LoadItemsCommand.Execute(null);
+
             LoadJobsCommand = new Command(async () => await ExecuteLoadJobsCommand());
             LoadCostCodesCommand = new Command(async () => await ExecuteLoadCostCodesCommand());
 
@@ -76,9 +78,6 @@ namespace Timecard
         /// <param name="day">Day.</param>
         public float NumberHoursWorkedOnDay(DayOfWeek? day = null)
         {
-            if (Items.Count == 0)
-                LoadItemsCommand.Execute(null);
-
             var timeEntries = Items.ToList();
 
             if (day != null) 
@@ -106,8 +105,9 @@ namespace Timecard
 
             try
             {
-                Items.Clear();
                 var items = await DataStore.GetItemsAsync(true);
+                Items.Clear();
+
                 foreach (var item in items)
                 {
                     Items.Add(item);
@@ -125,7 +125,7 @@ namespace Timecard
             }
         }
 
-        async Task AddItem(Item item)
+        public async Task<bool> AddItem(Item item)
         {
             string itemId = await DataStore.AddItemAsync(item);
 
@@ -135,14 +135,17 @@ namespace Timecard
 
                 item.Id = itemId;
                 Items.Add(item);
+
+                return true;
             }
             else
             {
                 Debug.WriteLine("Failed to add new item.");
+                return false;
             }
         }
 
-        async Task UpdateItem(Item item)
+        public async Task<bool> UpdateItem(Item item)
         {
             var elementToRemove = -1;
             for (var i = 0; i < Items.Count; i++)
@@ -162,16 +165,19 @@ namespace Timecard
                 {
                     Debug.WriteLine($"Successfully updated item: {item.Id}.");
                     Items.RemoveAt(elementToRemove);
-                    Items.Insert(elementToRemove, item);
+                    Items.Add(item);
+                    return true;
                 }
                 else
                 {
                     Debug.WriteLine($"Failed to update item: {item.Id}.");
                 }
             }
+
+            return false;
         }
 
-        async Task DeleteItem(Item item)
+        public async Task<bool> DeleteItem(Item item)
         {
             bool success = await DataStore.DeleteItemAsync(item.Id);
 
@@ -179,10 +185,12 @@ namespace Timecard
             {
                 Debug.WriteLine($"Successfully deleted item: {item.Id}.");
                 Items.Remove(item);
+                return true;
             }
             else
             {
                 Debug.WriteLine($"Failed to delete item: {item.Id}.");
+                return false;
             }
         }
 

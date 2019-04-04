@@ -2,7 +2,7 @@
 using UIKit;
 using Timecard.Models;
 
-namespace Timecard.iOS.ViewControllers.PickerViewModels
+namespace Timecard.iOS.PickerViewModels
 {
     /// <summary>
     /// Data source for the job picker.

@@ -1,13 +1,14 @@
 using System;
 using CoreLocation;
 using Foundation;
-using Timecard.iOS.ViewControllers.PickerViewModels;
+using Timecard.iOS.ViewControllers;
+using Timecard.iOS.PickerViewModels;
 using Timecard.Models;
 using UIKit;
 
 namespace Timecard.iOS
 {
-    public partial class TimeNewViewController : UIViewController
+    public partial class TimeNewViewController : BaseViewController
     {
         public ItemsViewModel ViewModel { get; set; }
         public Item EditingItem { get; internal set; } = null;
@@ -88,14 +89,6 @@ namespace Timecard.iOS
             btnSaveTime.TouchUpInside += OnSaveButtonClicked;
         }
 
-        private void DisplayAlertMessage(string message)
-        {
-            var alert = UIAlertController.Create("Error", message, UIAlertControllerStyle.Alert);
-            alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
-
-            PresentViewController(alert, animated: true, completionHandler: null);
-        }
-
         private void ConfigureDatePicker()
         {
             datePicker = new UIDatePicker
@@ -110,7 +103,7 @@ namespace Timecard.iOS
             // Whenever the date changes, set the date text field to the value of the picker
             datePicker.ValueChanged += (sender, e) =>
             {
-                txtDateField.Text = ((DateTime)datePicker.Date).ToString(ProjectSettings.DateFormat);
+                txtDateField.Text = ((DateTime)datePicker.Date).ToLocalTime().ToString(ProjectSettings.DateFormat);
             };
 
             txtDateField.Text = DateTime.Now.ToString(ProjectSettings.DateFormat);
@@ -119,7 +112,7 @@ namespace Timecard.iOS
             if (EditingItem != null)
             {
                 // If the user is editing this entry, set the picker to the previously selected date
-                txtDateField.Text = EditingItem.JobDate.ToString(ProjectSettings.DateFormat);
+                txtDateField.Text = EditingItem.JobDate.ToLocalTime().ToString(ProjectSettings.DateFormat);
                 datePicker.SetDate((Foundation.NSDate)EditingItem.JobDate, false);
    
             }
@@ -219,12 +212,12 @@ namespace Timecard.iOS
                                               clearText: true);
         }
 
-        private void OnSaveButtonClicked(object sender, EventArgs e)
+        private async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var item = new Item
             {
                 CostCode = (CostCode)txtCostCode.GetSelectedPickerObject(),
-                JobDate = (DateTime)datePicker.Date,
+                JobDate = ((DateTime)datePicker.Date).ToLocalTime(),
                 TimeWorked = (TimeWorked)txtHoursWorked.GetSelectedPickerObject()
             };
 
@@ -270,18 +263,31 @@ namespace Timecard.iOS
             try
             {
                 CheckForEmptyTextFields(item.JobType);
+
+                bool success;
                 if (EditingItem == null)
-                    ViewModel.AddItemCommand.Execute(item);
+                {
+                    success = await ViewModel.AddItem(item);
+                }
                 else
-                    ViewModel.UpdateItemCommand.Execute(item);
+                {
+                    success = await ViewModel.UpdateItem(item);
+                }
+
+                if (success)
+                {
+                    base.NavigationController.PopToRootViewController(true);
+                }
+                else
+                {
+                    DisplayAlertMessage("Failed to save time entry.");
+                }
             }
             catch (InvalidOperationException ex)
             {
                 DisplayAlertMessage(ex.Message);
                 return;
             }
-
-            base.NavigationController.PopToRootViewController(true);
         }
 
         private void CheckForEmptyTextFields(JobType selectedJobType)
