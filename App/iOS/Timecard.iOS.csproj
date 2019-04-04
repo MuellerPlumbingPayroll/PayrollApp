@@ -177,6 +177,7 @@
     <Compile Include="ViewControllers\SubmitTimecardViewController.designer.cs">
       <DependentUpon>SubmitTimecardViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\BaseViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
