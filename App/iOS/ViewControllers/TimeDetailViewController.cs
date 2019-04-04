@@ -1,11 +1,12 @@
 using System;
 using Foundation;
-using UIKit;
+using Timecard.iOS.ViewControllers;
 using Timecard.Models;
+using UIKit;
 
 namespace Timecard.iOS
 {
-    public partial class TimeDetailViewController : UIViewController
+    public partial class TimeDetailViewController : BaseViewController
     {
         public ItemDetailViewModel ViewModel { get; set; }
         public ItemsViewModel AllItemsViewModel { get; set; }
@@ -43,16 +44,31 @@ namespace Timecard.iOS
         {
             var alert = UIAlertController.Create(
             "Are you sure you want to delete this entry?",
-            "This action cannot be undone" ,
+            "This action cannot be undone",
              UIAlertControllerStyle.ActionSheet);
 
             alert.AddAction(UIAlertAction.Create("Delete", UIAlertActionStyle.Destructive, (UIAlertAction) => {
-                AllItemsViewModel.DeleteItemCommand.Execute(ViewModel.Item);
-                NavigationController.PopToRootViewController(true);
+                PerformDeleteAction();
             }));
             alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
             PresentViewController(alert, animated: true, completionHandler: null);
+        }
+
+        private async void PerformDeleteAction()
+        {
+            DisplayLoadingIndicator();
+            bool success = await AllItemsViewModel.DeleteItem(ViewModel.Item);
+
+            if (success)
+            {
+                NavigationController.PopToRootViewController(true);
+            }
+            else
+            {
+                RemoveLoadingIndicator();
+                DisplayErrorMessage("Error encountered when deleting time entry.");
+            }
         }
     }
 }

@@ -238,7 +238,7 @@ namespace Timecard.iOS
                 }
                 catch (LocationNotAuthorizedException ex)
                 {
-                    DisplayAlertMessage(string.Format("Error saving time entry: {0}", ex.Message));
+                    DisplayErrorMessage(string.Format("Error saving time entry: {0}", ex.Message));
                     return;
                 }
             }
@@ -283,13 +283,13 @@ namespace Timecard.iOS
                 else
                 {
                     RemoveLoadingIndicator();
-                    DisplayAlertMessage("Failed to save time entry.");
+                    DisplayErrorMessage("Failed to save time entry.");
                 }
             }
             catch (InvalidOperationException ex)
             {
                 RemoveLoadingIndicator();
-                DisplayAlertMessage(ex.Message);
+                DisplayErrorMessage(ex.Message);
             }
         }
 

@@ -12,7 +12,7 @@ namespace Timecard.iOS.ViewControllers
         {
         }
 
-        public void DisplayAlertMessage(string message)
+        public void DisplayErrorMessage(string message)
         {
             var alert = UIAlertController.Create("Error", message, UIAlertControllerStyle.Alert);
             alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
