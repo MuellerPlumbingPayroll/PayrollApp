@@ -50,7 +50,7 @@ namespace Timecard.Models
             }
             else
             {
-                writer.WriteValue(job);
+                serializer.Serialize(writer, job);
             }
         }
 
