@@ -1,12 +1,13 @@
 using System;
 using Timecard.Authentication;
+using Timecard.iOS.ViewControllers;
 using Timecard.Services;
 using Timecard.ViewModels;
 using UIKit;
 
 namespace Timecard.iOS
 {
-    public partial class AuthViewController : UIViewController, IGoogleAuthenticationDelegate
+    public partial class AuthViewController : BaseViewController, IGoogleAuthenticationDelegate
     {
         public static GoogleAuthenticator Auth;
 
@@ -60,6 +61,8 @@ namespace Timecard.iOS
             // SFSafariViewController doesn't dismiss itself
             DismissViewController(true, null);
 
+            DisplayLoadingIndicator();
+
             var googleUserInfo = await _authViewModel.RetrieveGoogleUserInfoAsync(token.TokenType, token.AccessToken);
             var firebaseUserInfo = await _authViewModel.AuthenticateUserWithFirebaseAsync(googleUserInfo);
 
@@ -73,8 +76,9 @@ namespace Timecard.iOS
             }
             else
             {
-                // This doesn't need to be awaited since its result is not used
-                _authViewModel.RevokeTokenAsync(token.TokenType, token.AccessToken);
+                await _authViewModel.RevokeTokenAsync(token.TokenType, token.AccessToken);
+
+                RemoveLoadingIndicator();
 
                 string message = _authViewModel.FirebaseNotAuthorizedErrorMessage;
                 var alert = UIAlertController.Create("Error", message, UIAlertControllerStyle.Alert);
