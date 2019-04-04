@@ -84,7 +84,7 @@ namespace Timecard.iOS.PickerViewModels
         public void SetSelectedJobType(JobType jobType)
         {
             selectedJobType = jobType;
-            if (jobType != JobType.Other)
+            if (jobType != JobType.Other && viewModel.CostCodes.ContainsKey(selectedJobType))
             {
                 selectedCostCode = viewModel.CostCodes[jobType][0];
             }

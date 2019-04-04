@@ -214,6 +214,8 @@ namespace Timecard.iOS
 
         private async void OnSaveButtonClicked(object sender, EventArgs e)
         {
+            DisplayLoadingIndicator();
+
             var item = new Item
             {
                 CostCode = (CostCode)txtCostCode.GetSelectedPickerObject(),
@@ -280,13 +282,14 @@ namespace Timecard.iOS
                 }
                 else
                 {
+                    RemoveLoadingIndicator();
                     DisplayAlertMessage("Failed to save time entry.");
                 }
             }
             catch (InvalidOperationException ex)
             {
+                RemoveLoadingIndicator();
                 DisplayAlertMessage(ex.Message);
-                return;
             }
         }
 
@@ -298,7 +301,7 @@ namespace Timecard.iOS
                 throw new InvalidOperationException("Hours worked is required.");
             if (string.IsNullOrWhiteSpace(txtJobDescription.Text))
                 throw new InvalidOperationException("Job description is required.");
-            if (string.IsNullOrWhiteSpace(txtDateField.Text) && selectedJobType != JobType.Other)
+            if (string.IsNullOrWhiteSpace(txtCostCode.Text) && selectedJobType != JobType.Other)
                 throw new InvalidOperationException("Cost code is required.");
         }
     }

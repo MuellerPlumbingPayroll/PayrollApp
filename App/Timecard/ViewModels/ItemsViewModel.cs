@@ -165,7 +165,7 @@ namespace Timecard
                 {
                     Debug.WriteLine($"Successfully updated item: {item.Id}.");
                     Items.RemoveAt(elementToRemove);
-                    Items.Add(item);
+                    Items.Insert(elementToRemove, item);
                     return true;
                 }
                 else
