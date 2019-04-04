@@ -12,8 +12,9 @@ namespace Timecard.ViewModels
         public AuthViewModel()
         {
             Title = "Sign In";
-            FirebaseNotAuthorizedErrorMessage = "You are not authorized to access the app. " 
-                + "If you believe this is an error, please contact your administrator.";
+            FirebaseNotAuthorizedErrorMessage = "You are not authorized to access this application. " + 
+                "If you believe this is an error, please contact your administrator. " +
+            	"Once your administrator has fixed this problem, please restart the app.";
 
             _googleService = new GoogleService();
         }

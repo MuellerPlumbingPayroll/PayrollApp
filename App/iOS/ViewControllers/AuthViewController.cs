@@ -80,11 +80,8 @@ namespace Timecard.iOS
 
                 RemoveLoadingIndicator();
 
-                string message = _authViewModel.FirebaseNotAuthorizedErrorMessage;
-                var alert = UIAlertController.Create("Error", message, UIAlertControllerStyle.Alert);
-                alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
-
-                PresentViewController(alert, true, null);
+                txtNotAuthorizedMessage.Text = _authViewModel.FirebaseNotAuthorizedErrorMessage;
+                GoogleLoginButton.Hidden = true;
             }
         }
 

@@ -18,11 +18,20 @@ namespace Timecard.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton GoogleLoginButton { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextView txtNotAuthorizedMessage { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (GoogleLoginButton != null) {
                 GoogleLoginButton.Dispose ();
                 GoogleLoginButton = null;
+            }
+
+            if (txtNotAuthorizedMessage != null) {
+                txtNotAuthorizedMessage.Dispose ();
+                txtNotAuthorizedMessage = null;
             }
         }
     }

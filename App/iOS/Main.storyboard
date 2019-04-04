@@ -546,16 +546,32 @@
                                 </constraints>
                                 <accessibility key="accessibilityConfiguration" label="GoogleLoginButton"/>
                             </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="84992" translatesAutoresizingMaskIntoConstraints="NO" bouncesZoom="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" scrollEnabled="NO" bounces="NO" editable="NO" selectable="NO">
+                                <rect key="frame" x="40" y="90" width="334" height="325"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <constraints>
+                                    <constraint id="84995" firstAttribute="height" constant="325"/>
+                                </constraints>
+                                <accessibility key="accessibilityConfiguration" label="txtNotAuthorizedMessage">
+                                    <accessibilityTraits key="traits" notEnabled="YES"/>
+                                </accessibility>
+                            </textView>
                         </subviews>
                         <constraints>
                             <constraint id="74833" firstAttribute="trailingMargin" secondItem="74713" secondAttribute="trailing" constant="20"/>
                             <constraint id="74834" firstItem="74713" firstAttribute="leading" secondItem="53691" secondAttribute="leadingMargin" constant="20"/>
                             <constraint id="74835" firstItem="53688" firstAttribute="top" secondItem="74713" secondAttribute="bottom" constant="50"/>
+                            <constraint id="84993" firstAttribute="trailingMargin" secondItem="84992" secondAttribute="trailing" constant="20"/>
+                            <constraint id="84994" firstItem="84992" firstAttribute="leading" secondItem="53691" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="85936" firstItem="84992" firstAttribute="top" secondItem="53687" secondAttribute="bottom" constant="20"/>
                         </constraints>
                     </view>
                     <connections>
                         <segue id="60010" destination="49e-Tb-3d3" kind="show" identifier="NavigateToTabBarSegue"/>
                         <outlet property="GoogleLoginButton" destination="74713" id="name-outlet-74713"/>
+                        <outlet property="txtNotAuthorizedMessage" destination="84992" id="name-outlet-84992"/>
                     </connections>
                     <navigationItem title="Title" id="60834" key="navigationItem"/>
                 </viewController>
