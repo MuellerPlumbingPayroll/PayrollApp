@@ -1,13 +1,14 @@
 using System;
-using Timecard.ViewModels;
 using Timecard.iOS.PickerViewModels;
+using Timecard.iOS.ViewControllers;
+using Timecard.ViewModels;
 using UIKit;
 
 namespace Timecard.iOS
 {
-    public partial class SubmitTimecardViewController : UIViewController
+    public partial class SubmitTimecardViewController : BaseViewController
     {
-        private SubmitTimecardViewModel _submitTimecardViewModel;
+        private readonly SubmitTimecardViewModel _submitTimecardViewModel;
 
         public SubmitTimecardViewController (IntPtr handle) : base (handle)
         {
@@ -24,10 +25,12 @@ namespace Timecard.iOS
 
             var pickerModel = new WorkInjuryPickerModel(_submitTimecardViewModel);
             txtAnswer.AddPickerToTextField(pickerModel);
-
+            
             btnSubmit.Layer.CornerRadius = 10;
             btnSubmit.ClipsToBounds = true;
             btnSubmit.TouchUpInside += BtnSubmit_TouchUpInside;
+
+            AddTapToDismissGesture();
         }
 
         private async void BtnSubmit_TouchUpInside(object sender, EventArgs e)
@@ -36,8 +39,17 @@ namespace Timecard.iOS
             {
                 uint answer = (uint)txtAnswer.PickerView.SelectedRowInComponent(0);
                 bool success = await _submitTimecardViewModel.SubmitTimecardAsync(answer);
+
                 if (success)
+                {
+                    // Reload the time entries
+                    _allItemsViewModel.LoadItemsCommand.Execute(null);
                     NavigationController.PopToRootViewController(true);
+                }
+                else
+                {
+                    DisplayErrorMessage("Error encountered while submitting timecard.");
+                }
             }
             else
             {
