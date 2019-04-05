@@ -27,6 +27,10 @@ namespace Timecard.iOS
             base.ViewDidLoad();
             Title = EditingItem == null ? "New Entry" : "Editing Entry";
 
+            // Refresh the jobs and cost codes
+            ViewModel.LoadJobsCommand.Execute(null);
+            ViewModel.LoadCostCodesCommand.Execute(null);
+
             ConfigureDatePicker();
             ConfigureHoursWorkedPicker();
             ConfigureJobDescriptionPicker();
@@ -46,9 +50,7 @@ namespace Timecard.iOS
 
         private void ConfigureGestures()
         {
-            // When user taps outside of a picker or keyboard, it disappears
-            var tapGesture = new UITapGestureRecognizer(() => View.EndEditing(true));
-            View.AddGestureRecognizer(tapGesture);
+            AddTapToDismissGesture();
 
             // When the user swipes left or right, change the value of the selected job type
             var swipeLeft = new UISwipeGestureRecognizer((s) => HandleSwipeGesture(UISwipeGestureRecognizerDirection.Left))
