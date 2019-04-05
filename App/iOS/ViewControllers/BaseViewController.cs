@@ -6,10 +6,20 @@ namespace Timecard.iOS.ViewControllers
 {
     public class BaseViewController : UIViewController
     {
+        protected ItemsViewModel _allItemsViewModel;
+
         private UIView _spinnerView;
 
         public BaseViewController(IntPtr handle) : base(handle)
         {
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            // The items view model instance stored in the tab bar controller shared between all views
+            _allItemsViewModel = (TabBarController as TabBarController).AllItemsViewModel;
         }
 
         public void DisplayErrorMessage(string message)
@@ -18,6 +28,13 @@ namespace Timecard.iOS.ViewControllers
             alert.AddAction(UIAlertAction.Create("Okay", UIAlertActionStyle.Cancel, null));
 
             PresentViewController(alert, animated: true, completionHandler: null);
+        }
+
+        public void AddTapToDismissGesture()
+        {
+            // When user taps outside of a picker or keyboard, it disappears
+            var tapGesture = new UITapGestureRecognizer(() => View.EndEditing(true));
+            View.AddGestureRecognizer(tapGesture);
         }
 
         public void DisplayLoadingIndicator()
