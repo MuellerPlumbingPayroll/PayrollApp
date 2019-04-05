@@ -18,8 +18,15 @@ namespace Timecard.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
-            // The items view model instance stored in the tab bar controller shared between all views
-            _allItemsViewModel = (TabBarController as TabBarController).AllItemsViewModel;
+            try
+            {
+                // The items view model instance stored in the tab bar controller shared between all views
+                _allItemsViewModel = (TabBarController as TabBarController).AllItemsViewModel;
+            }
+            catch (Exception)
+            {
+                _allItemsViewModel = null;
+            }
         }
 
         public void DisplayErrorMessage(string message)
