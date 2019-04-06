@@ -8,11 +8,13 @@ namespace Timecard.Authentication
     {
         public string TokenType { get; set; }
         public string AccessToken { get; set; }
+        public string IdToken { get; set; }
 
         public async void SaveToDevice()
         {
             await SecureStorage.SetAsync("TokenType", TokenType);
             await SecureStorage.SetAsync("AccessToken", AccessToken);
+            await SecureStorage.SetAsync("IdToken", IdToken);
         }
 
         public static async Task<GoogleOAuthToken> ReadFromDevice()
@@ -26,7 +28,8 @@ namespace Timecard.Authentication
                     return new GoogleOAuthToken()
                     {
                         TokenType = tokenType,
-                        AccessToken = await SecureStorage.GetAsync("AccessToken")
+                        AccessToken = await SecureStorage.GetAsync("AccessToken"),
+                        IdToken = await SecureStorage.GetAsync("IdToken")
                     };
                 }
 
@@ -42,6 +45,7 @@ namespace Timecard.Authentication
         {
             SecureStorage.Remove("TokenType");
             SecureStorage.Remove("AccessToken");
+            SecureStorage.Remove("IdToken");
         }
     }
 }
