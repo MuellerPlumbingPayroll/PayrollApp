@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>717687086763-ktn15r665qgpb6a16f81qceibkesoer3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.717687086763-ktn15r665qgpb6a16f81qceibkesoer3</string>
+	<key>API_KEY</key>
+	<string>AIzaSyArOXpUQGzmlsPOQzUun92AolNCUeiZJCY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>717687086763</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.eduroam.timecard</string>
+	<key>PROJECT_ID</key>
+	<string>muller-plumbing-salary</string>
+	<key>STORAGE_BUCKET</key>
+	<string>muller-plumbing-salary.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:717687086763:ios:eff60e6104b6a536</string>
+	<key>DATABASE_URL</key>
+	<string>https://muller-plumbing-salary.firebaseio.com</string>
+</dict>
+</plist>
