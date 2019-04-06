@@ -42,6 +42,8 @@ namespace Timecard.iOS
                 Window.RootViewController = tabBarController;
             }
 
+            FirebaseManager.Configure();
+
             return true;
         }
 
