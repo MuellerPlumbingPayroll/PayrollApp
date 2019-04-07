@@ -1,6 +1,7 @@
 using System;
 using Foundation;
 using Timecard.Authentication;
+using Timecard.iOS.ViewControllers;
 using Timecard.Models;
 using Timecard.Services;
 using Timecard.ViewModels;
@@ -8,7 +9,7 @@ using UIKit;
 
 namespace Timecard.iOS
 {
-    public partial class HomeViewController : UIViewController
+    public partial class HomeViewController : BaseViewController
     {
         public HomeViewModel ViewModel { get; set; }
         public ItemsViewModel AllItemsViewModel { get; set; }
@@ -115,14 +116,23 @@ namespace Timecard.iOS
 
         private void LogOut()
         {
-            GoogleUserInfo.RemoveFromDevice();
-            GoogleOAuthToken.RemoveFromDevice();
-            FirebaseUserInfo.RemoveFromDevice();
+            FirebaseManager.Auth.SignOut(out NSError error);
 
-            var rootNavController = Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
+            if (error == null)
+            {
+                GoogleUserInfo.RemoveFromDevice();
+                GoogleOAuthToken.RemoveFromDevice();
+                FirebaseUserInfo.RemoveFromDevice();
 
-            var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate;
-            appDelegate.Window.RootViewController = rootNavController;
+                var rootNavController = Storyboard.InstantiateViewController("navLoginController") as UINavigationController;
+
+                var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate;
+                appDelegate.Window.RootViewController = rootNavController;
+            }
+            else
+            {
+                DisplayErrorMessage("An error occurred while logging you out.");
+            }
         }
     }
 }
