@@ -1,4 +1,5 @@
 using System;
+using Firebase.Auth;
 using Timecard.Authentication;
 using Timecard.iOS.ViewControllers;
 using Timecard.Services;
@@ -68,6 +69,9 @@ namespace Timecard.iOS
 
             if (firebaseUserInfo != null)
             {
+                AuthCredential credential = GoogleAuthProvider.GetCredential(token.IdToken, token.AccessToken);
+                AuthDataResult result = await FirebaseManager.Auth.SignInAndRetrieveDataWithCredentialAsync(credential);
+                
                 token.SaveToDevice();
                 googleUserInfo.SaveToDevice();
                 firebaseUserInfo.SaveToDevice();
