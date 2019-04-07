@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Foundation;
 using Timecard.Authentication;
 using Timecard.iOS.ViewControllers;
@@ -12,7 +13,6 @@ namespace Timecard.iOS
     public partial class HomeViewController : BaseViewController
     {
         public HomeViewModel ViewModel { get; set; }
-        public ItemsViewModel AllItemsViewModel { get; set; }
 
         public HomeViewController(IntPtr handle) : base(handle)
         {
@@ -25,7 +25,6 @@ namespace Timecard.iOS
             if (ViewModel == null)
                 ViewModel = new HomeViewModel();
 
-            AllItemsViewModel = (TabBarController as TabBarController).AllItemsViewModel;
             Title = ViewModel.Title;
 
             txtUserName.Editable = false;
@@ -41,9 +40,20 @@ namespace Timecard.iOS
         {
             base.ViewWillAppear(animated);
             ConfigureSubmitButton();
+            ConfigureHoursWorkedTextAsync();
+        }
 
-            txtHoursWorkedToday.Text = "Today: " + AllItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now.DayOfWeek) + " hrs";
-            txtHoursWorkedThisWeek.Text = "This Week: " + AllItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
+        private async void ConfigureHoursWorkedTextAsync()
+        {
+            // Sometimes the view may appear while items are still being retrieved from the server.
+            // Repeatedly waiting until the items have been retrieved ensures that the hours worked text is correct.
+            while (_allItemsViewModel.IsBusy)
+            {
+                await Task.Delay(100);
+            }
+
+            txtHoursWorkedToday.Text = "Today: " + _allItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now.DayOfWeek) + " hrs";
+            txtHoursWorkedThisWeek.Text = "This Week: " + _allItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -51,7 +61,7 @@ namespace Timecard.iOS
             if (segue.Identifier == "NavigateFromHomeToNewTimeSegue")
             {
                 var controller = segue.DestinationViewController as TimeNewViewController;
-                controller.ViewModel = AllItemsViewModel;
+                controller.ViewModel = _allItemsViewModel;
             }
         }
 
@@ -75,7 +85,7 @@ namespace Timecard.iOS
         {
             if (segueIdentifier == "NavigateFromHomeToSubmit")
             {
-                float numHoursWorked = AllItemsViewModel.NumberHoursWorkedOnDay();
+                float numHoursWorked = _allItemsViewModel.NumberHoursWorkedOnDay();
 
                 if (numHoursWorked < ProjectSettings.NumberHoursInWorkWeek)
                 {
