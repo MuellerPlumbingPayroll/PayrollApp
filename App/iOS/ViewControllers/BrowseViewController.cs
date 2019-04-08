@@ -131,8 +131,8 @@ namespace Timecard.iOS
         {
             var header = tableView.DequeueReusableCell(SECTION_IDENTIFIER) as HistoryTableViewSectionHeader;
 
-            var date = ProjectSettings.GetStartOfCurrentPayPeriod().AddDays(section);
-            var numberHoursWorked = viewModel.NumberHoursWorkedOnDay(date.DayOfWeek);
+            var date = viewModel.GetStartOfPayPeriod().AddDays(section);
+            var numberHoursWorked = viewModel.NumberHoursWorkedOnDay(date);
 
             header.UpdateHeader(date, numberHoursWorked);
 

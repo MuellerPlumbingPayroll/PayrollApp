@@ -96,19 +96,19 @@ namespace Timecard.iOS
             datePicker = new UIDatePicker
             {
                 Mode = UIDatePickerMode.Date,
-                Date = (NSDate)DateTime.Now,
-                MinimumDate = (NSDate)ProjectSettings.GetStartOfCurrentPayPeriod(),
-                MaximumDate = (NSDate)ProjectSettings.GetEndOfCurrentPayPeriod(),
+                Date = (NSDate)ViewModel.GetInitialDate(),
+                MinimumDate = (NSDate)ViewModel.GetStartOfPayPeriod(),
+                MaximumDate = (NSDate)ViewModel.GetEndOfPayPeriod(),
                 TimeZone = NSTimeZone.LocalTimeZone
             };
-            
+
             // Whenever the date changes, set the date text field to the value of the picker
             datePicker.ValueChanged += (sender, e) =>
             {
                 txtDateField.Text = ((DateTime)datePicker.Date).ToLocalTime().ToString(ProjectSettings.DateFormat);
             };
 
-            txtDateField.Text = DateTime.Now.ToString(ProjectSettings.DateFormat);
+            txtDateField.Text = ((DateTime)datePicker.Date).ToLocalTime().ToString(ProjectSettings.DateFormat);
             txtDateField.InputView = datePicker;
 
             if (EditingItem != null)

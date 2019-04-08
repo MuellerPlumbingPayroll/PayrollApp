@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Foundation;
 using Timecard.Models;
 
 namespace Timecard
@@ -74,16 +75,20 @@ namespace Timecard
         /// If no day is provided, the method calculates the total  
         /// number of hours worked, regardless of the day.
         /// </summary>
-        /// <returns>The hours worked on the specified day.</returns>
-        /// <param name="day">Day.</param>
-        public float NumberHoursWorkedOnDay(DayOfWeek? day = null)
+        /// <returns>The hours worked on the specified date.</returns>
+        /// <param name="date">Day.</param>
+        public float NumberHoursWorkedOnDay(DateTime? date = null)
         {
             var timeEntries = Items.ToList();
 
-            if (day != null) 
+            if (date != null)
             {
+                var dayOfWeek = ((DateTime)date).DayOfWeek;
+                var day = ((DateTime)date).Day;
+
                 timeEntries = timeEntries
-                    .Where(item => (bool)item.JobDate.ToLocalTime().DayOfWeek.Equals(day))
+                    .Where(item => (bool)item.JobDate.ToLocalTime().DayOfWeek.Equals(dayOfWeek) &&
+                                   (bool)item.JobDate.ToLocalTime().Day.Equals(day))
                     .ToList();
             }
 
@@ -211,8 +216,8 @@ namespace Timecard
                         key = JobType.Service;
                     else
                         key = JobType.Other;
-                        
-                    if (CostCodes.ContainsKey(key)) 
+
+                    if (CostCodes.ContainsKey(key))
                     {
                         CostCodes[key].Add(costCode);
                     }
@@ -259,6 +264,39 @@ namespace Timecard
             {
                 Debug.WriteLine(ex);
             }
+        }
+
+        public DateTime GetStartOfPayPeriod()
+        {
+            if (Items.Count > 0) {
+                var sortedItems = Items.OrderBy(o => o.JobDate).ToList();
+                var earliestItem = sortedItems[0];
+                
+                var startCurrent = ProjectSettings.GetStartOfCurrentPayPeriod();
+
+                int result = DateTime.Compare(earliestItem.JobDate.ToLocalTime().Date, startCurrent.Date);
+                if (result < 0)
+                {
+                    return startCurrent.AddDays(-7);
+                }
+            }
+
+            return ProjectSettings.GetStartOfCurrentPayPeriod();
+        }
+
+        public DateTime GetEndOfPayPeriod()
+        {
+            return GetStartOfPayPeriod().AddDays(6);
+        }
+
+        public DateTime GetInitialDate()
+        {
+            if (DateTime.Compare(GetStartOfPayPeriod().Date, ProjectSettings.GetStartOfCurrentPayPeriod().Date) < 0)
+            {
+                return DateTime.Now.AddDays(-7);
+            }
+
+            return DateTime.Now;
         }
     }
 }

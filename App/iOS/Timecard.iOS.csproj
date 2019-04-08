@@ -192,7 +192,6 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <None Include="packages.config" />
-    <None Include="GoogleService-Info.plist" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -205,6 +204,9 @@
     <Folder Include="PickerViewModels\" />
     <Folder Include="Assets.xcassets\GoogleLogo.imageset\" />
     <Folder Include="Assets.xcassets\GoogleLogo.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="GoogleService-Info.plist" />
   </ItemGroup>
   <Import Project="..\Timecard\Timecard.projitems" Label="Shared" Condition="Exists('..\Timecard\Timecard.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

@@ -52,8 +52,8 @@ namespace Timecard.iOS
                 await Task.Delay(100);
             }
 
-            txtHoursWorkedToday.Text = "Today: " + _allItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now.DayOfWeek) + " hrs";
-            txtHoursWorkedThisWeek.Text = "This Week: " + _allItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
+            txtHoursWorkedToday.Text = "Today: " + _allItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now) + " hrs";
+            txtHoursWorkedThisWeek.Text = "This Period: " + _allItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
