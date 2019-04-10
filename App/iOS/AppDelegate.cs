@@ -20,6 +20,8 @@ namespace Timecard.iOS
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+            FirebaseManager.Configure();
+
             App.Initialize();
 
             #if ENABLE_TEST_CLOUD
@@ -41,8 +43,6 @@ namespace Timecard.iOS
                 // Set the tab bar controller as root
                 Window.RootViewController = tabBarController;
             }
-
-            FirebaseManager.Configure();
 
             return true;
         }
