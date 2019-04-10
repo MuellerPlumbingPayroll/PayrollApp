@@ -204,70 +204,92 @@ namespace Timecard.iOS
                                               clearText: true);
         }
 
-        private async void OnSaveButtonClicked(object sender, EventArgs e)
+        private void OnSaveButtonClicked(object sender, EventArgs e)
         {
             DisplayLoadingIndicator();
 
             var item = new Item
             {
                 CostCode = (CostCode)txtCostCode.GetSelectedPickerObject(),
+                Job = (Job)txtJobDescription.GetSelectedPickerObject(),
                 JobDate = ((DateTime)datePicker.Date).ToLocalTime(),
                 TimeWorked = (TimeWorked)txtHoursWorked.GetSelectedPickerObject()
             };
 
-
-            if (EditingItem == null) // Creating a new item
+            if (EditingItem == null)
             {
-                item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
-
-                try
-                {
-                    // Attempt to get the user's location
-                    // Location is only recorded when creating a new time entry
-                    CLLocationCoordinate2D location = locationManager.GetUserLocation();
-                    item.Latitude = location.Latitude;
-                    item.Longitude = location.Longitude;
-                }
-                catch (LocationNotAuthorizedException ex)
-                {
-                    DisplayErrorMessage(string.Format("Error saving time entry: {0}", ex.Message));
-                    return;
-                }
+                SaveNew(item);
             }
-            else // Editing an existing item
+            else
             {
-                item.Id = EditingItem.Id;
-                item.JobType = EditingItem.JobType;
+                SaveExisting(item);
             }
+        }
 
-            // Service jobs are entered via a number pad
+        private async void SaveNew(Item item)
+        {
+            item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
             if (item.JobType == JobType.Service)
             {
-                item.Job = new Job()
+                item.Job = new Job
                 {
                     Address = txtJobDescription.Text,
                     ClientName = txtJobDescription.Text
                 };
             }
-            else
+
+            try
             {
-                item.Job = (Job)txtJobDescription.GetSelectedPickerObject();
+                // Attempt to get the user's location. Location services might be disabled.
+                item.Latitude = locationManager.GetLatitude();
+                item.Longitude = locationManager.GetLongitude();
+            }
+            catch (LocationNotAuthorizedException ex)
+            {
+                DisplayErrorMessage(string.Format("Error saving time entry: {0}", ex.Message));
+                return;
             }
 
             try
             {
                 CheckForEmptyTextFields(item.JobType);
 
-                bool success;
-                if (EditingItem == null)
+                bool success = await AllItemsViewModel.AddItem(item);
+                if (success)
                 {
-                    success = await AllItemsViewModel.AddItem(item);
+                    base.NavigationController.PopToRootViewController(true);
                 }
                 else
                 {
-                    success = await AllItemsViewModel.UpdateItem(item);
+                    RemoveLoadingIndicator();
+                    DisplayErrorMessage("Failed to create new time entry.");
                 }
+            }
+            catch (InvalidOperationException ex)
+            {
+                RemoveLoadingIndicator();
+                DisplayErrorMessage(ex.Message);
+            }
+        }
 
+        private async void SaveExisting(Item item)
+        {
+            item.Id = EditingItem.Id;
+            item.JobType = EditingItem.JobType;
+            if (item.JobType == JobType.Service)
+            {
+                item.Job = new Job
+                {
+                    Address = txtJobDescription.Text,
+                    ClientName = txtJobDescription.Text
+                };
+            }
+
+            try
+            {
+                CheckForEmptyTextFields(item.JobType);
+
+                bool success = await AllItemsViewModel.UpdateItem(item);
                 if (success)
                 {
                     base.NavigationController.PopToRootViewController(true);

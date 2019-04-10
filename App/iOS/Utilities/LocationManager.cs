@@ -30,7 +30,33 @@ namespace Timecard.iOS
             }
         }
 
-        public CLLocationCoordinate2D GetUserLocation()
+        public double GetLatitude()
+        {
+            try
+            {
+                return GetUserLocation().Latitude;
+            }
+            catch (Exception)
+            {
+                // If user location isn't available, just return 0
+                return 0;
+            }
+        }
+
+        public double GetLongitude()
+        {
+            try
+            {
+                return GetUserLocation().Longitude;
+            }
+            catch (Exception)
+            {
+                // If user location isn't available, just return 0
+                return 0;
+            }
+        }
+
+        private CLLocationCoordinate2D GetUserLocation()
         {
             if (CLLocationManager.Status != CLAuthorizationStatus.AuthorizedWhenInUse)
                 throw new LocationNotAuthorizedException("Location services are not enabled.");

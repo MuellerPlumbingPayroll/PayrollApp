@@ -14,5 +14,8 @@ namespace Timecard.iOS
     [Register ("RoundedButton")]
     partial class RoundedButton
     {
+        void ReleaseDesignerOutlets ()
+        {
+        }
     }
 }
