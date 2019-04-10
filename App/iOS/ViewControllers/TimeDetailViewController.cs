@@ -1,6 +1,5 @@
 using System;
 using Foundation;
-using Timecard.iOS.ViewControllers;
 using Timecard.Models;
 using UIKit;
 
@@ -9,7 +8,6 @@ namespace Timecard.iOS
     public partial class TimeDetailViewController : BaseViewController
     {
         public ItemDetailViewModel ViewModel { get; set; }
-        public ItemsViewModel AllItemsViewModel { get; set; }
 
         public TimeDetailViewController(IntPtr handle) : base(handle)
         {
@@ -32,7 +30,6 @@ namespace Timecard.iOS
             if (segue.Identifier == "NavigateToEditTimeSegue")
             {
                 var controller = segue.DestinationViewController as TimeNewViewController;
-                controller.ViewModel = AllItemsViewModel;
                 controller.EditingItem = ViewModel.Item;
             }
         }

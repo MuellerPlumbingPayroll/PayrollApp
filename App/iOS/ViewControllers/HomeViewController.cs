@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Foundation;
 using Timecard.Authentication;
-using Timecard.iOS.ViewControllers;
 using Timecard.Models;
 using Timecard.Services;
 using Timecard.ViewModels;
@@ -44,22 +43,13 @@ namespace Timecard.iOS
         {
             // Sometimes the view may appear while items are still being retrieved from the server.
             // Repeatedly waiting until the items have been retrieved ensures that the hours worked text is correct.
-            while (_allItemsViewModel.IsBusy)
+            while (AllItemsViewModel.IsBusy)
             {
                 await Task.Delay(100);
             }
 
-            txtHoursWorkedToday.Text = "Today: " + _allItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now) + " hrs";
-            txtHoursWorkedThisWeek.Text = "This Period: " + _allItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
-        }
-
-        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
-        {
-            if (segue.Identifier == "NavigateFromHomeToNewTimeSegue")
-            {
-                var controller = segue.DestinationViewController as TimeNewViewController;
-                controller.ViewModel = _allItemsViewModel;
-            }
+            txtHoursWorkedToday.Text = "Today: " + AllItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now) + " hrs";
+            txtHoursWorkedThisWeek.Text = "This Period: " + AllItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
         }
 
         private void ConfigureSubmitButton()
@@ -79,7 +69,7 @@ namespace Timecard.iOS
         {
             if (segueIdentifier == "NavigateFromHomeToSubmit")
             {
-                float numHoursWorked = _allItemsViewModel.NumberHoursWorkedOnDay();
+                float numHoursWorked = AllItemsViewModel.NumberHoursWorkedOnDay();
 
                 if (numHoursWorked < ProjectSettings.NumberHoursInWorkWeek)
                 {

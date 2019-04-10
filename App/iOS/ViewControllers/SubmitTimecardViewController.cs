@@ -1,6 +1,5 @@
 using System;
 using Timecard.iOS.PickerViewModels;
-using Timecard.iOS.ViewControllers;
 using Timecard.ViewModels;
 using UIKit;
 
@@ -41,7 +40,7 @@ namespace Timecard.iOS
                 if (success)
                 {
                     // Reload the time entries
-                    _allItemsViewModel.LoadItemsCommand.Execute(null);
+                    AllItemsViewModel.LoadItemsCommand.Execute(null);
                     NavigationController.PopToRootViewController(true);
                 }
                 else

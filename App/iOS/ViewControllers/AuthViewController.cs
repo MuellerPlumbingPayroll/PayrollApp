@@ -1,7 +1,6 @@
 using System;
 using Firebase.Auth;
 using Timecard.Authentication;
-using Timecard.iOS.ViewControllers;
 using Timecard.Services;
 using Timecard.ViewModels;
 using UIKit;

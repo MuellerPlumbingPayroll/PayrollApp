@@ -1,7 +1,6 @@
 using System;
 using CoreLocation;
 using Foundation;
-using Timecard.iOS.ViewControllers;
 using Timecard.iOS.PickerViewModels;
 using Timecard.Models;
 using UIKit;
@@ -10,7 +9,6 @@ namespace Timecard.iOS
 {
     public partial class TimeNewViewController : BaseViewController
     {
-        public ItemsViewModel ViewModel { get; set; }
         public Item EditingItem { get; internal set; } = null;
 
         private LocationManager locationManager;
@@ -28,8 +26,8 @@ namespace Timecard.iOS
             Title = EditingItem == null ? "New Entry" : "Editing Entry";
 
             // Refresh the jobs and cost codes
-            ViewModel.LoadJobsCommand.Execute(null);
-            ViewModel.LoadCostCodesCommand.Execute(null);
+            AllItemsViewModel.LoadJobsCommand.Execute(null);
+            AllItemsViewModel.LoadCostCodesCommand.Execute(null);
 
             ConfigureDatePicker();
             ConfigureHoursWorkedPicker();
@@ -88,9 +86,9 @@ namespace Timecard.iOS
             datePicker = new UIDatePicker
             {
                 Mode = UIDatePickerMode.Date,
-                Date = (NSDate)ViewModel.GetInitialDate(),
-                MinimumDate = (NSDate)ViewModel.GetStartOfPayPeriod(),
-                MaximumDate = (NSDate)ViewModel.GetEndOfPayPeriod(),
+                Date = (NSDate)AllItemsViewModel.GetInitialDate(),
+                MinimumDate = (NSDate)AllItemsViewModel.GetStartOfPayPeriod(),
+                MaximumDate = (NSDate)AllItemsViewModel.GetEndOfPayPeriod(),
                 TimeZone = NSTimeZone.LocalTimeZone
             };
 
@@ -131,7 +129,7 @@ namespace Timecard.iOS
         {
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
-            jobDescriptionPickerModel = new JobDescriptionPickerModel(ViewModel, selectedJobType);
+            jobDescriptionPickerModel = new JobDescriptionPickerModel(AllItemsViewModel, selectedJobType);
             txtJobDescription.AddPickerToTextField(jobDescriptionPickerModel);
 
             if (EditingItem != null)
@@ -150,7 +148,7 @@ namespace Timecard.iOS
         {
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
-            costCodeModel = new CostCodePickerModel(ViewModel, selectedJobType);
+            costCodeModel = new CostCodePickerModel(AllItemsViewModel, selectedJobType);
 
             if (EditingItem != null && selectedJobType != JobType.Other)
             {
@@ -263,11 +261,11 @@ namespace Timecard.iOS
                 bool success;
                 if (EditingItem == null)
                 {
-                    success = await ViewModel.AddItem(item);
+                    success = await AllItemsViewModel.AddItem(item);
                 }
                 else
                 {
-                    success = await ViewModel.UpdateItem(item);
+                    success = await AllItemsViewModel.UpdateItem(item);
                 }
 
                 if (success)

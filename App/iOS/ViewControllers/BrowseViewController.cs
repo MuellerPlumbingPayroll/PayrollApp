@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using CoreGraphics;
 using Foundation;
-using Timecard.Models;
 using UIKit;
 
 namespace Timecard.iOS
@@ -21,7 +20,7 @@ namespace Timecard.iOS
         {
             base.ViewDidLoad();
 
-            ViewModel = (this.TabBarController as TabBarController).AllItemsViewModel;
+            ViewModel = BaseViewController.AllItemsViewModel;
 
             // Setup UITableView.
             refreshControl = new UIRefreshControl();
@@ -52,12 +51,6 @@ namespace Timecard.iOS
                 var item = ViewModel.GetItemSections()[indexPath.Section][indexPath.Row];
 
                 controller.ViewModel = new ItemDetailViewModel(item);
-                controller.AllItemsViewModel = ViewModel;
-            }
-            else
-            {
-                var controller = segue.DestinationViewController as TimeNewViewController;
-                controller.ViewModel = ViewModel;
             }
         }
 
@@ -88,7 +81,7 @@ namespace Timecard.iOS
 
         void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            InvokeOnMainThread(() => TableView.ReloadData());
+            InvokeOnMainThread(TableView.ReloadData);
         }
     }
 
