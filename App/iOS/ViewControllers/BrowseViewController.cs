@@ -44,13 +44,13 @@ namespace Timecard.iOS
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if (segue.Identifier == "NavigateToTimeDetailSegue")
+            if (segue.Identifier == "NavigateToEditItemSegue")
             {
-                var controller = segue.DestinationViewController as TimeDetailViewController;
+                var controller = segue.DestinationViewController as TimeNewViewController;
                 var indexPath = TableView.IndexPathForCell(sender as UITableViewCell);
                 var item = ViewModel.GetItemSections()[indexPath.Section][indexPath.Row];
 
-                controller.ViewModel = new ItemDetailViewModel(item);
+                controller.EditingItem = item;
             }
         }
 

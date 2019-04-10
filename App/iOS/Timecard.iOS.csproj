@@ -154,10 +154,6 @@
     <Compile Include="ViewControllers\HomeViewController.designer.cs">
       <DependentUpon>HomeViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\TimeDetailViewController.cs" />
-    <Compile Include="ViewControllers\TimeDetailViewController.designer.cs">
-      <DependentUpon>TimeDetailViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="TableViewCells\HistoryTableViewCell.cs" />
     <Compile Include="TableViewCells\HistoryTableViewCell.designer.cs">
       <DependentUpon>HistoryTableViewCell.cs</DependentUpon>

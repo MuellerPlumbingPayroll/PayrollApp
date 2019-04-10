@@ -119,9 +119,9 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="118" kind="show" identifier="NavigateToTimeDetailSegue" id="152"/>
                                     <outlet property="txtJobDescription" destination="27626" id="name-outlet-27626"/>
                                     <outlet property="txtHoursWorked" destination="27627" id="name-outlet-27627"/>
+                                    <segue id="91853" destination="3274" kind="show" identifier="NavigateToEditItemSegue"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="42809" customClass="HistoryTableViewSectionHeader" reuseIdentifier="SECTION_CELL" rowHeight="50">
@@ -189,125 +189,6 @@
             <point key="canvasLocation" x="1411" y="463"/>
         </scene>
         <!--Title-->
-        <scene sceneID="117">
-            <objects>
-                <viewController id="118" customClass="TimeDetailViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="115"/>
-                        <viewControllerLayoutGuide type="bottom" id="116"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="119">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="1702">
-                                <rect key="frame" x="20" y="110" width="374" height="40"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <constraints>
-                                    <constraint id="23586" firstAttribute="height" constant="40"/>
-                                </constraints>
-                                <accessibility key="accessibilityConfiguration" label="dateLabel">
-                                    <accessibilityTraits key="traits" none="YES"/>
-                                </accessibility>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="23592" misplaced="YES">
-                                <rect key="frame" x="20" y="182" width="374" height="40"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <constraints>
-                                    <constraint id="23593" firstAttribute="height" constant="40"/>
-                                </constraints>
-                                <accessibility key="accessibilityConfiguration" label="hoursWorkedLabel"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="24574" misplaced="YES">
-                                <rect key="frame" x="20" y="252" width="374" height="40"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <constraints>
-                                    <constraint id="24575" firstAttribute="height" constant="40"/>
-                                </constraints>
-                                <accessibility key="accessibilityConfiguration" label="jobTypeLabel"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="24638" misplaced="YES">
-                                <rect key="frame" x="20" y="322" width="374" height="40"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <constraints>
-                                    <constraint id="24639" firstAttribute="height" constant="40"/>
-                                </constraints>
-                                <accessibility key="accessibilityConfiguration" label="jobDescriptionLabel"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="39282" translatesAutoresizingMaskIntoConstraints="NO" buttonType="roundedRect" customClass="RoundedButton">
-                                <rect key="frame" x="40" y="666" width="334" height="50"/>
-                                <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0.58823529411764708" blue="1" alpha="1"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Edit">
-                                    <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
-                                </state>
-                                <constraints>
-                                    <constraint id="39285" firstAttribute="height" constant="50"/>
-                                </constraints>
-                                <connections>
-                                    <segue id="39936" destination="3274" kind="show" identifier="NavigateToEditTimeSegue"/>
-                                </connections>
-                                <accessibility key="accessibilityConfiguration" label="btnEditTime"/>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint id="23587" firstItem="1702" firstAttribute="trailing" secondItem="119" secondAttribute="trailingMargin"/>
-                            <constraint id="23588" firstItem="1702" firstAttribute="leading" secondItem="119" secondAttribute="leadingMargin"/>
-                            <constraint id="23590" firstItem="1702" firstAttribute="top" secondItem="115" secondAttribute="bottom" constant="40"/>
-                            <constraint id="23594" firstItem="23592" firstAttribute="top" secondItem="1702" secondAttribute="bottom" constant="30"/>
-                            <constraint id="23596" firstItem="23592" firstAttribute="leading" secondItem="119" secondAttribute="leadingMargin"/>
-                            <constraint id="23597" firstItem="23592" firstAttribute="trailing" secondItem="119" secondAttribute="trailingMargin"/>
-                            <constraint id="24576" firstItem="24574" firstAttribute="leading" secondItem="119" secondAttribute="leadingMargin"/>
-                            <constraint id="24577" firstItem="24574" firstAttribute="trailing" secondItem="119" secondAttribute="trailingMargin"/>
-                            <constraint id="24640" firstItem="24638" firstAttribute="leading" secondItem="119" secondAttribute="leadingMargin"/>
-                            <constraint id="24641" firstItem="24638" firstAttribute="trailing" secondItem="119" secondAttribute="trailingMargin"/>
-                            <constraint id="24964" firstItem="24574" firstAttribute="top" secondItem="23592" secondAttribute="bottom" constant="30"/>
-                            <constraint id="24965" firstItem="24638" firstAttribute="top" secondItem="24574" secondAttribute="bottom" constant="30"/>
-                            <constraint id="39291" firstItem="116" firstAttribute="top" secondItem="39282" secondAttribute="bottom" constant="20"/>
-                            <constraint id="39292" firstAttribute="trailingMargin" secondItem="39282" secondAttribute="trailing" constant="20"/>
-                            <constraint id="39293" firstItem="39282" firstAttribute="leading" secondItem="119" secondAttribute="leadingMargin" constant="20"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Title" id="200">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="40318">
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="40317" translatesAutoresizingMaskIntoConstraints="NO" key="customView" buttonType="roundedRect">
-                                <rect key="frame" x="0.0" y="0.0" width="57" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Delete"/>
-                                <connections>
-                                    <action selector="DeleteButton_TouchUpInside:" destination="118" id="40321" eventType="touchUpInside"/>
-                                </connections>
-                                <accessibility key="accessibilityConfiguration" label="btnDeleteTime"/>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="dateLabel" destination="1702" id="name-outlet-1702"/>
-                        <outlet property="hoursWorkedLabel" destination="23592" id="name-outlet-23592"/>
-                        <outlet property="jobTypeLabel" destination="24574" id="name-outlet-24574"/>
-                        <outlet property="jobDescriptionLabel" destination="24638" id="name-outlet-24638"/>
-                        <outlet property="btnEditTime" destination="39282" id="name-outlet-39282"/>
-                        <outlet property="btnDeleteTime" destination="40317" id="name-outlet-40317"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="120" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2402" y="887"/>
-        </scene>
         <!--New Item-->
         <scene sceneID="3273">
             <objects>

@@ -23,7 +23,7 @@ namespace Timecard.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            Title = EditingItem == null ? "New Entry" : "Editing Entry";
+            Title = EditingItem == null ? "New Entry" : $"Edit Entry - {EditingItem.JobType}";
 
             // Refresh the jobs and cost codes
             AllItemsViewModel.LoadJobsCommand.Execute(null);
@@ -33,6 +33,7 @@ namespace Timecard.iOS
             ConfigureHoursWorkedPicker();
             ConfigureJobDescriptionPicker();
             ConfigureCostCodePicker();
+            ConfigureDeleteButton();
            
             btnSaveTime.TouchUpInside += OnSaveButtonClicked;
 
@@ -317,6 +318,52 @@ namespace Timecard.iOS
                 throw new InvalidOperationException("Job description is required.");
             if (string.IsNullOrWhiteSpace(txtCostCode.Text) && selectedJobType != JobType.Other)
                 throw new InvalidOperationException("Cost code is required.");
+        }
+
+        private void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+            var alert = UIAlertController.Create(
+            "Are you sure you want to delete this entry?",
+            "This action cannot be undone",
+             UIAlertControllerStyle.ActionSheet);
+
+            alert.AddAction(UIAlertAction.Create("Delete", UIAlertActionStyle.Destructive, (UIAlertAction) => {
+                PerformDeleteAction();
+            }));
+            alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+
+            PresentViewController(alert, animated: true, completionHandler: null);
+        }
+
+        private async void PerformDeleteAction()
+        {
+            DisplayLoadingIndicator();
+            bool success = await AllItemsViewModel.DeleteItem(EditingItem);
+
+            if (success)
+            {
+                NavigationController.PopToRootViewController(true);
+            }
+            else
+            {
+                RemoveLoadingIndicator();
+                DisplayErrorMessage("Error encountered when deleting time entry.");
+            }
+        }
+
+        private void ConfigureDeleteButton()
+        {
+            // The delete button is only added when an item is being edited
+            if (EditingItem != null)
+            {
+                var button = new UIButton(UIButtonType.System);
+                button.SetTitle("Delete", UIControlState.Normal);
+                button.AddTarget(OnDeleteButtonClicked, UIControlEvent.TouchUpInside);
+
+                var barButton = new UIBarButtonItem(button);
+
+                NavigationItem.SetRightBarButtonItem(barButton, false);
+            }
         }
     }
 }
