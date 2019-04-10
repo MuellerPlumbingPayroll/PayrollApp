@@ -29,14 +29,6 @@ namespace Timecard.iOS
                                            GoogleConfiguration.Scope,
                                            GoogleConfiguration.RedirectUrl,
                                            this);
-            ConfigureGoogleLoginButton();
-        }
-
-        private void ConfigureGoogleLoginButton()
-        {
-            GoogleLoginButton.Layer.CornerRadius = 10;
-            GoogleLoginButton.ClipsToBounds = true;
-
             GoogleLoginButton.TouchUpInside += OnGoogleLoginButtonClicked;
         }
 

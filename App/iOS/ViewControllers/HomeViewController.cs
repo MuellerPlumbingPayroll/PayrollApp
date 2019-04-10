@@ -30,9 +30,6 @@ namespace Timecard.iOS
             txtUserName.Editable = false;
             txtUserName.Text = "Hello, " + ViewModel.UserName;
 
-            btnNewEntry.Layer.CornerRadius = 10;
-            btnNewEntry.ClipsToBounds = true;
-
             ConfigureSubmitButton();
         }
 
@@ -67,9 +64,6 @@ namespace Timecard.iOS
 
         private void ConfigureSubmitButton()
         {
-            btnSubmit.Layer.CornerRadius = 10;
-            btnSubmit.ClipsToBounds = true;
-
             // Determine if today is beginning or end of the pay period
             bool shouldSubmitTimecardToday =
                 DateTime.Now.DayOfWeek.Equals(ProjectSettings.PayPeriodEndDay) ||

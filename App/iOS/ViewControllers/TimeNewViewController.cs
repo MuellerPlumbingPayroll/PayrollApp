@@ -35,7 +35,8 @@ namespace Timecard.iOS
             ConfigureHoursWorkedPicker();
             ConfigureJobDescriptionPicker();
             ConfigureCostCodePicker();
-            ConfigureSaveButton();
+           
+            btnSaveTime.TouchUpInside += OnSaveButtonClicked;
 
             jobTypeSegControl.SetTitle(JobType.Construction.ToString(), 0);
             jobTypeSegControl.SetTitle(JobType.Service.ToString(), 1);
@@ -80,15 +81,6 @@ namespace Timecard.iOS
                 jobTypeSegControl.Hidden = true;
                 txtCostCode.Hidden = EditingItem.JobType == JobType.Other;
             }
-        }
-
-        private void ConfigureSaveButton()
-        {
-            // Round the button's corners
-            btnSaveTime.Layer.CornerRadius = 10;
-            btnSaveTime.ClipsToBounds = true;
-
-            btnSaveTime.TouchUpInside += OnSaveButtonClicked;
         }
 
         private void ConfigureDatePicker()

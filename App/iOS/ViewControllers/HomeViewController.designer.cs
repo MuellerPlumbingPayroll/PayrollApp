@@ -20,11 +20,11 @@ namespace Timecard.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton btnNewEntry { get; set; }
+        Timecard.iOS.RoundedButton btnNewEntry { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton btnSubmit { get; set; }
+        Timecard.iOS.RoundedButton btnSubmit { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

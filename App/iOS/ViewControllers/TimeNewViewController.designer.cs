@@ -16,7 +16,7 @@ namespace Timecard.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton btnSaveTime { get; set; }
+        Timecard.iOS.RoundedButton btnSaveTime { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

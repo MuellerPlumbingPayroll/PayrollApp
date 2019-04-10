@@ -187,6 +187,10 @@
     <Compile Include="ViewControllers\BaseViewController.cs" />
     <Compile Include="FirebaseManager.cs" />
     <Compile Include="GoogleConfiguration.cs" />
+    <Compile Include="CustomWidgets\RoundedButton.cs" />
+    <Compile Include="CustomWidgets\RoundedButton.designer.cs">
+      <DependentUpon>RoundedButton.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />

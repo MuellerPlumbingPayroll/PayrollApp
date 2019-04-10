@@ -25,9 +25,6 @@ namespace Timecard.iOS
             hoursWorkedLabel.Text = "Time Worked:   " + ViewModel.Item.TimeWorked.ToColonFormat();
             jobTypeLabel.Text = "Type:   " + ViewModel.Item.JobType;
             jobDescriptionLabel.Text = "Job:   " + ViewModel.Item.Job.Address;
-
-            btnEditTime.Layer.CornerRadius = 10;
-            btnEditTime.ClipsToBounds = true;
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

@@ -25,9 +25,7 @@ namespace Timecard.iOS
 
             var pickerModel = new WorkInjuryPickerModel(_submitTimecardViewModel);
             txtAnswer.AddPickerToTextField(pickerModel);
-            
-            btnSubmit.Layer.CornerRadius = 10;
-            btnSubmit.ClipsToBounds = true;
+
             btnSubmit.TouchUpInside += BtnSubmit_TouchUpInside;
 
             AddTapToDismissGesture();

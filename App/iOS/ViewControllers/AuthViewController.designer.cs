@@ -16,7 +16,7 @@ namespace Timecard.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton GoogleLoginButton { get; set; }
+        Timecard.iOS.RoundedButton GoogleLoginButton { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
