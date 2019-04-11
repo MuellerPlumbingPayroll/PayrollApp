@@ -60,7 +60,9 @@ namespace Timecard
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var date = (DateTime)value;
-            writer.WriteValue(date.ToString());
+
+            // Times should be stored in UTC
+            writer.WriteValue(date.ToUniversalTime().ToString());
         }
     }
 }

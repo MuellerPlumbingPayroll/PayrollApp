@@ -21,7 +21,8 @@ namespace Timecard.iOS.PickerViewModels
             this.viewModel = viewModel;
             this.selectedJobType = selectedJobType;
 
-            this.selectedJob = viewModel.Jobs[selectedJobType][0];
+            if (viewModel.Jobs[selectedJobType].Count > 0)
+                this.selectedJob = viewModel.Jobs[selectedJobType][0];
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
