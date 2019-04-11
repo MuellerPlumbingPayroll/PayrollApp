@@ -1,7 +1,7 @@
 using System;
-using CoreLocation;
 using Foundation;
 using Timecard.iOS.PickerViewModels;
+using Timecard.iOS.Utilities;
 using Timecard.Models;
 using UIKit;
 
@@ -11,6 +11,7 @@ namespace Timecard.iOS
     {
         public Item EditingItem { get; internal set; } = null;
 
+        private TimeCrudManager _crudManager;
         private LocationManager locationManager;
         private UIDatePicker datePicker;
         private JobDescriptionPickerModel jobDescriptionPickerModel;
@@ -33,8 +34,7 @@ namespace Timecard.iOS
             ConfigureHoursWorkedPicker();
             ConfigureJobDescriptionPicker();
             ConfigureCostCodePicker();
-            ConfigureDeleteButton();
-           
+                     
             btnSaveTime.TouchUpInside += OnSaveButtonClicked;
 
             jobTypeSegControl.SetTitle(JobType.Construction.ToString(), 0);
@@ -46,6 +46,9 @@ namespace Timecard.iOS
 
             locationManager = new LocationManager();
             locationManager.EnableLocationServices();
+
+            _crudManager = new TimeCrudManager(this);
+            _crudManager.AddDeleteButtonToNavBarForItem(EditingItem);
         }
 
         private void ConfigureGestures()
@@ -107,7 +110,6 @@ namespace Timecard.iOS
                 // If the user is editing this entry, set the picker to the previously selected date
                 txtDateField.Text = EditingItem.JobDate.ToLocalTime().ToString(ProjectSettings.DateFormat);
                 datePicker.SetDate((Foundation.NSDate)EditingItem.JobDate, false);
-   
             }
         }
 
@@ -188,8 +190,7 @@ namespace Timecard.iOS
             // Hide the picker or keyboard that's currently on the screen
             View.EndEditing(true);
 
-            string segmentTitle = sender.TitleAt(sender.SelectedSegment);
-            JobType segmentJobType = (JobType)Enum.Parse(typeof(JobType), segmentTitle);
+            JobType segmentJobType = (JobType)(int)sender.SelectedSegment;
 
             jobDescriptionPickerModel.SetSelectedJobType(segmentJobType);
             costCodeModel.SetSelectedJobType(segmentJobType);
@@ -207,8 +208,6 @@ namespace Timecard.iOS
 
         private void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            DisplayLoadingIndicator();
-
             var item = new Item
             {
                 CostCode = (CostCode)txtCostCode.GetSelectedPickerObject(),
@@ -217,66 +216,28 @@ namespace Timecard.iOS
                 TimeWorked = (TimeWorked)txtHoursWorked.GetSelectedPickerObject()
             };
 
-            if (EditingItem == null)
+            if (EditingItem == null) // Creating a new item
             {
-                SaveNew(item);
-            }
-            else
-            {
-                SaveExisting(item);
-            }
-        }
+                item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
 
-        private async void SaveNew(Item item)
-        {
-            item.JobType = (JobType)(int)jobTypeSegControl.SelectedSegment;
-            if (item.JobType == JobType.Service)
-            {
-                item.Job = new Job
+                try
                 {
-                    Address = txtJobDescription.Text,
-                    ClientName = txtJobDescription.Text
-                };
-            }
-
-            try
-            {
-                // Attempt to get the user's location. Location services might be disabled.
-                item.Latitude = locationManager.GetLatitude();
-                item.Longitude = locationManager.GetLongitude();
-            }
-            catch (LocationNotAuthorizedException ex)
-            {
-                DisplayErrorMessage(string.Format("Error saving time entry: {0}", ex.Message));
-                return;
-            }
-
-            try
-            {
-                CheckForEmptyTextFields(item.JobType);
-
-                bool success = await AllItemsViewModel.AddItem(item);
-                if (success)
-                {
-                    base.NavigationController.PopToRootViewController(true);
+                    // Attempt to get the user's location. Location services might be disabled.
+                    item.Latitude = locationManager.GetLatitude();
+                    item.Longitude = locationManager.GetLongitude();
                 }
-                else
+                catch (LocationNotAuthorizedException ex)
                 {
-                    RemoveLoadingIndicator();
-                    DisplayErrorMessage("Failed to create new time entry.");
+                    DisplayErrorMessage(string.Format("Error saving time entry: {0}", ex.Message));
+                    return;
                 }
             }
-            catch (InvalidOperationException ex)
+            else // Editing an existing item
             {
-                RemoveLoadingIndicator();
-                DisplayErrorMessage(ex.Message);
+                item.Id = EditingItem.Id;
+                item.JobType = EditingItem.JobType;
             }
-        }
 
-        private async void SaveExisting(Item item)
-        {
-            item.Id = EditingItem.Id;
-            item.JobType = EditingItem.JobType;
             if (item.JobType == JobType.Service)
             {
                 item.Job = new Job
@@ -289,21 +250,10 @@ namespace Timecard.iOS
             try
             {
                 CheckForEmptyTextFields(item.JobType);
-
-                bool success = await AllItemsViewModel.UpdateItem(item);
-                if (success)
-                {
-                    base.NavigationController.PopToRootViewController(true);
-                }
-                else
-                {
-                    RemoveLoadingIndicator();
-                    DisplayErrorMessage("Failed to save time entry.");
-                }
+                _crudManager.SaveItem(item);
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                RemoveLoadingIndicator();
                 DisplayErrorMessage(ex.Message);
             }
         }
@@ -318,52 +268,6 @@ namespace Timecard.iOS
                 throw new InvalidOperationException("Job description is required.");
             if (string.IsNullOrWhiteSpace(txtCostCode.Text) && selectedJobType != JobType.Other)
                 throw new InvalidOperationException("Cost code is required.");
-        }
-
-        private void OnDeleteButtonClicked(object sender, EventArgs e)
-        {
-            var alert = UIAlertController.Create(
-            "Are you sure you want to delete this entry?",
-            "This action cannot be undone",
-             UIAlertControllerStyle.ActionSheet);
-
-            alert.AddAction(UIAlertAction.Create("Delete", UIAlertActionStyle.Destructive, (UIAlertAction) => {
-                PerformDeleteAction();
-            }));
-            alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
-
-            PresentViewController(alert, animated: true, completionHandler: null);
-        }
-
-        private async void PerformDeleteAction()
-        {
-            DisplayLoadingIndicator();
-            bool success = await AllItemsViewModel.DeleteItem(EditingItem);
-
-            if (success)
-            {
-                NavigationController.PopToRootViewController(true);
-            }
-            else
-            {
-                RemoveLoadingIndicator();
-                DisplayErrorMessage("Error encountered when deleting time entry.");
-            }
-        }
-
-        private void ConfigureDeleteButton()
-        {
-            // The delete button is only added when an item is being edited
-            if (EditingItem != null)
-            {
-                var button = new UIButton(UIButtonType.System);
-                button.SetTitle("Delete", UIControlState.Normal);
-                button.AddTarget(OnDeleteButtonClicked, UIControlEvent.TouchUpInside);
-
-                var barButton = new UIBarButtonItem(button);
-
-                NavigationItem.SetRightBarButtonItem(barButton, false);
-            }
         }
     }
 }
