@@ -1,7 +1,7 @@
 ﻿using System;
 using CoreLocation;
 
-namespace Timecard.iOS
+namespace Timecard.iOS.Utilities
 {
     public class LocationManager : CLLocationManagerDelegate
     {

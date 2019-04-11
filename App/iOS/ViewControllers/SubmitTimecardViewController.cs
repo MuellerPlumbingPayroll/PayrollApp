@@ -34,6 +34,7 @@ namespace Timecard.iOS
         {
             if (!string.IsNullOrWhiteSpace(txtAnswer.Text))
             {
+                DisplayLoadingIndicator();
                 uint answer = (uint)txtAnswer.PickerView.SelectedRowInComponent(0);
                 bool success = await _submitTimecardViewModel.SubmitTimecardAsync(answer);
 
@@ -45,6 +46,7 @@ namespace Timecard.iOS
                 }
                 else
                 {
+                    RemoveLoadingIndicator();
                     DisplayErrorMessage("Error encountered while submitting timecard.");
                 }
             }
