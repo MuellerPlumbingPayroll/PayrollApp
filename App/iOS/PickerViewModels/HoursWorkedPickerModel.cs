@@ -74,5 +74,37 @@ namespace Timecard.iOS.PickerViewModels
             // This method should never be called for this picker
             throw new NotImplementedException();
         }
+
+        public int[] GetPickerIndexesToSelect(object o)
+        {
+            var time = (TimeWorked)o;
+
+            if (time == null)
+            {
+                return null;
+            }
+
+            int hoursIndex = 1;
+            for (int i = 0; i < TimeWorked.Hours.Length; i++)
+            {
+                if (time.HoursPart == TimeWorked.Hours[i])
+                {
+                    hoursIndex = i;
+                    break;
+                }
+            }
+
+            int minutesIndex = 1;
+            for (int i = 0; i < TimeWorked.Minutes.Length; i++)
+            {
+                if (time.MinutesPart == TimeWorked.Minutes[i])
+                {
+                    minutesIndex = i;
+                    break;
+                }
+            }
+
+            return new int[] { hoursIndex, minutesIndex };
+        }
     }
 }

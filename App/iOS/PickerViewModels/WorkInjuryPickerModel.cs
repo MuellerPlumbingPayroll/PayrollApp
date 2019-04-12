@@ -61,5 +61,10 @@ namespace Timecard.iOS.PickerViewModels
         {
             throw new NotImplementedException();
         }
+
+        public int[] GetPickerIndexesToSelect(object o)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

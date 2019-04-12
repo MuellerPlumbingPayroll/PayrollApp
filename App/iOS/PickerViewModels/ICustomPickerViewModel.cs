@@ -11,5 +11,6 @@ namespace Timecard.iOS
         void SetValueChangedView(UIView view);
         object GetSelectedPickerObject();
         void SetSelectedPickerObject(object o);
+        int[] GetPickerIndexesToSelect(object o);
     }
 }

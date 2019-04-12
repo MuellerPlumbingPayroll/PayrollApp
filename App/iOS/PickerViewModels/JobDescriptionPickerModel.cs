@@ -84,5 +84,25 @@ namespace Timecard.iOS.PickerViewModels
                 selectedJob = viewModel.Jobs[jobType][0];
             }
         }
+
+        public int[] GetPickerIndexesToSelect(object o)
+        {
+            var job = (Job)o;
+
+            if (job == null || selectedJobType == JobType.Service)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < viewModel.Jobs[selectedJobType].Count; i++)
+            {
+                if (job.Equals(viewModel.Jobs[selectedJobType][i]))
+                {
+                    return new int[] { i };
+                }
+            }
+
+            return null;
+        }
     }
 }

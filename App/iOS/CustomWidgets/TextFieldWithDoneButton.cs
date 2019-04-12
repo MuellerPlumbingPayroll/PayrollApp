@@ -56,6 +56,15 @@ namespace Timecard.iOS
         public void SetSelectedPickerObject(object o)
         {
             (PickerView.Model as ICustomPickerViewModel).SetSelectedPickerObject(o);
+            int[] indexesToSelect = (PickerView.Model as ICustomPickerViewModel).GetPickerIndexesToSelect(o);
+
+            if (indexesToSelect != null)
+            {
+                for (int i = 0; i < indexesToSelect.Length; i++)
+                {
+                    PickerView.Select(indexesToSelect[i], i, false);
+                }
+            }
         }
 
         public void SetPickerActive(bool active = true, bool fieldVisible = true, bool clearText = false)

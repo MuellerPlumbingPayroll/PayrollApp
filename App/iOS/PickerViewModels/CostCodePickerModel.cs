@@ -84,7 +84,7 @@ namespace Timecard.iOS.PickerViewModels
         public void SetSelectedJobType(JobType jobType)
         {
             selectedJobType = jobType;
-            if (jobType != JobType.Other && viewModel.CostCodes.ContainsKey(selectedJobType))
+            if (jobType != JobType.Other && viewModel.CostCodes.ContainsKey(jobType))
             {
                 selectedCostCode = viewModel.CostCodes[jobType][0];
             }
@@ -92,6 +92,27 @@ namespace Timecard.iOS.PickerViewModels
             {
                 selectedCostCode = null;
             }
+        }
+
+        public int[] GetPickerIndexesToSelect(object o)
+        {
+            var costCode = (CostCode)o;
+
+            if (costCode == null || selectedJobType == JobType.Other)
+            {
+                return null;
+            }
+
+            // Search for the cost code. If found, return its index
+            for (int i = 0; i < viewModel.CostCodes[selectedJobType].Count; i++)
+            {
+                if (costCode.Equals(viewModel.CostCodes[selectedJobType][i]))
+                {
+                    return new int[] { i };
+                }
+            }
+
+            return null;
         }
     }
 }
