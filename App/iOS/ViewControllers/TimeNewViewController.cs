@@ -55,6 +55,13 @@ namespace Timecard.iOS
         {
             AddTapToDismissGesture();
 
+            // Only add the swipe gestures if the user is editing an item
+            // Users are not allowed to change the job type when editing
+            if (EditingItem != null)
+            {
+                return;
+            }
+
             // When the user swipes left or right, change the value of the selected job type
             var swipeLeft = new UISwipeGestureRecognizer((s) => HandleSwipeGesture(UISwipeGestureRecognizerDirection.Left))
             {
@@ -66,13 +73,8 @@ namespace Timecard.iOS
                 Direction = UISwipeGestureRecognizerDirection.Right
             };
 
-            // Only add the swipe gestures if the user is editing an item
-            // Users are not allowed to change the job type when editing
-            if (EditingItem == null)
-            {
-                View.AddGestureRecognizer(swipeLeft);
-                View.AddGestureRecognizer(swipeRight);
-            }
+            View.AddGestureRecognizer(swipeLeft);
+            View.AddGestureRecognizer(swipeRight);
         }
 
         private void ConfigureEditing()
@@ -81,6 +83,8 @@ namespace Timecard.iOS
             {
                 // Prevent user from being able to change the job type
                 jobTypeSegControl.Hidden = true;
+
+                // Cost code is not available if the job type is other
                 txtCostCode.Hidden = EditingItem.JobType == JobType.Other;
             }
         }
@@ -109,7 +113,7 @@ namespace Timecard.iOS
             {
                 // If the user is editing this entry, set the picker to the previously selected date
                 txtDateField.Text = EditingItem.JobDate.ToLocalTime().ToString(ProjectSettings.DateFormat);
-                datePicker.SetDate((Foundation.NSDate)EditingItem.JobDate, false);
+                datePicker.SetDate((NSDate)EditingItem.JobDate, false);
             }
         }
 
@@ -152,14 +156,13 @@ namespace Timecard.iOS
             var selectedJobType = EditingItem != null ? EditingItem.JobType : JobType.Construction;
 
             costCodeModel = new CostCodePickerModel(AllItemsViewModel, selectedJobType);
+            txtCostCode.AddPickerToTextField(costCodeModel);
 
             if (EditingItem != null && selectedJobType != JobType.Other)
             {
-                costCodeModel.SetSelectedPickerObject(EditingItem.CostCode);
+                txtCostCode.SetSelectedPickerObject(EditingItem.CostCode);
                 txtCostCode.Text = EditingItem.CostCode.Description;
             }
-
-            txtCostCode.AddPickerToTextField(costCodeModel);
         }
 
         /*************************** Event Handlers ***************************/
@@ -249,7 +252,7 @@ namespace Timecard.iOS
 
             try
             {
-                CheckForEmptyTextFields(item.JobType);
+                VerifyTextFields(item.JobType);
                 _crudManager.SaveItem(item);
             }
             catch (Exception ex)
@@ -258,14 +261,20 @@ namespace Timecard.iOS
             }
         }
 
-        private void CheckForEmptyTextFields(JobType selectedJobType)
+        private void VerifyTextFields(JobType selectedJobType)
         {
             if (string.IsNullOrWhiteSpace(txtDateField.Text))
                 throw new InvalidOperationException("Job date is required.");
+
             if (string.IsNullOrWhiteSpace(txtHoursWorked.Text))
                 throw new InvalidOperationException("Hours worked is required.");
+
+            if (TimeWorked.FromColonFormat(txtHoursWorked.Text).AsFloat() < 0.2f)
+                throw new InvalidOperationException("Hours worked must be greater than zero.");
+
             if (string.IsNullOrWhiteSpace(txtJobDescription.Text))
                 throw new InvalidOperationException("Job description is required.");
+
             if (string.IsNullOrWhiteSpace(txtCostCode.Text) && selectedJobType != JobType.Other)
                 throw new InvalidOperationException("Cost code is required.");
         }
