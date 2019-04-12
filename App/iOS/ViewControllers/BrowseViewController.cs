@@ -87,10 +87,10 @@ namespace Timecard.iOS
 
     class ItemsDataSource : UITableViewSource
     {
-        private static readonly NSString CELL_IDENTIFIER = new NSString("HISTORY_CELL");
-        private static readonly NSString SECTION_IDENTIFIER = new NSString("SECTION_CELL");
-        private readonly int CELL_HEIGHT = 100;
-        private static readonly int SECTION_HEADER_HEIGHT = 50;
+        private static readonly NSString CELL_IDENTIFIER = new NSString(HistoryTableViewCell.REUSE_IDENTIFIER);
+        private static readonly NSString SECTION_IDENTIFIER = new NSString(HistoryTableViewSectionHeader.REUSE_IDENTIFIER);
+        private static readonly int CELL_HEIGHT = 100;
+        private static readonly int SECTION_HEADER_HEIGHT = 60;
         private static readonly int SECTION_FOOTER_HEIGHT = 2;
 
         ItemsViewModel viewModel;

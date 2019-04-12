@@ -124,40 +124,54 @@
                                     <segue id="91853" destination="3274" kind="show" identifier="NavigateToEditItemSegue"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="42809" customClass="HistoryTableViewSectionHeader" reuseIdentifier="SECTION_CELL" rowHeight="50">
-                                <rect key="frame" x="0.0" y="122" width="414" height="50"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="42809" customClass="HistoryTableViewSectionHeader" reuseIdentifier="SECTION_CELL" rowHeight="60">
+                                <rect key="frame" x="0.0" y="122" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="42809" id="42810">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="49.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42902" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
-                                            <rect key="frame" x="20" y="14" width="273" height="21"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42902" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                                            <rect key="frame" x="20" y="19" width="213" height="22"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                             <accessibility key="accessibilityConfiguration" label="txtDate"/>
+                                            <constraints>
+                                                <constraint id="105506" firstAttribute="height" constant="22"/>
+                                            </constraints>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42903" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
-                                            <rect key="frame" x="294" y="14" width="100" height="21"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42903" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                                            <rect key="frame" x="294" y="20" width="100" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <nil key="highlightedColor"/>
                                             <accessibility key="accessibilityConfiguration" label="txtHoursWorked"/>
+                                            <constraints>
+                                                <constraint id="105505" firstAttribute="height" constant="22"/>
+                                            </constraints>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="103681" translatesAutoresizingMaskIntoConstraints="NO" image="Warning" misplaced="YES">
+                                            <rect key="frame" x="255" y="20" width="25" height="21"/>
+                                            <accessibility key="accessibilityConfiguration" label="imgWarning"/>
+                                            <constraints>
+                                                <constraint id="105384" firstAttribute="height" constant="24"/>
+                                                <constraint id="105385" firstAttribute="width" constant="24"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint id="42904" firstAttribute="trailing" secondItem="42903" secondAttribute="trailing" constant="20"/>
                                         <constraint id="42908" firstItem="42902" firstAttribute="leading" secondItem="42810" secondAttribute="leading" constant="20"/>
-                                        <constraint id="42909" firstItem="42903" firstAttribute="leading" secondItem="42902" secondAttribute="trailing" constant="10"/>
-                                        <constraint id="51629" firstAttribute="bottom" secondItem="42902" secondAttribute="bottom" constant="14"/>
-                                        <constraint id="51630" firstItem="42902" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="14"/>
-                                        <constraint id="52434" firstAttribute="bottom" secondItem="42903" secondAttribute="bottom" constant="14"/>
-                                        <constraint id="52435" firstItem="42903" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="14"/>
+                                        <constraint id="95585" firstAttribute="bottom" secondItem="42903" secondAttribute="bottom" constant="18"/>
+                                        <constraint id="104528" firstAttribute="bottom" secondItem="42902" secondAttribute="bottom" constant="18"/>
+                                        <constraint id="105387" firstItem="103681" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="18"/>
+                                        <constraint id="106365" firstItem="42903" firstAttribute="leading" secondItem="103681" secondAttribute="trailing" constant="8"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="txtHoursWorked" destination="42903" id="name-outlet-42903"/>
                                     <outlet property="txtDate" destination="42902" id="name-outlet-42902"/>
+                                    <outlet property="imgWarning" destination="103681" id="name-outlet-103681"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -300,17 +314,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" id="20364" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="110" width="374" height="150"/>
+                                <rect key="frame" x="20" y="110" width="374" height="100"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="44"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <constraints>
-                                    <constraint id="21548" firstAttribute="height" constant="150"/>
+                                    <constraint id="21548" firstAttribute="height" constant="100"/>
                                 </constraints>
                                 <accessibility key="accessibilityConfiguration" label="txtUserName"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25618" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="280" width="374" height="40"/>
+                                <rect key="frame" x="20" y="230" width="374" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -320,7 +334,7 @@
                                 <accessibility key="accessibilityConfiguration" label="txtHoursWorkedToday"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40703" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="340" width="374" height="40"/>
+                                <rect key="frame" x="20" y="290" width="374" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -562,5 +576,6 @@
     <resources>
         <image name="First" width="32" height="30"/>
         <image name="Second" width="32" height="30"/>
+        <image name="Warning" width="231" height="197"/>
     </resources>
 </document>

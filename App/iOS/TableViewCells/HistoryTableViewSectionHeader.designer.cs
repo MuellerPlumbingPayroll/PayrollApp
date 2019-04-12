@@ -16,6 +16,10 @@ namespace Timecard.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView imgWarning { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel txtDate { get; set; }
 
         [Outlet]
@@ -24,6 +28,11 @@ namespace Timecard.iOS
 
         void ReleaseDesignerOutlets ()
         {
+            if (imgWarning != null) {
+                imgWarning.Dispose ();
+                imgWarning = null;
+            }
+
             if (txtDate != null) {
                 txtDate.Dispose ();
                 txtDate = null;

@@ -134,6 +134,10 @@
     <ImageAsset Include="Assets.xcassets\XamarinLogo.imageset\xamarin_logo%402x.png" />
     <ImageAsset Include="Assets.xcassets\XamarinLogo.imageset\xamarin_logo%403x.png" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Warning.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Warning.imageset\warning.png" />
+    <ImageAsset Include="Assets.xcassets\Warning.imageset\warning-1.png" />
+    <ImageAsset Include="Assets.xcassets\Warning.imageset\warning-2.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewControllers\BrowseViewController.cs" />
@@ -205,6 +209,7 @@
     <Folder Include="PickerViewModels\" />
     <Folder Include="Assets.xcassets\GoogleLogo.imageset\" />
     <Folder Include="Assets.xcassets\GoogleLogo.imageset\" />
+    <Folder Include="Assets.xcassets\Warning.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

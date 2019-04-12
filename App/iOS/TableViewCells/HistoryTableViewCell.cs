@@ -5,6 +5,8 @@ namespace Timecard.iOS
 {
     public partial class HistoryTableViewCell : UITableViewCell
     {
+        public static readonly string REUSE_IDENTIFIER = "HISTORY_CELL";
+
         public HistoryTableViewCell (IntPtr handle) : base (handle)
         {
         }

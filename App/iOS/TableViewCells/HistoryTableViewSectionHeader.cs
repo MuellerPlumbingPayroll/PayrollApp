@@ -1,7 +1,6 @@
-using Foundation;
 using System;
-using UIKit;
 using Timecard.Models;
+using UIKit;
 
 namespace Timecard.iOS
 {
@@ -11,10 +10,10 @@ namespace Timecard.iOS
 
         public HistoryTableViewSectionHeader (IntPtr handle) : base (handle)
         {
-            this.BackgroundColor = UIColor.LightGray;
+            BackgroundColor = UIColor.DarkGray;
         }
 
-        public void UpdateHeader(DateTime date, float hoursWorked)
+        internal void UpdateHeader(DateTime date, float hoursWorked)
         {
             // Set both label text colors to white
             txtDate.TextColor = UIColor.White;
@@ -27,14 +26,11 @@ namespace Timecard.iOS
             txtDate.Text = date.ToString(ProjectSettings.DateFormat);
             txtHoursWorked.Text = hoursWorked + " hrs";
 
-            if (hoursWorked > ProjectSettings.NumberHoursInWorkDay)
-            {
-                // If there are more than a normal number of hours entered on
-                // this day, then set the text color to red. This doesn't 
-                // necessarily mean that there's an error (it could be overtime),
-                // it just draws attention in case there is one.
-                txtHoursWorked.TextColor = UIColor.Red;
-            }
+            // If there are more than a normal number of hours entered on this day,
+            // then set the warning image should be visible.
+            // This doesn't necessarily mean that there's an error, 
+            // but instead draws attention in case there is one.
+            imgWarning.Hidden = hoursWorked <= ProjectSettings.NumberHoursInWorkDay;
         }
     }
 }
