@@ -9,11 +9,13 @@
         public string CodeGroup { get; set; }
         public string Description { get; set; }
 
-        public static CostCode DummyCostCode(string codeGroup)
+        public static CostCode DummyCostCode(JobType jobType)
         {
+            var codeGroup = jobType.Equals(JobType.Construction) ? PlumbingCodeGroup : ServiceCodeGroup;
+
             return new CostCode
             {
-                Code = "Not Listed",
+                Code = "00-000",
                 CodeGroup = codeGroup,
                 Description = "Not Listed"
             };

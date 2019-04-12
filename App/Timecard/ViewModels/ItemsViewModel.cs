@@ -205,6 +205,10 @@ namespace Timecard
             {
                 var costCodes = await DataStore.GetCostCodesAsync();
 
+                // Add dummy cost codes
+                costCodes = costCodes.Concat(new [] { CostCode.DummyCostCode(JobType.Construction),
+                                                      CostCode.DummyCostCode(JobType.Service) });
+
                 CostCodes.Clear();
 
                 foreach (var costCode in costCodes)
@@ -229,7 +233,8 @@ namespace Timecard
                     }
                 }
 
-                Debug.WriteLine($"Successfully added {CostCodes.Count} cost codes.");
+                Debug.WriteLine($"Successfully added {CostCodes[JobType.Construction].Count} construction cost codes.");
+                Debug.WriteLine($"Successfully added {CostCodes[JobType.Service].Count} service cost codes.");
             }
             catch (Exception ex)
             {
@@ -243,6 +248,9 @@ namespace Timecard
             {
                 var jobs = await DataStore.GetJobsAsync();
 
+                // Add a dummy job
+                jobs = jobs.Concat(new[] { Job.DummyJob() });
+
                 Jobs[JobType.Construction].Clear();
 
                 foreach (var job in jobs)
@@ -250,15 +258,7 @@ namespace Timecard
                     Jobs[JobType.Construction].Add(job);
                 }
 
-                if (Jobs[JobType.Construction].Count == 0)
-                {
-                    Debug.WriteLine($"Failed to find any jobs. Adding a dummy job.");
-                    Jobs[JobType.Construction].Add(Job.DummyJob());
-                }
-                else
-                {
-                    Debug.WriteLine($"Successfully added {Jobs[JobType.Construction].Count} construction jobs.");
-                }
+                Debug.WriteLine($"Successfully added {Jobs[JobType.Construction].Count} construction jobs.");
             }
             catch (Exception ex)
             {
