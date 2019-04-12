@@ -29,17 +29,16 @@ namespace Timecard.iOS
             txtUserName.Editable = false;
             txtUserName.Text = "Hello, " + ViewModel.UserName;
 
-            ConfigureSubmitButton();
+            btnSubmit.BackgroundColor = UIColor.LightGray;        
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            ConfigureSubmitButton();
-            ConfigureHoursWorkedTextAsync();
+            ConfigureInformationLabels();
         }
 
-        private async void ConfigureHoursWorkedTextAsync()
+        private async void ConfigureInformationLabels()
         {
             // Sometimes the view may appear while items are still being retrieved from the server.
             // Repeatedly waiting until the items have been retrieved ensures that the hours worked text is correct.
@@ -50,19 +49,19 @@ namespace Timecard.iOS
 
             txtHoursWorkedToday.Text = "Today: " + AllItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now) + " hrs";
             txtHoursWorkedThisWeek.Text = "This Period: " + AllItemsViewModel.NumberHoursWorkedOnDay() + " hrs";
-        }
 
-        private void ConfigureSubmitButton()
-        {
-            // Determine if today is beginning or end of the pay period
-            bool shouldSubmitTimecardToday =
-                DateTime.Now.DayOfWeek.Equals(ProjectSettings.PayPeriodEndDay) ||
-                DateTime.Now.DayOfWeek.Equals(ProjectSettings.PayPeriodStartDay);
+            var startCurrent = ProjectSettings.GetStartOfCurrentPayPeriod().Date;
+            var startEntires = AllItemsViewModel.GetStartOfPayPeriod().Date;
 
-            if (shouldSubmitTimecardToday)
-                btnSubmit.BackgroundColor = UIColor.DarkGray;
+            if (startEntires.CompareTo(startCurrent) < 0)
+            {
+                txtWarningLabel.AdjustsFontSizeToFitWidth = true;
+                txtWarningLabel.Text = ViewModel.NeedToSubmitTimecardWarningMessage;
+            }
             else
-                btnSubmit.BackgroundColor = UIColor.LightGray;
+            {
+                txtWarningLabel.Text = string.Empty;
+            }
         }
 
         public override bool ShouldPerformSegue(string segueIdentifier, NSObject sender)

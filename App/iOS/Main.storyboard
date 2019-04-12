@@ -314,17 +314,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" id="20364" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="110" width="374" height="100"/>
+                                <rect key="frame" x="20" y="110" width="374" height="80"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="44"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <constraints>
-                                    <constraint id="21548" firstAttribute="height" constant="100"/>
+                                    <constraint id="21548" firstAttribute="height" constant="80"/>
                                 </constraints>
                                 <accessibility key="accessibilityConfiguration" label="txtUserName"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25618" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="230" width="374" height="40"/>
+                                <rect key="frame" x="20" y="210" width="374" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -334,7 +334,7 @@
                                 <accessibility key="accessibilityConfiguration" label="txtHoursWorkedToday"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40703" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="290" width="374" height="40"/>
+                                <rect key="frame" x="20" y="270" width="374" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -372,6 +372,16 @@
                                     <segue id="88891" destination="3274" kind="show" identifier="NavigateFromHomeToNewTimeSegue"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="108153" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="0" adjustsFontForContentSizeCategory="YES">
+                                <rect key="frame" x="40" y="476" width="334" height="100"/>
+                                <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <accessibility key="accessibilityConfiguration" label="txtWarningLabel"/>
+                                <constraints>
+                                    <constraint id="108704" firstAttribute="height" constant="100"/>
+                                </constraints>
+                            </label>
                         </subviews>
                         <constraints>
                             <constraint id="20957" firstItem="20364" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin"/>
@@ -389,6 +399,9 @@
                             <constraint id="87791" firstItem="17872" firstAttribute="top" secondItem="87786" secondAttribute="bottom" constant="20"/>
                             <constraint id="87792" firstItem="87786" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin" constant="20"/>
                             <constraint id="88066" firstItem="87786" firstAttribute="top" secondItem="53153" secondAttribute="bottom" constant="20"/>
+                            <constraint id="108582" firstItem="108153" firstAttribute="leading" secondItem="17875" secondAttribute="leadingMargin" constant="20"/>
+                            <constraint id="108583" firstAttribute="trailingMargin" secondItem="108153" secondAttribute="trailing" constant="20"/>
+                            <constraint id="108584" firstItem="53153" firstAttribute="top" secondItem="108153" secondAttribute="bottom" constant="20"/>
                         </constraints>
                     </view>
                     <navigationItem id="17985" key="navigationItem">
@@ -411,6 +424,7 @@
                         <outlet property="btnSubmit" destination="53153" id="name-outlet-53153"/>
                         <outlet property="btnLogOut" destination="69097" id="name-outlet-69097"/>
                         <outlet property="btnNewEntry" destination="87786" id="name-outlet-87786"/>
+                        <outlet property="txtWarningLabel" destination="108153" id="name-outlet-108153"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17876" userLabel="First Responder" sceneMemberID="firstResponder"/>

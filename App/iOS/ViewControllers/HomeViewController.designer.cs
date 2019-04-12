@@ -38,6 +38,10 @@ namespace Timecard.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextView txtUserName { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel txtWarningLabel { get; set; }
+
         [Action ("BtnLogOut_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void BtnLogOut_TouchUpInside (UIKit.UIButton sender);
@@ -72,6 +76,11 @@ namespace Timecard.iOS
             if (txtUserName != null) {
                 txtUserName.Dispose ();
                 txtUserName = null;
+            }
+
+            if (txtWarningLabel != null) {
+                txtWarningLabel.Dispose ();
+                txtWarningLabel = null;
             }
         }
     }
