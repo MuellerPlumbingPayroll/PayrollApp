@@ -53,6 +53,26 @@ namespace Timecard.Models
             return float.Parse(ToDecimalFormat());
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is TimeWorked other))
+            {
+                return false;
+            }
+
+            return HoursPart == other.HoursPart && MinutesPart == other.MinutesPart;
+        }
+
+        public override int GetHashCode()
+        {
+            int result = 17;
+
+            result = 31 * result + HoursPart.GetHashCode();
+            result = 31 * result + MinutesPart.GetHashCode();
+
+            return result;
+        }
+
         public static TimeWorked FromDecimalFormat(string df)
         {
             var times = df.Split(".");

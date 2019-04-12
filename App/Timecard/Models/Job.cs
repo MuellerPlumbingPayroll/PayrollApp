@@ -12,14 +12,41 @@ namespace Timecard.Models
         public string JobNumber { get; set; }
         public bool IsActive { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Job other))
+            {
+                return false;
+            }
+
+            return Id == other.Id &&
+                   Address == other.Address &&
+                   ClientName == other.ClientName &&
+                   JobNumber == other.JobNumber &&
+                   IsActive == other.IsActive;
+        }
+
+        public override int GetHashCode()
+        {
+            int result = 17;
+
+            result = 31 * result + Id.GetHashCode();
+            result = 31 * result + Address.GetHashCode();
+            result = 31 * result + ClientName.GetHashCode();
+            result = 31 * result + JobNumber.GetHashCode();
+            result = 31 * result + (IsActive ? 1 : 0);
+
+            return result;
+        }
+
         public static Job DummyJob()
         {
-            return new Job()
+            return new Job
             {
                 Id = "0",
                 Address = "Not Listed",
                 ClientName = "Not Listed",
-                JobNumber = "0"
+                JobNumber = "00-000"
             };
         }
 
