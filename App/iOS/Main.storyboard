@@ -131,14 +131,15 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42902" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
-                                            <rect key="frame" x="20" y="19" width="213" height="22"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42902" translatesAutoresizingMaskIntoConstraints="NO">
+                                            <rect key="frame" x="20" y="19.5" width="210" height="22"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                             <accessibility key="accessibilityConfiguration" label="txtDate"/>
                                             <constraints>
                                                 <constraint id="105506" firstAttribute="height" constant="22"/>
+                                                <constraint id="109275" firstAttribute="width" constant="210"/>
                                             </constraints>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="42903" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
@@ -165,7 +166,7 @@
                                         <constraint id="95585" firstAttribute="bottom" secondItem="42903" secondAttribute="bottom" constant="18"/>
                                         <constraint id="104528" firstAttribute="bottom" secondItem="42902" secondAttribute="bottom" constant="18"/>
                                         <constraint id="105387" firstItem="103681" firstAttribute="top" secondItem="42810" secondAttribute="top" constant="18"/>
-                                        <constraint id="106365" firstItem="42903" firstAttribute="leading" secondItem="103681" secondAttribute="trailing" constant="8"/>
+                                        <constraint id="106365" firstItem="42903" firstAttribute="leading" secondItem="103681" secondAttribute="trailing" constant="5"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

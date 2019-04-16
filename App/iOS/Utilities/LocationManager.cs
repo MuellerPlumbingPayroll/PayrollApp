@@ -49,7 +49,7 @@ namespace Timecard.iOS.Utilities
             {
                 return GetUserLocation().Longitude;
             }
-            catch (Exception)
+            catch (InvalidOperationException)
             {
                 // If user location isn't available, just return 0
                 return 0;
@@ -66,7 +66,7 @@ namespace Timecard.iOS.Utilities
             }
             catch (Exception ex)
             {
-                throw new LocationNotAuthorizedException("Location is currently unavailable.", ex);
+                throw new InvalidOperationException("Location is currently unavailable.", ex);
             }
         }
     }

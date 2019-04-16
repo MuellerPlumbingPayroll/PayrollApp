@@ -98,7 +98,7 @@ namespace Timecard.iOS.PickerViewModels
         {
             var costCode = (CostCode)o;
 
-            if (costCode == null || selectedJobType == JobType.Other)
+            if (costCode == null || selectedJobType == JobType.Other || !viewModel.CostCodes.ContainsKey(selectedJobType))
             {
                 return null;
             }
