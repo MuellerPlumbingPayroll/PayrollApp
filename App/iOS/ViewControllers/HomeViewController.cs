@@ -20,6 +20,7 @@ namespace Timecard.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            DisplayLoadingIndicator();
 
             if (ViewModel == null)
                 ViewModel = new HomeViewModel();
@@ -44,7 +45,7 @@ namespace Timecard.iOS
             // Repeatedly waiting until the items have been retrieved ensures that the hours worked text is correct.
             while (AllItemsViewModel.IsBusy)
             {
-                await Task.Delay(100);
+                await Task.Delay(150);
             }
 
             txtHoursWorkedToday.Text = "Today: " + AllItemsViewModel.NumberHoursWorkedOnDay(DateTime.Now) + " hrs";
@@ -62,6 +63,8 @@ namespace Timecard.iOS
             {
                 txtWarningLabel.Text = string.Empty;
             }
+
+            RemoveLoadingIndicator();
         }
 
         public override bool ShouldPerformSegue(string segueIdentifier, NSObject sender)

@@ -2,8 +2,8 @@
 {
     public class CostCode
     {
-        public static readonly string PlumbingCodeGroup = "PLUMBING";
-        public static readonly string ServiceCodeGroup = "SERVICE";
+        public static readonly string PlumbingCodeGroup = "Plumbing";
+        public static readonly string ServiceCodeGroup = "Service";
 
         public string Code { get; set; }
         public string CodeGroup { get; set; }
