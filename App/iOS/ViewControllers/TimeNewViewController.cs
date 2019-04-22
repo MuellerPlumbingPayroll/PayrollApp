@@ -41,8 +41,12 @@ namespace Timecard.iOS
             jobTypeSegControl.SetTitle(JobType.Service.ToString(), 1);
             jobTypeSegControl.SetTitle(JobType.Other.ToString(), 2);
 
+            if (EditingItem != null)
+            {
+                jobTypeSegControl.Hidden = true;
+            }
+
             ConfigureGestures();
-            ConfigureEditing();
 
             locationManager = new LocationManager();
             locationManager.EnableLocationServices();
@@ -75,18 +79,6 @@ namespace Timecard.iOS
 
             View.AddGestureRecognizer(swipeLeft);
             View.AddGestureRecognizer(swipeRight);
-        }
-
-        private void ConfigureEditing()
-        {
-            if (EditingItem != null)
-            {
-                // Prevent user from being able to change the job type
-                jobTypeSegControl.Hidden = true;
-
-                // Cost code is not available if the job type is other
-                txtCostCode.Hidden = EditingItem.JobType == JobType.Other;
-            }
         }
 
         private void ConfigureDatePicker()
@@ -241,11 +233,17 @@ namespace Timecard.iOS
 
             if (item.JobType == JobType.Service)
             {
+                string value = txtJobDescription.Text;
+                if (!value.StartsWith('Z'))
+                {
+                    value = "Z" + value;
+                }
+
                 item.Job = new Job
                 {
-                    Address = txtJobDescription.Text,
-                    ClientName = txtJobDescription.Text,
-                    JobNumber = txtJobDescription.Text
+                    Address = value,
+                    ClientName = value,
+                    JobNumber = value
                 };
             }
 

@@ -33,12 +33,18 @@ namespace Timecard.iOS.PickerViewModels
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return _viewModel.Jobs[_selectedJobType][(int)row].Address;
+            if (_viewModel.Jobs.ContainsKey(_selectedJobType) && _viewModel.Jobs[_selectedJobType].Count > 0)
+                return _viewModel.Jobs[_selectedJobType][(int)row].Address;
+
+            return string.Empty;
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return _viewModel.Jobs[_selectedJobType].Count;
+            if (_viewModel.Jobs.ContainsKey(_selectedJobType))
+                return _viewModel.Jobs[_selectedJobType].Count;
+
+            return 0;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
