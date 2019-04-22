@@ -41,7 +41,7 @@ namespace Timecard
             {
                 {JobType.Construction, new List<Job>()},
                 {JobType.Service, new List<Job>{new Job()} },
-                {JobType.Other, Job.GetOtherTypeJobs()}
+                {JobType.Other, new List<Job>{Job.ShopJob()}}
             };
 
             LoadJobsCommand.Execute(null);
@@ -204,16 +204,12 @@ namespace Timecard
             {
                 var costCodes = await DataStore.GetCostCodesAsync();
 
-                // Add dummy cost codes
-                costCodes = costCodes.Concat(new [] { CostCode.DummyCostCode(JobType.Construction),
-                                                      CostCode.DummyCostCode(JobType.Service) });
-
                 CostCodes.Clear();
 
                 foreach (var costCode in costCodes)
                 {
                     JobType key;
-                    if (costCode.CodeGroup == CostCode.PlumbingCodeGroup)
+                    if (costCode.CodeGroup == CostCode.PlumbingCodeGroup || costCode.CodeGroup == CostCode.HeatingCodeGroup)
                         key = JobType.Construction;
                     else if (costCode.CodeGroup == CostCode.ServiceCodeGroup)
                         key = JobType.Service;
@@ -234,6 +230,7 @@ namespace Timecard
 
                 Debug.WriteLine($"Successfully added {CostCodes[JobType.Construction].Count} construction cost codes.");
                 Debug.WriteLine($"Successfully added {CostCodes[JobType.Service].Count} service cost codes.");
+                Debug.WriteLine($"Successfully added {CostCodes[JobType.Other].Count} shop cost codes.");
             }
             catch (Exception ex)
             {
@@ -246,9 +243,6 @@ namespace Timecard
             try
             {
                 var jobs = await DataStore.GetJobsAsync();
-
-                // Add a dummy job
-                jobs = jobs.Concat(new[] { Job.DummyJob() });
 
                 Jobs[JobType.Construction].Clear();
 

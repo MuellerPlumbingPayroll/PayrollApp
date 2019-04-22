@@ -15,10 +15,6 @@ namespace Timecard.Models
         public static readonly int NumberHoursInWorkWeek = NumberHoursInWorkDay * NumberDaysInWorkWeek;
         public static readonly int MaxNumberHoursInWorkDay = 2 * NumberHoursInWorkDay - 1;
 
-        public static readonly string[] OtherTimeOptions = {
-                "Shop", "Vacation", "Holiday", "Sick", "Unpaid Leave"
-            };
-
         public static DateTime GetStartOfCurrentPayPeriod()
         {
             var payPeriodStart = DateTime.Now;

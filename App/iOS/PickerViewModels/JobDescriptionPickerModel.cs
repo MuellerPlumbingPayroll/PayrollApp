@@ -9,38 +9,36 @@ namespace Timecard.iOS.PickerViewModels
     /// </summary>
     internal class JobDescriptionPickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
-        private static readonly string DEFAULT_JOB_DESCRIPTION_VALUE = "Not Listed";
-
-        private JobType selectedJobType;
-        private Job selectedJob;
-        private ItemsViewModel viewModel;
-        private UITextField textField;
+        private JobType _selectedJobType;
+        private Job _selectedJob;
+        private ItemsViewModel _viewModel;
+        private UITextField _textField;
 
         public JobDescriptionPickerModel(ItemsViewModel viewModel, JobType selectedJobType)
         {
-            this.viewModel = viewModel;
-            this.selectedJobType = selectedJobType;
+            _viewModel = viewModel;
+            _selectedJobType = selectedJobType;
 
-            if (viewModel.Jobs[selectedJobType].Count > 0)
-                this.selectedJob = viewModel.Jobs[selectedJobType][0];
+            if (_viewModel.Jobs.ContainsKey(selectedJobType) && _viewModel.Jobs[selectedJobType].Count > 0)
+                _selectedJob = viewModel.Jobs[selectedJobType][0];
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            selectedJob = viewModel.Jobs[selectedJobType][(int)row];
+            _selectedJob = _viewModel.Jobs[_selectedJobType][(int)row];
 
-            if (textField != null)
-                textField.Text = selectedJob.Address;
+            if (_textField != null)
+                _textField.Text = _selectedJob.Address;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return viewModel.Jobs[selectedJobType][(int)row].Address;
+            return _viewModel.Jobs[_selectedJobType][(int)row].Address;
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return viewModel.Jobs[selectedJobType].Count;
+            return _viewModel.Jobs[_selectedJobType].Count;
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
@@ -56,32 +54,33 @@ namespace Timecard.iOS.PickerViewModels
             }
             catch (Exception)
             {
-                return DEFAULT_JOB_DESCRIPTION_VALUE;
+                return string.Empty;
             }
         }
 
         public void SetValueChangedView(UIView textField)
         {
-            this.textField = (UITextField)textField;
+            _textField = (UITextField)textField;
         }
 
         public object GetSelectedPickerObject()
         {
-            return selectedJob;
+            return _selectedJob;
         }
 
         public void SetSelectedPickerObject(object o)
         {
-            selectedJob = (Job)o;
+            _selectedJob = (Job)o;
         }
 
         public void SetSelectedJobType(JobType jobType)
         {
-            selectedJobType = jobType;
+            _selectedJobType = jobType;
 
-            if (jobType != JobType.Service)
+            if (jobType != JobType.Service && _viewModel.Jobs.ContainsKey(jobType) 
+                && _viewModel.Jobs[jobType].Count > 0)
             {
-                selectedJob = viewModel.Jobs[jobType][0];
+                _selectedJob = _viewModel.Jobs[jobType][0];
             }
         }
 
@@ -89,14 +88,14 @@ namespace Timecard.iOS.PickerViewModels
         {
             var job = (Job)o;
 
-            if (job == null || selectedJobType == JobType.Service)
+            if (job == null || _selectedJobType == JobType.Service)
             {
                 return null;
             }
 
-            for (int i = 0; i < viewModel.Jobs[selectedJobType].Count; i++)
+            for (int i = 0; i < _viewModel.Jobs[_selectedJobType].Count; i++)
             {
-                if (job.Equals(viewModel.Jobs[selectedJobType][i]))
+                if (job.Equals(_viewModel.Jobs[_selectedJobType][i]))
                 {
                     return new int[] { i };
                 }

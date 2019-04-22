@@ -198,10 +198,8 @@ namespace Timecard.iOS
             jobDescriptionPickerModel.SetSelectedJobType(segmentJobType);
             costCodeModel.SetSelectedJobType(segmentJobType);
 
-            // Cost code is only needed for the non-other tabs
-            txtCostCode.SetPickerActive(active: segmentJobType != JobType.Other,
-                                        fieldVisible: segmentJobType != JobType.Other,
-                                        clearText: true);
+            // Clear the cost code field's text
+            txtCostCode.SetPickerActive(true, true, true);
 
             // Job description should not have a picker if on the service tab
             txtJobDescription.SetPickerActive(active: segmentJobType != JobType.Service,
@@ -246,13 +244,14 @@ namespace Timecard.iOS
                 item.Job = new Job
                 {
                     Address = txtJobDescription.Text,
-                    ClientName = txtJobDescription.Text
+                    ClientName = txtJobDescription.Text,
+                    JobNumber = txtJobDescription.Text
                 };
             }
 
             try
             {
-                VerifyTextFields(item.JobType);
+                VerifyTextFields();
                 _crudManager.SaveItem(item);
             }
             catch (Exception ex)
@@ -261,7 +260,7 @@ namespace Timecard.iOS
             }
         }
 
-        private void VerifyTextFields(JobType selectedJobType)
+        private void VerifyTextFields()
         {
             if (string.IsNullOrWhiteSpace(txtDateField.Text))
                 throw new InvalidOperationException("Job date is required.");
@@ -272,11 +271,11 @@ namespace Timecard.iOS
             if (TimeWorked.FromColonFormat(txtHoursWorked.Text).AsFloat() < 0.2f)
                 throw new InvalidOperationException("Hours worked must be greater than zero.");
 
+            if (string.IsNullOrWhiteSpace(txtCostCode.Text))
+                throw new InvalidOperationException("Cost code is required.");
+
             if (string.IsNullOrWhiteSpace(txtJobDescription.Text))
                 throw new InvalidOperationException("Job description is required.");
-
-            if (string.IsNullOrWhiteSpace(txtCostCode.Text) && selectedJobType != JobType.Other)
-                throw new InvalidOperationException("Cost code is required.");
         }
     }
 }

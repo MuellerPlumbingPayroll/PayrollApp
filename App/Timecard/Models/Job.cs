@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Timecard.Models
@@ -39,30 +38,16 @@ namespace Timecard.Models
             return result;
         }
 
-        public static Job DummyJob()
+        public static Job ShopJob()
         {
+            string shop = "SHOP";
             return new Job
             {
-                Id = "0",
-                Address = "Not Listed",
-                ClientName = "Not Listed",
-                JobNumber = "00-000"
+                Id = shop,
+                Address = shop,
+                ClientName = shop,
+                JobNumber = shop
             };
-        }
-
-        public static List<Job> GetOtherTypeJobs()
-        {
-            var jobs = new List<Job>();
-            foreach (var job in ProjectSettings.OtherTimeOptions)
-            {
-                jobs.Add(new Job()
-                {
-                    Address = job,
-                    ClientName = job
-                });
-            }
-
-            return jobs;
         }
     }
 

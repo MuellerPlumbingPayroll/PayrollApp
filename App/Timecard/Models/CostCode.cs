@@ -3,23 +3,13 @@
     public class CostCode
     {
         public static readonly string PlumbingCodeGroup = "Plumbing";
+        public static readonly string HeatingCodeGroup = "Heating";
         public static readonly string ServiceCodeGroup = "Service";
+        public static readonly string ShopCodeGroup = "Shop";
 
         public string Code { get; set; }
         public string CodeGroup { get; set; }
         public string Description { get; set; }
-
-        public static CostCode DummyCostCode(JobType jobType)
-        {
-            var codeGroup = jobType.Equals(JobType.Construction) ? PlumbingCodeGroup : ServiceCodeGroup;
-
-            return new CostCode
-            {
-                Code = "00-000",
-                CodeGroup = codeGroup,
-                Description = "Not Listed"
-            };
-        }
 
         public override bool Equals(object obj)
         {

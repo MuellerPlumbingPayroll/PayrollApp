@@ -9,42 +9,40 @@ namespace Timecard.iOS.PickerViewModels
     /// </summary>
     class CostCodePickerModel : UIPickerViewModel, ICustomPickerViewModel
     {
-        private static readonly string DEFAULT_COST_CODE_VALUE = "Not Listed";
-
-        private JobType selectedJobType;
-        private CostCode selectedCostCode;
-        private UITextField textField;
-        private ItemsViewModel viewModel;
+        private readonly ItemsViewModel _viewModel;
+        private JobType _selectedJobType;
+        private CostCode _selectedCostCode;
+        private UITextField _textField;
 
         public CostCodePickerModel(ItemsViewModel viewModel, JobType selectedJobType)
         {
-            this.viewModel = viewModel;
-            this.selectedJobType = selectedJobType;
+            _viewModel = viewModel;
+            _selectedJobType = selectedJobType;
 
             if (viewModel.CostCodes.ContainsKey(selectedJobType) && viewModel.CostCodes.Count > 0)
-                selectedCostCode = viewModel.CostCodes[this.selectedJobType][0];
+                _selectedCostCode = viewModel.CostCodes[selectedJobType][0];
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            selectedCostCode = viewModel.CostCodes[selectedJobType][(int)row];
+            _selectedCostCode = _viewModel.CostCodes[_selectedJobType][(int)row];
 
-            if (textField != null)
-                textField.Text = selectedCostCode.Description;
+            if (_textField != null)
+                _textField.Text = _selectedCostCode.Description;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            if (viewModel.CostCodes.ContainsKey(selectedJobType))
-                return viewModel.CostCodes[selectedJobType][(int)row].Description;
+            if (_viewModel.CostCodes.ContainsKey(_selectedJobType))
+                return _viewModel.CostCodes[_selectedJobType][(int)row].Description;
 
-            return DEFAULT_COST_CODE_VALUE;
+            return string.Empty;
         }
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            if (viewModel.CostCodes.ContainsKey(selectedJobType))
-                return viewModel.CostCodes[selectedJobType].Count;
+            if (_viewModel.CostCodes.ContainsKey(_selectedJobType))
+                return _viewModel.CostCodes[_selectedJobType].Count;
 
             return 0;
         }
@@ -62,35 +60,35 @@ namespace Timecard.iOS.PickerViewModels
             }
             catch (Exception)
             {
-                return DEFAULT_COST_CODE_VALUE;
+                return string.Empty;
             }
         }
 
         public void SetValueChangedView(UIView textField)
         {
-            this.textField = (UITextField)textField;
+            _textField = (UITextField)textField;
         }
 
         public object GetSelectedPickerObject()
         {
-            return selectedCostCode;
+            return _selectedCostCode;
         }
 
         public void SetSelectedPickerObject(object o)
         {
-            selectedCostCode = (CostCode)o;
+            _selectedCostCode = (CostCode)o;
         }
 
         public void SetSelectedJobType(JobType jobType)
         {
-            selectedJobType = jobType;
-            if (jobType != JobType.Other && viewModel.CostCodes.ContainsKey(jobType))
+            _selectedJobType = jobType;
+            if (jobType != JobType.Other && _viewModel.CostCodes.ContainsKey(jobType))
             {
-                selectedCostCode = viewModel.CostCodes[jobType][0];
+                _selectedCostCode = _viewModel.CostCodes[jobType][0];
             }
             else
             {
-                selectedCostCode = null;
+                _selectedCostCode = null;
             }
         }
 
@@ -98,15 +96,15 @@ namespace Timecard.iOS.PickerViewModels
         {
             var costCode = (CostCode)o;
 
-            if (costCode == null || selectedJobType == JobType.Other || !viewModel.CostCodes.ContainsKey(selectedJobType))
+            if (costCode == null || !_viewModel.CostCodes.ContainsKey(_selectedJobType))
             {
                 return null;
             }
 
             // Search for the cost code. If found, return its index
-            for (int i = 0; i < viewModel.CostCodes[selectedJobType].Count; i++)
+            for (int i = 0; i < _viewModel.CostCodes[_selectedJobType].Count; i++)
             {
-                if (costCode.Equals(viewModel.CostCodes[selectedJobType][i]))
+                if (costCode.Equals(_viewModel.CostCodes[_selectedJobType][i]))
                 {
                     return new int[] { i };
                 }
