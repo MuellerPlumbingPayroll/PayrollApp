@@ -1,5 +1,6 @@
 using System;
 using UIKit;
+using Timecard.Models;
 
 namespace Timecard.iOS
 {
@@ -16,7 +17,16 @@ namespace Timecard.iOS
             txtHoursWorked.AdjustsFontSizeToFitWidth = true;
             txtJobDescription.AdjustsFontSizeToFitWidth = true;
 
-            txtJobDescription.Text = item.JobType.ToString() + " - " + item.Job.Address;
+            if (item.JobType == JobType.Other)
+            {
+                // For other jobs, display the cost code instead of the job as it is more informative
+                txtJobDescription.Text = item.JobType.ToString() + " - " + item.CostCode.Description;
+            }
+            else
+            {
+                txtJobDescription.Text = item.JobType.ToString() + " - " + item.Job.Address;
+            }
+
             txtHoursWorked.Text = item.TimeWorked.ToDecimalFormat();
         }
     }
