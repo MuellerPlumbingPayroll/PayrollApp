@@ -21,7 +21,6 @@ namespace Timecard
         IEnumerable<Job> jobs;
 
         private readonly JsonSerializerSettings _serializerSettings;
-        private FirebaseUserInfo _firebaseUserInfo;
 
         public CloudDataStore()
         {
@@ -61,7 +60,7 @@ namespace Timecard
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
-                var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+                var firebaseUserInfo = await FirebaseUserInfo.ReadFromDevice();
                 if (firebaseUserInfo != null)
                 {
                     await SetAuthenticationHeader();
@@ -89,7 +88,7 @@ namespace Timecard
 
         public async Task<string> AddItemAsync(Item item)
         {
-            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+            var firebaseUserInfo = await FirebaseUserInfo.ReadFromDevice();
 
             if (item == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return null;
@@ -109,7 +108,7 @@ namespace Timecard
 
         public async Task<bool> UpdateItemAsync(Item item)
         {
-            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+            var firebaseUserInfo = await FirebaseUserInfo.ReadFromDevice();
 
             if (item == null || item.Id == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -124,7 +123,7 @@ namespace Timecard
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+            var firebaseUserInfo = await FirebaseUserInfo.ReadFromDevice();
 
             if (string.IsNullOrEmpty(id) || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -164,7 +163,7 @@ namespace Timecard
 
         public async Task<bool> SubmitTimecardAsync(TimecardSubmission timecardSubmission)
         {
-            var firebaseUserInfo = ReadFirebaseUserInfoFromDevice();
+            var firebaseUserInfo = await FirebaseUserInfo.ReadFromDevice();
 
             if (timecardSubmission == null || firebaseUserInfo == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -175,17 +174,6 @@ namespace Timecard
             var response = await client.PostAsync($"submit/{firebaseUserInfo.Id}", new StringContent(serializedSubmission, Encoding.UTF8, "application/json"));
             
             return response.IsSuccessStatusCode;
-        }
-
-        // Method to reduce the number of reads from the device's storage
-        private FirebaseUserInfo ReadFirebaseUserInfoFromDevice()
-        {
-            if (_firebaseUserInfo == null)
-            {
-                _firebaseUserInfo = FirebaseUserInfo.ReadFromDevice().Result;
-            }
-
-            return _firebaseUserInfo;
         }
 
         private async Task SetAuthenticationHeader()

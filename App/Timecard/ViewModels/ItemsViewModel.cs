@@ -251,7 +251,10 @@ namespace Timecard
                     Jobs[JobType.Construction].Add(job);
                 }
 
-                Debug.WriteLine($"Successfully added {Jobs[JobType.Construction].Count} construction jobs.");
+                if (Jobs.ContainsKey(JobType.Construction))
+                {
+                    Debug.WriteLine($"Successfully added {Jobs[JobType.Construction].Count} construction jobs.");
+                }
             }
             catch (Exception ex)
             {

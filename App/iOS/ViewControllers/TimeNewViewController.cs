@@ -163,16 +163,12 @@ namespace Timecard.iOS
         {
             switch (direction)
             {
-                case UISwipeGestureRecognizerDirection.Left:
-                    if (jobTypeSegControl.SelectedSegment == 0)
-                        jobTypeSegControl.SelectedSegment = jobTypeSegControl.NumberOfSegments - 1;
-                    else
+                case UISwipeGestureRecognizerDirection.Right:
+                    if (jobTypeSegControl.SelectedSegment > 0)
                         jobTypeSegControl.SelectedSegment -= 1;
                     break;
-                case UISwipeGestureRecognizerDirection.Right:
-                    if (jobTypeSegControl.SelectedSegment == jobTypeSegControl.NumberOfSegments - 1)
-                        jobTypeSegControl.SelectedSegment = 0;
-                    else
+                case UISwipeGestureRecognizerDirection.Left:
+                    if (jobTypeSegControl.SelectedSegment < jobTypeSegControl.NumberOfSegments - 1)
                         jobTypeSegControl.SelectedSegment += 1;
                     break;
             }
@@ -234,7 +230,7 @@ namespace Timecard.iOS
             if (item.JobType == JobType.Service)
             {
                 string value = txtJobDescription.Text;
-                if (!value.StartsWith('Z'))
+                if (!value.StartsWith('Z') || !value.StartsWith('z'))
                 {
                     value = "Z" + value;
                 }
