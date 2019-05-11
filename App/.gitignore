@@ -39,3 +39,6 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+
+iOS/GoogleService-Info.plist
+iOS/GoogleConfiguration.cs
