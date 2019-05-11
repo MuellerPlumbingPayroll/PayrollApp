@@ -238,7 +238,7 @@ namespace Timecard.iOS
             if (item.JobType == JobType.Service)
             {
                 string value = txtJobDescription.Text;
-                if (!value.StartsWith('Z') || !value.StartsWith('z'))
+                if (!value.StartsWith('Z') && !value.StartsWith('z'))
                 {
                     value = "Z" + value;
                 }

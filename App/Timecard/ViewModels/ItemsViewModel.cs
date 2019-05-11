@@ -52,15 +52,21 @@ namespace Timecard
 
         public List<Item>[] GetItemSections()
         {
-            var numberSections = 7 * ProjectSettings.NumberWeeksInPayPeriod;
-            var sections = new List<Item>[numberSections];
+            var startPayPeriod = GetStartOfPayPeriod();
+            var endPayPeriod = GetEndOfPayPeriod();
 
-            var dayInPayPeriod = ProjectSettings.GetStartOfCurrentPayPeriod();
+            var numberDaysInPayPeriod = (endPayPeriod - startPayPeriod).Days + 1;
+            var sections = new List<Item>[numberDaysInPayPeriod];
 
-            for (var i = 0; i < numberSections; i++)
+            var dayInPayPeriod = startPayPeriod;
+
+            for (var i = 0; i < numberDaysInPayPeriod; i++)
             {
                 sections[i] = Items.ToList()
-                    .Where(item => item.JobDate.ToLocalTime().DayOfWeek.Equals(dayInPayPeriod.DayOfWeek))
+                    .Where(item => item.JobDate.ToLocalTime().Date.Equals(dayInPayPeriod.Date))
+                    .OrderBy(item => (int)item.JobType)
+                    .ThenBy(item => item.Job.Address)
+                    .ThenByDescending(item => item.TimeWorked)
                     .ToList();
 
                 dayInPayPeriod = dayInPayPeriod.AddDays(1);
@@ -82,12 +88,10 @@ namespace Timecard
 
             if (date != null)
             {
-                var dayOfWeek = ((DateTime)date).DayOfWeek;
-                var day = ((DateTime)date).Day;
+                var dateToFilter = ((DateTime)date).Date;
 
                 timeEntries = timeEntries
-                    .Where(item => (bool)item.JobDate.ToLocalTime().DayOfWeek.Equals(dayOfWeek) &&
-                                   (bool)item.JobDate.ToLocalTime().Day.Equals(day))
+                    .Where(item => (bool)item.JobDate.ToLocalTime().Date.Equals(dateToFilter))
                     .ToList();
             }
 

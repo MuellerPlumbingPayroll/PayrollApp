@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Timecard.Models
 {
-    public class TimeWorked
+    public class TimeWorked : IComparable<TimeWorked>
     {
         public static readonly string[] Hours;
         public static readonly string[] Minutes;
@@ -113,6 +113,11 @@ namespace Timecard.Models
             string minutes = times[1];
 
             return new TimeWorked(hours, minutes);
+        }
+
+        public int CompareTo(TimeWorked other)
+        {
+            return AsFloat().CompareTo(other.AsFloat());
         }
     }
 

@@ -8,7 +8,6 @@ namespace Timecard.Models
         public static readonly string DateFormat = "dddd, MMMM dd, yyyy";
         public static readonly DayOfWeek PayPeriodStartDay = DayOfWeek.Wednesday;
         public static readonly DayOfWeek PayPeriodEndDay = DayOfWeek.Tuesday;
-        public static readonly int NumberWeeksInPayPeriod = 1;
 
         public static readonly int NumberHoursInWorkDay = 8;
         public static readonly int NumberDaysInWorkWeek = 5;
@@ -33,15 +32,6 @@ namespace Timecard.Models
                 payPeriodEnd = payPeriodEnd.AddDays(1);
             }
             return payPeriodEnd;
-        }
-
-        public static DateTime? LocalDateFromString(string s)
-        {
-            var isValid = DateTime.TryParseExact(s, DateFormat, CultureInfo.InvariantCulture, 
-                                                 DateTimeStyles.AssumeLocal, out DateTime date);
-            if (isValid)
-                return date;
-            return null;
         }
     }
 }
