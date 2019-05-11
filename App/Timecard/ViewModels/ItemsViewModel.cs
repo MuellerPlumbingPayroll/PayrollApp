@@ -264,20 +264,20 @@ namespace Timecard
 
         public DateTime GetStartOfPayPeriod()
         {
+            var startCurrent = ProjectSettings.GetStartOfCurrentPayPeriod();
+
             if (Items.Count > 0) {
                 var sortedItems = Items.OrderBy(o => o.JobDate).ToList();
-                var earliestItem = sortedItems[0];
+                var earliestItemDate = sortedItems[0].JobDate;
                 
-                var startCurrent = ProjectSettings.GetStartOfCurrentPayPeriod();
-
-                int result = DateTime.Compare(earliestItem.JobDate.ToLocalTime().Date, startCurrent.Date);
+                int result = DateTime.Compare(earliestItemDate.ToLocalTime().Date, startCurrent.Date);
                 if (result < 0)
                 {
                     return startCurrent.AddDays(-7);
                 }
             }
 
-            return ProjectSettings.GetStartOfCurrentPayPeriod();
+            return startCurrent;
         }
 
         public DateTime GetEndOfPayPeriod()
@@ -285,7 +285,7 @@ namespace Timecard
             return GetStartOfPayPeriod().AddDays(6);
         }
 
-        public DateTime GetInitialDate()
+        public DateTime GetInitialPickerDate()
         {
             if (DateTime.Compare(GetStartOfPayPeriod().Date, ProjectSettings.GetStartOfCurrentPayPeriod().Date) < 0)
             {

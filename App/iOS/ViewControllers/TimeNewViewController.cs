@@ -59,8 +59,8 @@ namespace Timecard.iOS
         {
             AddTapToDismissGesture();
 
-            // Only add the swipe gestures if the user is editing an item
-            // Users are not allowed to change the job type when editing
+            // Only add the swipe gestures if the user is creating a new time entry.
+            // Users are not allowed to change the job type when editing.
             if (EditingItem != null)
             {
                 return;
@@ -86,7 +86,7 @@ namespace Timecard.iOS
             datePicker = new UIDatePicker
             {
                 Mode = UIDatePickerMode.Date,
-                Date = (NSDate)AllItemsViewModel.GetInitialDate(),
+                Date = (NSDate)AllItemsViewModel.GetInitialPickerDate(),
                 MinimumDate = (NSDate)AllItemsViewModel.GetStartOfPayPeriod(),
                 MaximumDate = (NSDate)AllItemsViewModel.GetEndOfPayPeriod(),
                 TimeZone = NSTimeZone.LocalTimeZone
@@ -165,15 +165,19 @@ namespace Timecard.iOS
             {
                 case UISwipeGestureRecognizerDirection.Right:
                     if (jobTypeSegControl.SelectedSegment > 0)
+                    {
                         jobTypeSegControl.SelectedSegment -= 1;
+                        JobTypeSegControl_ValueChanged(jobTypeSegControl);
+                    }
                     break;
                 case UISwipeGestureRecognizerDirection.Left:
                     if (jobTypeSegControl.SelectedSegment < jobTypeSegControl.NumberOfSegments - 1)
+                    {
                         jobTypeSegControl.SelectedSegment += 1;
+                        JobTypeSegControl_ValueChanged(jobTypeSegControl);
+                    }
                     break;
             }
-
-            JobTypeSegControl_ValueChanged(jobTypeSegControl);
         }
 
         partial void JobTypeSegControl_ValueChanged(UISegmentedControl sender)
@@ -197,11 +201,15 @@ namespace Timecard.iOS
 
         private void OnSaveButtonClicked(object sender, EventArgs e)
         {
+            // Make sure the time is always in the middle of the day.
+            var jobDate = ((DateTime)datePicker.Date).ToLocalTime();
+            jobDate = jobDate.Date.AddHours(12);
+
             var item = new Item
             {
                 CostCode = (CostCode)txtCostCode.GetSelectedPickerObject(),
                 Job = (Job)txtJobDescription.GetSelectedPickerObject(),
-                JobDate = ((DateTime)datePicker.Date).ToLocalTime(),
+                JobDate = jobDate,
                 TimeWorked = (TimeWorked)txtHoursWorked.GetSelectedPickerObject()
             };
 
