@@ -44,7 +44,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Timecard records your location when creating a new time entry or editing an existing one.</string>
+	<string>Timecard collects location data when creating a new time entry.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
