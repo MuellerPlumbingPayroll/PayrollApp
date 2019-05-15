@@ -1,4 +1,6 @@
-﻿namespace Timecard.ViewModels
+﻿using System.Globalization;
+
+namespace Timecard.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
@@ -8,7 +10,11 @@
         public HomeViewModel(string userName = "Employee")
         {
             Title = "Home";
-            UserName = userName;
+
+            // Titleize the user's name
+            string region = "en-US";
+            TextInfo textInfo = new CultureInfo(region, false).TextInfo;
+            UserName = textInfo.ToTitleCase(userName.ToLower());
 
             NeedToSubmitTimecardWarningMessage = "You have not submitted your timecard " +
                                          "for the previous pay period. " +
